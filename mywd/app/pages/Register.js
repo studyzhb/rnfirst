@@ -172,7 +172,7 @@ export default class Register extends Component{
                     />
                     {
                         !this.state.codeSent
-                        ?<Button onPress={this._sendVerifyCode.bind(this)} style={{backgroundColor:'#fff',color:'#2ac945',fontSize:14,height:px2dp(50),paddingTop:px2dp(18)}}>
+                        ?<Button onPress={this._sendVerifyCode.bind(this)} style={[styles.countBtn,{backgroundColor:'#fff',color:'#2ac945',fontSize:14,height:px2dp(50),paddingTop:px2dp(18)}]}>
                         获取验证码
                         </Button>
                         :

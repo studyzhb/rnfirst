@@ -82,7 +82,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingTop: (Platform.OS === 'ios') ? 20 : 0,
-        paddingHorizontal: px2dp(10)
+        paddingHorizontal: px2dp(10),
+        borderBottomWidth:1,
+        borderBottomColor:"#eaeaea"
     },
     btn: {
       width: 40,
