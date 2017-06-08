@@ -90,12 +90,9 @@ export default class My extends Component{
     })
   }
 
+
     render(){
-        if(!this.state.isLogin){
-            return (
-                <Login navigator={this.props.navigator} />
-            )
-        }
+        
         return (
             <View style={{flex:1,backgroundColor:'#f3f3f3'}}>
                 <NavBar 

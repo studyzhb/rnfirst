@@ -28,7 +28,7 @@ export default class LoginIndex extends Component{
         super(props);
     }
     _submit(){
-
+        this.props.enterLogin();
     }
 
     leftPress(){
