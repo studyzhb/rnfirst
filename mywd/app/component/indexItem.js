@@ -39,7 +39,6 @@ export default class IndexItem extends Component{
                         <Text style={{color:'#999',fontSize:12,marginTop:-11}}>{row.isEnter?'已参加':'未参加'}</Text>
                     </View>
                 </View>
-                
             </TouchableHighlight>
         )
     }

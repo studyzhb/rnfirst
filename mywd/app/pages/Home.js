@@ -22,18 +22,21 @@ import px2dp from '../util/px2dp';
 
 import Item from '../component/indexItem';
 import ObligationList from './ObligationList';
-
+import AllObligationList from './AllobList';
+import Popularize from './Popularize';
 
 let {width,height}=Dimensions.get('window');
+
+
 
 export default class Home extends Component{
     constructor(props){
         super(props);
         this.tabArr=[
-            {img:require('../images/index01.png'),text:'我的推广'},
-            {img:require('../images/index02.png'),text:'我的二维码'},
-            {img:require('../images/index03.png'),text:'历史返利'},
-            {img:require('../images/index04.png'),text:'债权资料'}
+            {img:require('../images/index01.png'),text:'我的推广',onPress:this.goPage.bind(this,'popularize')},
+            {img:require('../images/index02.png'),text:'我的二维码',onPress:this.goPage.bind(this,'popularize')},
+            {img:require('../images/index03.png'),text:'历史返利',onPress:this.goPage.bind(this,'oblist')},
+            {img:require('../images/index04.png'),text:'债权资料',onPress:this.goPage.bind(this,'oblist')}
         ]
         let ds=new ListView.DataSource({
             rowHasChanged:(r1,r2)=>r1!==r2
@@ -53,6 +56,20 @@ export default class Home extends Component{
     }
     rightPress(){
         
+    }
+
+    goPage(key, data = {}){
+        console.log(key)
+        let pages = {
+        "oblist": AllObligationList,
+        "popularize":Popularize
+        }
+        if(pages[key]){
+        this.props.navigator.push({
+            component: pages[key],
+            args: { data }
+        })
+        }
     }
 
     _enterObligationGoods(){
@@ -117,11 +134,14 @@ export default class Home extends Component{
                 <View style={styles.tabWrapper}>
                     {
                         this.tabArr.map((item,i)=>{
+                            console.log(item)
                             return (
-                                <View key={i} style={styles.itemcon}>
-                                    <Image source={item.img} style={{width:px2dp(42),height:px2dp(42),marginLeft:24}} />
-                                    <Text style={{textAlign:'center'}}>{item.text}</Text>
-                                </View>
+                                <TouchableWithoutFeedback key={i} onPress={item.onPress}>
+                                    <View style={styles.itemcon}>
+                                        <Image source={item.img} style={{width:px2dp(42),height:px2dp(42),marginLeft:24}} />
+                                        <Text style={{textAlign:'center'}}>{item.text}</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
                             )
                         })
                     }

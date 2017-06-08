@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import { View } from 'react-native'
 import TabView from './TabView'
-
+import Login from '../pages/validateLogin';
 export default class Wrapper extends Component{
     constructor(props){
       super(props);

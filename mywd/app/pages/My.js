@@ -25,7 +25,7 @@ import px2dp from '../util/px2dp';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import Login from './validateLogin';
+
 
 let {width,height} = Dimensions.get('window');
 
@@ -38,11 +38,10 @@ export default class My extends Component{
         }
 
         this.config=[
-            {icon:"ios-pin", name:"收货地址", onPress:this.goPage.bind(this, "address")},
-            {icon:"ios-heart", name:"我的收藏", color:"#fc7b53"},
-            {icon:"logo-usd", name:"推荐有奖", subName:"分润奖励金", color:"#fc7b53"},
-            {icon:"md-flower", name:"服务中心"},
-
+            {icon:"ios-pin", name:"安全中心", onPress:this.goPage.bind(this, "address")},
+            {icon:"ios-bulb-outline", name:"意见反馈", color:"#fc7b53"},
+            {icon:"ios-information-circle-outline", name:"关于我们", subName:"分润奖励金", color:"#fc7b53"},
+            // {icon:"md-flower", name:"服务中心"},
         ]
     }
 
@@ -86,22 +85,23 @@ export default class My extends Component{
       if(i%3==0){
         item.first = true
       }
-      return (<Item key={i} {...item}/>)
+      return (<Item key={i} {...item} />)
     })
   }
-
 
     render(){
         
         return (
-            <View style={{flex:1,backgroundColor:'#f3f3f3'}}>
+            <View style={{flex:1,backgroundColor:'#f0f0f0'}}>
                 <NavBar 
                     title='我的'
-                    leftIcon='ios-notifications-outline'
+                    leftIcon='ios-arrow-back-outline'
                     leftPress={this.leftPress.bind(this)}
-                    rightIcon='ios-settings-outline'
+                    style={{backgroundColor:'#fff'}}
                     rightPress={this.rightPress.bind(this)}
                 />
+                
+                    
                 <ScrollView
                     style={styles.scrollView}
                     refreshControl={
@@ -114,23 +114,23 @@ export default class My extends Component{
                         />
                     }
                 >
-                    <View style={{minHeight:height-64-px2dp(46),paddingBottom:100,backgroundColor:'#f3f3f3' }}>
-                        <TouchableWithoutFeedback onPress={this.goProfile.bind(this)}>
-                            <View style={styles.userHead}>
-                                <View style={{flex: 1,flexDirection: "row"}}>
-                                <Image source={require('../images/avatar.jpg')} style={{width: px2dp(60), height: px2dp(60), borderRadius: px2dp(30)}}/>
-                                <View style={{flex: 1, marginLeft: 10, paddingVertical: 5}}>
-                                    <Text style={{color: "#fff", fontSize: px2dp(18)}}>web前端开发zhb</Text>
-                                    <View style={{marginTop: px2dp(10), flexDirection: "row"}}>
-                                    <Icon name="ios-phone-portrait-outline" size={px2dp(14)} color="#fff" />
-                                    <Text style={{color: "#fff", fontSize: 13, paddingLeft: 5}}>18188888888</Text>
-                                    </View>
-                                </View>
-                                </View>
-                                <Icon name="ios-arrow-forward-outline" size={px2dp(22)} color="#fff" />
+                    <TouchableWithoutFeedback style={{backgroundColor:'#f0f0f0'}} onPress={this.goProfile.bind(this)}>
+                        <View style={styles.userHead}>
+                            <View style={{flex: 1,flexDirection: "row"}}>
+                            <Image source={require('../images/avatar.jpg')} style={{width: px2dp(60), height: px2dp(60), borderRadius: px2dp(30)}}/>
+                            <View style={{flex: 1, marginLeft: 10,justifyContent:'center', paddingVertical: 5}}>
+                                <Text style={{color: "#3a3a3a", fontSize: px2dp(14)}}>web前端开发zhb</Text>
+                                {/*<View style={{marginTop: px2dp(10), flexDirection: "row"}}>
+                                <Icon name="ios-phone-portrait-outline" size={px2dp(14)} color="#fff" />
+                                <Text style={{color: "#fff", fontSize: 13, paddingLeft: 5}}>18188888888</Text>
+                                </View>*/}
                             </View>
-                        </TouchableWithoutFeedback> 
-                        <View style={styles.numbers}>
+                            </View>
+                            <Icon name="ios-arrow-forward-outline" size={px2dp(22)} color="#666" />
+                        </View>
+                    </TouchableWithoutFeedback> 
+                    <View style={{minHeight:height-64-px2dp(46),paddingBottom:100,backgroundColor:'#fff' }}>
+                        {/*<View style={styles.numbers}>
                             <TouchableWithoutFeedback>
                                 <View style={styles.numItem}>
                                     <Text style={{color: "#f90", fontSize: 18, textAlign: "center", fontWeight: "bold"}}>{"999999.0元"}</Text>
@@ -149,7 +149,7 @@ export default class My extends Component{
                                 <Text style={{color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5}}>{"积分"}</Text>
                             </View>
                             </TouchableWithoutFeedback>
-                        </View>
+                        </View>*/}
                         <View>
                         {this._renderListItem()}
                         </View>   
@@ -162,16 +162,18 @@ export default class My extends Component{
 
 const styles = StyleSheet.create({
   scrollView: {
+    flex:1,
     marginBottom: px2dp(46),
-    backgroundColor: "#0398ff"
+    backgroundColor: "#f0f0f0"
   },
   userHead: {
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
     paddingHorizontal: 20,
-    paddingVertical: 20,
-    backgroundColor: "#0398ff"
+    paddingVertical: 10,
+    backgroundColor: "#fff",
+    marginBottom:12,
   },
   numbers: {
     flexDirection: "row",
