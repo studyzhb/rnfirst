@@ -20,6 +20,7 @@ import NavBar from '../component/NavBar';
 import Item from '../component/Item';
 import Setting from './Setting';
 // import UserProfile from './UserProfile';
+import Person from './person';
 import Address from './Address';
 import px2dp from '../util/px2dp';
 
@@ -66,10 +67,10 @@ export default class My extends Component{
     });
   }
   goProfile(){
-    // this.props.navigator.push({
-    //     component: UserProfile,
-    //     args: {}
-    // });
+    this.props.navigator.push({
+        component: Person,
+        args: {}
+    });
   }
   componentDidMount(){
     this._onRefresh()
@@ -104,6 +105,7 @@ export default class My extends Component{
                     
                 <ScrollView
                     style={styles.scrollView}
+                    showsVerticalScrollIndicator={false}
                     refreshControl={
                         <RefreshControl 
                             refreshing={this.state.isRefreshing}

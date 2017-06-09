@@ -24,7 +24,8 @@ import Item from '../component/indexItem';
 import ObligationList from './ObligationList';
 import AllObligationList from './AllobList';
 import Popularize from './Popularize';
-
+import MyExpense from './myExpenseList';
+import Notice from './notice';
 let {width,height}=Dimensions.get('window');
 
 
@@ -34,7 +35,7 @@ export default class Home extends Component{
         this.tabArr=[
             {img:require('../images/index01.png'),text:'我的推广',onPress:this.goPage.bind(this,'popularize')},
             {img:require('../images/index02.png'),text:'我的二维码',onPress:this.goPage.bind(this,'popularize')},
-            {img:require('../images/index03.png'),text:'历史返利',onPress:this.goPage.bind(this,'oblist')},
+            {img:require('../images/index03.png'),text:'历史返利',onPress:this.goPage.bind(this,'myExpense')},
             {img:require('../images/index04.png'),text:'债权资料',onPress:this.goPage.bind(this,'oblist')}
         ]
         let ds=new ListView.DataSource({
@@ -43,6 +44,7 @@ export default class Home extends Component{
         this.state={
             isRefreshing:false,
             isLoadingTail:false,
+            isAuthor:true,
             dataSource:ds.cloneWithRows([
                 {queueName:'我是队列名称2',buynum:'10',willGetScore:'40000',isEnter:true},
                 {queueName:'我是队列名称1',buynum:'10',willGetScore:'40000',isEnter:true},
@@ -58,10 +60,11 @@ export default class Home extends Component{
     }
 
     goPage(key, data = {}){
-        console.log(key)
+
         let pages = {
         "oblist": AllObligationList,
-        "popularize":Popularize
+        "popularize":Popularize,
+        'myExpense':MyExpense
         }
         if(pages[key]){
         this.props.navigator.push({
@@ -71,7 +74,14 @@ export default class Home extends Component{
         }
     }
 
+    _enterLookInfo(){
+        this.setState({
+            isAuthor:true
+        });
+    }
+
     _enterObligationGoods(){
+        
         if(this.props.navigator){
             this.props.navigator.push({
                 name:"obligaionCenter",
@@ -84,7 +94,7 @@ export default class Home extends Component{
     }
 
     _renderRow(row){
-        console.log(row);
+        
         return <Item 
             onPress={this._enterObligationGoods.bind(this)}
             row={row}
@@ -97,7 +107,12 @@ export default class Home extends Component{
 
     render(){
         
+        if(!this.state.isAuthor){
+            return <Notice navigator={this.props.navigator} enterAuthor={this._enterLookInfo.bind(this)} />
+        }
+
         return (
+
             <View style={styles.container}>
                 <NavBar 
                     title='我的债权金'
@@ -133,7 +148,7 @@ export default class Home extends Component{
                 <View style={styles.tabWrapper}>
                     {
                         this.tabArr.map((item,i)=>{
-                            console.log(item)
+                            
                             return (
                                 <TouchableWithoutFeedback key={i} onPress={item.onPress}>
                                     <View style={styles.itemcon}>

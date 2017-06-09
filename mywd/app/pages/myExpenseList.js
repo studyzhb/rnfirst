@@ -22,6 +22,7 @@ import Button from 'react-native-button';
 import NavBar from '../component/NavBar';
 import px2dp from '../util/px2dp';
 import Icon from 'react-native-vector-icons/Ionicons';
+
 let { width, height } = Dimensions.get('window');
 let isIOS = Platform.OS === 'ios';
 
@@ -35,10 +36,18 @@ export default class MyExpenseList extends Component {
 
     renderGoodsList() {
         return (
-            <View>
-                <View style={{}}>
-
+            <View style={styles.items}>
+                <View style={[styles.flexRow,{marginBottom:10}]}>
+                    <Icon name="ios-clock-outline" size={15} color='#999' style={{marginLeft:-7}}/>
+                    <Text style={[styles.baseText,{marginLeft:5}]}>昨天</Text>
                 </View>
+                <View style={styles.sitem}>
+                    <View style={{width:330,height:78,backgroundColor:'#fff',justifyContent:'space-between',borderRadius:4,paddingLeft:15,paddingTop:12,paddingBottom:12}}>
+                        <Text style={styles.subText}>债权金审核提交</Text>
+                        <Text style={styles.baseText}>您2017-04-20提交的申请正在审核，敬请期待.</Text>
+                    </View>
+                </View>
+                
             </View>
 
 
@@ -77,12 +86,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#f0f0f0',
     },
     items: {
-        height: 112,
-        backgroundColor: '#fff',
-        borderBottomColor: '#eaeaea',
-        borderBottomWidth: 1,
         paddingTop: 12,
-        paddingLeft: 20
+        paddingLeft: 18,
+        
     },
     flexRow: {
         flexDirection: 'row'
@@ -99,12 +105,9 @@ const styles = StyleSheet.create({
         marginTop:12
     },
     sitem:{
-        borderBottomColor:'#eaeaea',
-        borderBottomWidth:1,
-        backgroundColor:'#fff',
-        height:45,
-        paddingLeft:20,
-        alignItems:'center'
+        borderLeftColor:"#e3e3e3",
+        borderLeftWidth:1,
+        paddingLeft:12,
     }
 
 })

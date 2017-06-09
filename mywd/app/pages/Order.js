@@ -20,7 +20,8 @@ import NavBar from '../component/NavBar';
 import Item from '../component/Item';
 import Setting from './Setting';
 // import UserProfile from './UserProfile';
-import Address from './Address';
+import Deal from './Deal';
+import BankList from './Banklist';
 import px2dp from '../util/px2dp';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -39,15 +40,16 @@ export default class Order extends Component{
         // onPress:this.goPage.bind(this, "address")
         this.config=[
            
-            {icon:"ios-albums-outline", name:"交易记录",subName:""},
-            {icon:"ios-card-outline", name:"银行卡管理", subName:""},
+            {icon:"ios-albums-outline", name:"交易记录",subName:"",onPress:this.goPage.bind(this,'record')},
+            {icon:"ios-card-outline", name:"银行卡管理", subName:"",onPress:this.goPage.bind(this,'banklist')},
         ]
     }
     static topbarHeight=(Platform.OS==='ios'?64:42)
 
     goPage(key, data = {}){
     let pages = {
-      "address": Address
+      "record": Deal,
+      'banklist':BankList
     }
     if(pages[key]){
       this.props.navigator.push({

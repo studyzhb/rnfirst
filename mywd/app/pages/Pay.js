@@ -23,60 +23,32 @@ import NavBar from '../component/NavBar';
 import px2dp from '../util/px2dp';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import Pay from "./Pay";
 
 let {width,height} = Dimensions.get('window');
 let isIOS=Platform.OS==='ios';
 
-export default class GoodsList extends Component{
+export default class Pay extends Component{
 
     constructor(props){
         super(props);
     }
 
-    confirmPay(){
-        let info='您的订单不足1400元，将无法生成队列订单，您可以继续购物凑够金额。';
-        isIOS
-        ?AlertIOS.alert(
-            '提示',
-            info,
-            [
-                {text: '去凑单', onPress: () => console.log('Ask me later pressed')},
-                {text: '去支付', onPress:this.gotoPay.bind(this), style: 'cancel'}
-            ],
-            { cancelable: false }
-        )
-        :Alert.alert(
-            '提示',
-            info,
-            [
-                {text: '去凑单', onPress: () => console.log('Ask me later pressed')},
-                {text: '去支付', onPress:this.gotoPay.bind(this), style: 'cancel'}
-            ],
-            { cancelable: false }
-        )
+    createOrder(){
+        
     }
 
-    gotoPay(){
-        this.props.navigator.push({
-            name:'pay',
-            component:Pay
-        })
-    }
 
     renderGoodsList(){
         return (
             <View style={styles.items}>
-                <Image source={require('../images/goods.png')} style={{width:100,height:100}} />
+                {/*<Image source={require('../images/goods.png')} style={{width:100,height:100}} />*/}
                 <View style={{marginLeft:20,justifyContent:'space-between'}}>
-                    <Text style={{fontSize:14,width:158,lineHeight:20,color:'#666'}}>冰箱一台空调一台冰箱一台空调一台冰箱一台空调一台</Text>
+                    <Text style={{fontSize:14,width:158,lineHeight:20,color:'#666'}}>备注：</Text>
                     <View style={[{flexDirection:'row',marginTop:-10,height:18}]}>
-                        <Icon name='logo-yen' size={12} />
-                        <Text style={{ color: "#999", fontSize: 12, textAlign: "center",marginLeft:9, fontWeight: "bold" }}>3000</Text>
+                        <Text>选择自提点：</Text>
+                        <Text style={{ color: "#999", fontSize: 12, textAlign: "center",marginLeft:9, fontWeight: "bold" }}>e+便利凤台路店</Text>
                     </View>
-                    
                 </View>
-                <Image source={require('../images/slected.png')} style={{position:'absolute',right:0}} />
             </View> 
         )
     }
@@ -86,24 +58,11 @@ export default class GoodsList extends Component{
             <View style={styles.container}>
                 <View style={styles.container}>
                     <NavBar
-                        title="购物"
+                        title="确认支付"
                         titleStyle={{ color: '#666', fontSize: 18 }}
                         style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea" }}
                     />
-                    <View style={styles.tabTitle}>
-                        <Button
-                            containerStyle={[styles.backBuyWrapper,styles.backActive]}
-                            style={styles.backBuy}
-                        >
-                            可回购
-                        </Button>
-                        <Button
-                            containerStyle={[styles.backBuyWrapper]}
-                            style={styles.backBuy}
-                        >
-                            不可回购
-                        </Button>
-                    </View>
+
                     {
                         this.renderGoodsList()
                     }
@@ -116,9 +75,9 @@ export default class GoodsList extends Component{
                     <Button
                         style={styles.paybtn}
                         containerStyle={styles.paybtncontainer}
-                        onPress={this.confirmPay.bind(this)}
+                        onPress={this.createOrder.bind(this)}
                     >
-                        结算
+                        提交
                     </Button>
                 </View>
 
