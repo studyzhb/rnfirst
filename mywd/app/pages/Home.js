@@ -28,7 +28,6 @@ import Popularize from './Popularize';
 let {width,height}=Dimensions.get('window');
 
 
-
 export default class Home extends Component{
     constructor(props){
         super(props);

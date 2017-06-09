@@ -24,7 +24,7 @@ import px2dp from '../util/px2dp';
 import Icon from 'react-native-vector-icons/Ionicons';
 let {width,height} = Dimensions.get('window');
 let isIOS=Platform.OS==='ios';
-export default class OrderList extends Component{
+export default class OrderDetail extends Component{
 
     constructor(props){
         super(props);

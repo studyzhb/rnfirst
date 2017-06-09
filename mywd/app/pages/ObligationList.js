@@ -23,6 +23,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import GoodsList from './GoodsList';
 import OrderList from './orderList';
+import RecordList from './RecordList';
+import OrderInfo from './OrderInfo';
 
 let { width, height } = Dimensions.get('window');
 
@@ -36,67 +38,81 @@ export default class ObligationList extends Component {
 
     }
 
-    gotoshopping(){
+    gotoshopping() {
         this.props.navigator.push({
-            name:'',
-            component:GoodsList
+            name: '',
+            component: GoodsList
         })
     }
 
     // 查看订单
-    gotoOrderPage(){
+    gotoOrderPage() {
         this.props.navigator.push({
-            name:'orderlist',
-            component:OrderList
+            name: 'orderlist',
+            component: OrderList
         })
     }
 
-    gotoConvercePage(){
-        
+    gotoConvercePage() {
+        this.props.navigator.push({
+            name: 'RecordList',
+            component: RecordList
+        })
+    }
+    // 订单信息
+    gotoRecordList(){
+        console.log('111')
+        this.props.navigator.push({
+            name: 'OrderInfo',
+            component: OrderInfo
+        })
     }
 
-    renderRecordList(){
+    renderRecordList() {
         return (
-            <View style={styles.recordWrapper}>
-                <View style={{borderBottomColor:'#eaeaea',borderBottomWidth:1}}>
+            <TouchableWithoutFeedback onPress={this.gotoRecordList.bind(this)}>
+                <View style={styles.recordWrapper}>
+                    <View style={{ borderBottomColor: '#eaeaea', borderBottomWidth: 1 }}>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:20,paddingTop:16 }}>
-                        <Text style={styles.normalText}>订单号：136541515611</Text>
-                        <Text>已提货</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:20,paddingTop:16 }}>
-                        <Text style={styles.boldText}>生活综合包</Text>
-                        <Text>￥1000.00</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:20,paddingVertical:16 }}>
-                        <Text style={[styles.normalText,{marginTop:10}]}>2017-04-15 11:20</Text>
-                        <View style={{flexDirection: 'row',}}>
-                            <Button style={styles.convercebtn} containerStyle={styles.convercebtnWrapper}>
-                                提货
-                            </Button>
-                            <Button style={[styles.convercebtn]} containerStyle={[styles.convercebtnWrapper,{marginLeft:15}]}>
-                                兑换
-                            </Button>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 16 }}>
+                            <Text style={styles.normalText}>订单号：136541515611</Text>
+                            <Text>已提货</Text>
                         </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 16 }}>
+                            <Text style={styles.boldText}>生活综合包</Text>
+                            <Text>￥1000.00</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 16 }}>
+                            <Text style={[styles.normalText, { marginTop: 10 }]}>2017-04-15 11:20</Text>
+                            <View style={{ flexDirection: 'row', }}>
+                                <Button style={styles.convercebtn} containerStyle={styles.convercebtnWrapper}>
+                                    提货
+                                </Button>
+                                <Button style={[styles.convercebtn]} containerStyle={[styles.convercebtnWrapper, { marginLeft: 15 }]}>
+                                    兑换
+                                </Button>
+                            </View>
+                        </View>
+
+                    </View>
+
+                    <View style={[styles.numbers, { paddingVertical: 20, height: 58 }]}>
+
+                        <View style={[styles.numItem, { flexDirection: 'row',justifyContent:'flex-start',paddingLeft:10, marginTop: -10, height: 18 }]}>
+                            <Icon name='logo-yen' size={12} />
+                            <Text style={{ color: "#999", fontSize: 12, marginLeft: 9, fontWeight: "bold" }}>返还状态：等待中</Text>
+
+                        </View>
+                        {/*<View style={[styles.numItem, { flexDirection: 'row', marginTop: -10, borderLeftWidth: 1, height: 18, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
+                            <Icon name='ios-people-outline' size={12} />
+                            <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>队列编号</Text>
+                        </View>*/}
+
                     </View>
 
                 </View>
-                
-                <View style={[styles.numbers,{paddingVertical:20,height:18}]}>
+            </TouchableWithoutFeedback>
 
-                    <View style={[styles.numItem,{flexDirection:'row',marginTop:-10,height:18}]}>
-                        <Icon name='logo-yen' size={12} />
-                        <Text style={{ color: "#999", fontSize: 12, textAlign: "center",marginLeft:9, fontWeight: "bold" }}>返还状态：等待中</Text>
-                        
-                    </View>
-                    <View style={[styles.numItem, {flexDirection:'row',marginTop:-10, borderLeftWidth: 1,height:18, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
-                        <Icon name='ios-people-outline' size={12} />
-                        <Text style={{ color: "#999", fontSize: 12, textAlign: "center",marginLeft:9, fontWeight: "bold" }}>队列编号</Text>
-                    </View>
-
-                </View>
-
-            </View>
         )
     }
 
@@ -132,14 +148,14 @@ export default class ObligationList extends Component {
                             </Button>
                             </TouchableWithoutFeedback>
                         </View>
-                        <View style={[styles.numbers,{height:68}]}>
+                        <View style={[styles.numbers, { height: 68 }]}>
                             <TouchableWithoutFeedback>
                                 <View style={[styles.numItem, { flexDirection: 'row' }]}>
-                                    <View style={{marginLeft:36}}>
-                                         <Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />
+                                    <View style={{ marginLeft: 36 }}>
+                                        <Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />
                                     </View>
-                                   
-                                    <View style={{marginLeft:20}}>
+
+                                    <View style={{ marginLeft: 20 }}>
                                         <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"已返积分"}</Text>
                                         <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"500"}</Text>
                                     </View>
@@ -148,18 +164,18 @@ export default class ObligationList extends Component {
                             </TouchableWithoutFeedback>
                             <TouchableWithoutFeedback>
                                 <View style={[styles.numItem, { flexDirection: 'row', borderLeftWidth: 1, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
-                                    
-                                    <View style={{marginLeft:36}}>
-                                         <Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />
+
+                                    <View style={{ marginLeft: 36 }}>
+                                        <Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />
                                     </View>
-                                    <View style={{marginLeft:20}}>
+                                    <View style={{ marginLeft: 20 }}>
                                         <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"已返积分"}</Text>
                                         <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"500"}</Text>
                                     </View>
                                 </View>
                             </TouchableWithoutFeedback>
                         </View>
-                        <View style={{ minHeight: height - 64 - px2dp(46),marginTop:12, paddingBottom: 100, backgroundColor: '#f3f3f3' }}>
+                        <View style={{ minHeight: height - 64 - px2dp(46), marginTop: 12, paddingBottom: 100, backgroundColor: '#f3f3f3' }}>
                             <View style={styles.numbers}>
                                 <TouchableWithoutFeedback onPress={this.gotoOrderPage.bind(this)}>
                                     <View style={styles.numItem}>
@@ -212,55 +228,59 @@ export default class ObligationList extends Component {
                                 <Text style={{ fontSize: 14, color: '#3a3a3a' }}>返利记录</Text>
                             </View>
 
-                            <View style={styles.recordWrapper}>
-                                <View style={{borderBottomColor:'#eaeaea',borderBottomWidth:1}}>
+                            {
+                                this.renderRecordList()
+                            }
 
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:20,paddingTop:16 }}>
+                            {/*<View style={styles.recordWrapper}>
+                                <View style={{ borderBottomColor: '#eaeaea', borderBottomWidth: 1 }}>
+
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 16 }}>
                                         <Text style={styles.normalText}>订单号：136541515611</Text>
                                         <Text>已提货</Text>
                                     </View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:20,paddingTop:16 }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 16 }}>
                                         <Text style={styles.boldText}>生活综合包</Text>
                                         <Text>￥1000.00</Text>
                                     </View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:20,paddingVertical:16 }}>
-                                        <Text style={[styles.normalText,{marginTop:10}]}>2017-04-15 11:20</Text>
-                                        <View style={{flexDirection: 'row',}}>
-                                            <Button style={styles.convercebtn} containerStyle={[styles.convercebtnWrapper,{backgroundColor:'#c8c8c8'}]} disabled={true}  >
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 16 }}>
+                                        <Text style={[styles.normalText, { marginTop: 10 }]}>2017-04-15 11:20</Text>
+                                        <View style={{ flexDirection: 'row', }}>
+                                            <Button style={styles.convercebtn} containerStyle={[styles.convercebtnWrapper, { backgroundColor: '#c8c8c8' }]} disabled={true}  >
                                                 提货
                                             </Button>
-                                            <Button style={[styles.convercebtn]} containerStyle={[styles.convercebtnWrapper,{marginLeft:15}]} styleDisabled={{color:'#c8c8c8'}} >
+                                            <Button style={[styles.convercebtn]} containerStyle={[styles.convercebtnWrapper, { marginLeft: 15 }]} styleDisabled={{ color: '#c8c8c8' }} >
                                                 兑换
                                             </Button>
                                         </View>
                                     </View>
 
                                 </View>
-                                
-                                <View style={[styles.numbers,{paddingVertical:20,height:18}]}>
 
-                                    <View style={[styles.numItem,{flexDirection:'row',marginTop:-10,height:18}]}>
+                                <View style={[styles.numbers, { paddingVertical: 20, height: 18 }]}>
+
+                                    <View style={[styles.numItem, { flexDirection: 'row', marginTop: -10, height: 18 }]}>
                                         <Icon name='logo-yen' size={12} />
-                                        <Text style={{ color: "#999", fontSize: 12, textAlign: "center",marginLeft:9, fontWeight: "bold" }}>返还状态：等待中</Text>
-                                        
+                                        <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>返还状态：等待中</Text>
+
                                     </View>
 
 
-                                    <View style={[styles.numItem, {flexDirection:'row',marginTop:-10, borderLeftWidth: 1,height:18, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
+                                    <View style={[styles.numItem, { flexDirection: 'row', marginTop: -10, borderLeftWidth: 1, height: 18, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
                                         <Icon name='ios-people-outline' size={12} />
-                                        <Text style={{ color: "#999", fontSize: 12, textAlign: "center",marginLeft:9, fontWeight: "bold" }}>队列编号</Text>
+                                        <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>队列编号</Text>
                                     </View>
 
 
                                 </View>
-                            </View>
+                            </View>*/}
 
                         </View>
                     </ScrollView>
                 </View>
                 <Button
                     onPress={this.gotoshopping.bind(this)}
-                    containerStyle={{padding:10, height:45, overflow:'hidden', backgroundColor: '#21bb58'}}
+                    containerStyle={{ padding: 10, height: 45, overflow: 'hidden', backgroundColor: '#21bb58' }}
                     style={styles.nowbuybtn}>
                     立即参加
                 </Button>
@@ -315,23 +335,23 @@ const styles = StyleSheet.create({
     nowbuybtn: {
         fontSize: 14, color: '#fff',
     },
-    boldText:{
-        fontSize:14,
-        color:'#3a3a3a'
+    boldText: {
+        fontSize: 14,
+        color: '#3a3a3a'
     },
-    convercebtn:{
-        fontSize:14,
-        color:'#fff',
+    convercebtn: {
+        fontSize: 14,
+        color: '#fff',
     },
-    convercebtnWrapper:{
-        width:px2dp(56),
-        padding:5,
-        height:px2dp(30),
-        backgroundColor:"#21bb58",
-        overflow:'hidden',
-        borderRadius:20,
+    convercebtnWrapper: {
+        width: px2dp(56),
+        padding: 5,
+        height: px2dp(30),
+        backgroundColor: "#21bb58",
+        overflow: 'hidden',
+        borderRadius: 20,
         // marginTop:-16
         // marginBottom:16
     }
-    
+
 })

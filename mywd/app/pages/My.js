@@ -47,7 +47,7 @@ export default class My extends Component{
 
     goPage(key, data = {}){
     let pages = {
-      "address": Address
+      "address1": Address
     }
     if(pages[key]){
       this.props.navigator.push({

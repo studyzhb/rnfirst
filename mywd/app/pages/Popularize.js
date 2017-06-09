@@ -25,7 +25,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 let { width, height } = Dimensions.get('window');
 
-export default class AllobList extends Component {
+export default class Popularize extends Component {
     constructor(props) {
         super(props);
     }
@@ -53,7 +53,7 @@ export default class AllobList extends Component {
                                 <Text style={styles.baseText}>152*******2152</Text>
                             </View>
                             <View style={{justifyContent:'flex-end',flex:3}}>
-                                <Text style={[styles.baseText,{marginLeft:100}]}>2014-04-10</Text>
+                                <Text style={[styles.baseText,{texAlign:'right'}]}>2014-04-10</Text>
                             </View>
 
                         </View>
@@ -65,9 +65,8 @@ export default class AllobList extends Component {
                                 <Text style={styles.baseText}>152*******2152</Text>
                             </View>
                             <View style={{justifyContent:'flex-end',flex:3}}>
-                                <Text style={[styles.baseText,{marginLeft:100}]}>2014-04-10</Text>
+                                <Text style={[styles.baseText,{texAlign:'right'}]}>2014-04-10</Text>
                             </View>
-
                         </View>
                     </ScrollView>
 
