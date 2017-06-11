@@ -26,17 +26,54 @@ export default class Authorize extends Component{
     constructor(props){
         super(props);
         this.state={
-            name:'',
-            phoneNumber:'',
-            code:''
+            name:'zhang',
+            tel:'18137826957',
+            coding:'1-59367118-3887'
         }
     }
     _submit(){
-        this.props.enterOblist();
+        let self=this;
+        let tel=this.state.tel;
+        let name=this.state.name;
+        let coding=this.state.coding;
+
+        if(!tel){
+            return isIOS?AlertIOS.alert('手机号不能为空！'):Alert.alert('手机号不能为空！');
+        }
+
+        if(!name){
+            return isIOS?AlertIOS.alert('姓名不能为空！'):Alert.alert('姓名不能为空！');
+        }
+
+        if(!coding){
+            return isIOS?AlertIOS.alert('编号不能为空！'):Alert.alert('编号不能为空！');
+        }
+
+        let body={
+            tel:tel,
+            name:name,
+            coding:coding
+        }
+
+        let loginUrl=config.baseUrl+config.api.rebate.applyInfo;
+        console.log(body);
+        request.post(loginUrl,body)
+                .then((data)=>{
+                    if(data.code==1){
+                        this.props.navigator.pop();
+                        this.props.enterOblist();
+                    }else{
+                        isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
+                    }
+                })
+                .catch((err)=>{
+                    console.log(JSON.stringify(err));
+                }) 
+        
     }
 
     leftPress(){
-        this.props.navigator.pop();
+        
     }
     rightPress(){
         
@@ -45,7 +82,7 @@ export default class Authorize extends Component{
             args: {}
         });
     }
-
+    /*leftIcon='ios-close-outline'*/
     render(){
        
         return (
@@ -54,7 +91,6 @@ export default class Authorize extends Component{
                     title='认证'
                     style={{'backgroundColor':'#fff'}}
                     titleStyle={{'color':'#666'}}
-                    leftIcon='ios-close-outline'
                     leftPress={this.leftPress.bind(this)}
                     rightPress={this.rightPress.bind(this)}
                 />
@@ -69,7 +105,7 @@ export default class Authorize extends Component{
                         autoCorrect={false}
                         //去除android下的底部边框问题
                         underlineColorAndroid="transparent"
-                        keyboardType='number-pad' //弹出软键盘类型
+                        keyboardType='default' //弹出软键盘类型
                         onChangeText={(text)=>{
                             this.setState({
                                 name:text
@@ -89,10 +125,10 @@ export default class Authorize extends Component{
                         autoCorrect={false}
                         //去除android下的底部边框问题
                         underlineColorAndroid="transparent"
-                        keyboardType='number-pad' //弹出软键盘类型
+                        keyboardType='numeric' //弹出软键盘类型
                         onChangeText={(text)=>{
                             this.setState({
-                                phoneNumber:text
+                                tel:text
                             })
                         }}
                     />
@@ -103,6 +139,7 @@ export default class Authorize extends Component{
                     <TextInput 
                         style={styles.inputField}
                         placeholder="请输入编号"
+                        defaultValue="1-59367118-3887"
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
@@ -112,7 +149,7 @@ export default class Authorize extends Component{
                         keyboardType='number-pad' //弹出软键盘类型
                         onChangeText={(text)=>{
                             this.setState({
-                                code:text
+                                coding:text
                             })
                         }}
                     />

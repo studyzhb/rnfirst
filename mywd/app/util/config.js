@@ -15,9 +15,14 @@ export default {
             sendmessage:'/send/sms',
             
         },
+        //返利模块
         rebate:{
             list:'/rebate/current',
-            index:'/creditor/index'
+            index:'/creditor/index',
+            applyInfo:'/rebate/regis',
+            //查看历史(申请中请求此接口查看)
+            lookupHis:'/rebate/show',
+            
         }
     }
 

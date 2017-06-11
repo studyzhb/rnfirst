@@ -49,7 +49,7 @@ export default class Home extends Component{
         this.state={
             isRefreshing:false,
             isLoadingTail:false,
-            isAuthor:true,
+            isAuthor:0,
             dataSource:ds.cloneWithRows([
                 {queueName:'我是队列名称2',buynum:'10',willGetScore:'40000',isEnter:true},
                 {queueName:'我是队列名称1',buynum:'10',willGetScore:'40000',isEnter:true},
@@ -57,45 +57,42 @@ export default class Home extends Component{
         }
     }
     
-    componentWillMount(){
+     componentWillMount(){
         this._getIndexInfo();
     }
 
-   async _getIndexInfo(){
-        let isTrue=await this._isHasAuthor()
-                            .then(data=>{
-                                return data;
-                            })
-        if(isTrue){
-            let getIndexUrl=config.baseUrl+config.api.rebate.index;
-
-            request.post(getIndexUrl,body)
-                .then((data)=>{
-
+    async _getIndexInfo(){
+        let self=this;
+        let user=await storage.load({
+            key:'loginUser'
+        })
+        console.log(user);
+        //'0未申请1第一次申请中2申请过'
+        if(user.creditor_status==0){
+                self.setState({
+                    isAuthor:0
                 })
-        }else{
-            
-        }
+            }else if(user.creditor_status==1){
+                console.log('1111')
+                self.setState({
+                    isAuthor:1
+                })
+            }else if(user.creditor_status==2){
+                self.setState({
+                    isAuthor:2
+                })
+                let getIndexUrl=config.baseUrl+config.api.rebate.index;
 
+                request.get(getIndexUrl)
+                    .then((data)=>{
+
+                    })
+            }
+        
         
     }
 
-  async _isHasAuthor(){
-
-        let getAuthorUrl=config.baseUrl+config.api.rebate.list;
-
-      return await request.get(getAuthorUrl)
-                .then(data=>{
-                    if(data.code==1&&data.data){
-                        return true;
-                    }else{
-                        return false;
-                    }
-                })
-                .catch(err=>{
-                    console.log(err);
-                })
-    }
+  
 
     leftPress(){
 
@@ -121,7 +118,7 @@ export default class Home extends Component{
 
     _enterLookInfo(){
         this.setState({
-            isAuthor:true
+            isAuthor:1
         });
     }
 
@@ -151,9 +148,12 @@ export default class Home extends Component{
     }
 
     render(){
-        
-        if(!this.state.isAuthor){
+        console.log('render data')
+        console.log(this.state.isAuthor===1)
+        if(this.state.isAuthor===0){
             return <Notice navigator={this.props.navigator} enterAuthor={this._enterLookInfo.bind(this)} />
+        }else if(this.state.isAuthor===1){
+            return <MyExpense />;
         }
 
         return (

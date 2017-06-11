@@ -27,12 +27,13 @@ export default class LoginIndex extends Component{
     constructor(props){
         super(props);
         this.state={
-            phoneNumber:'',
-            password:''
+            phoneNumber:'18137826957',
+            password:'123456'
         }
     }
     _submit(){
         let self=this;
+        console.log(this.state)
         let phoneNumber=this.state.phoneNumber;
         let pass=this.state.password;
 
@@ -53,6 +54,7 @@ export default class LoginIndex extends Component{
 
         request.post(loginUrl,body)
                 .then((data)=>{
+                    console.log(data)
                     if(data.code==1){
                         this.props.enterLogin(data.data);
                     }else{
@@ -103,6 +105,7 @@ export default class LoginIndex extends Component{
                         underlineColorAndroid="transparent"
                         keyboardType='number-pad' //弹出软键盘类型
                         onChangeText={(text)=>{
+                            
                             this.setState({
                                 phoneNumber:text
                             })

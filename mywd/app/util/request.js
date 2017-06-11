@@ -29,11 +29,29 @@ request.get=async (url,params)=>{
             .then((response)=>response.json())
 }
 
-request.post=(url,body)=>{
-    
-    let options=_.assign(config.header,{
-        body:JSON.stringify(body)
-    });
+request.post=async (url,body)=>{
+
+    let token=await storage.load({
+        key:'token',
+        autoSync: false,
+    })
+    .catch(err=>{
+        console.log(err);
+    })
+    let headers=_.assign({
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+    },{token:token||''});
+
+    let options={
+        body:JSON.stringify(body),
+        method:'POST',
+    };
+
+    _.assign(options,{
+        headers:headers
+    })
+    console.log(options)
 
     return fetch(url,options)
             .then((response)=>response.json())
