@@ -6,7 +6,7 @@ export default {
             'Content-Type':'application/json'
         }
     },
-    baseUrl:'http://wll.china87.cn/api/',
+    baseUrl:'http://wll.china87.cn/api',
     api:{
         user:{
             login:'/user/login',
@@ -14,6 +14,10 @@ export default {
             //发送验证码
             sendmessage:'/send/sms',
             
+        },
+        rebate:{
+            list:'/rebate/current',
+            index:'/creditor/index'
         }
     }
 

@@ -4,8 +4,8 @@ import React,{Component} from 'react';
 import {Navigator,View,StatusBar,Platform,AsyncStorage,BackAndroid} from 'react-native';
 import Wrapper from './component/Wrapper';
 
-// import Storage from './util/storage';
-/** 
+import Storage from './util/storage';
+
 const storage=new Storage({
 	// 最大容量，默认值1000条数据循环存储
   size: 1000,
@@ -27,13 +27,13 @@ const storage=new Storage({
   // 或是写到另一个文件里，这里require引入
   // 或是在任何时候，直接对storage.sync进行赋值修改
   //sync: require('./sync')  // 这个sync文件是要你自己写的
-})*/
+})
 
 // 对于web
 // window.storage = storage;
   
 // 对于react native
-// global.storage = storage;
+global.storage = storage;
 
 
 export default class Navigation extends Component{

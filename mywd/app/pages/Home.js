@@ -10,6 +10,7 @@ import {
     Dimensions,
     Platform,
     AlertIOS,
+    Alert,
     TouchableOpacity,
     TouchableHighlight,
     TouchableNativeFeedback,
@@ -26,8 +27,12 @@ import AllObligationList from './AllobList';
 import Popularize from './Popularize';
 import MyExpense from './myExpenseList';
 import Notice from './notice';
-let {width,height}=Dimensions.get('window');
 
+import request from '../util/request';
+import config from '../util/config';
+
+let {width,height}=Dimensions.get('window');
+const isIOS=Platform.OS==='ios';
 
 export default class Home extends Component{
     constructor(props){
@@ -52,6 +57,46 @@ export default class Home extends Component{
         }
     }
     
+    componentWillMount(){
+        this._getIndexInfo();
+    }
+
+   async _getIndexInfo(){
+        let isTrue=await this._isHasAuthor()
+                            .then(data=>{
+                                return data;
+                            })
+        if(isTrue){
+            let getIndexUrl=config.baseUrl+config.api.rebate.index;
+
+            request.post(getIndexUrl,body)
+                .then((data)=>{
+
+                })
+        }else{
+            
+        }
+
+        
+    }
+
+  async _isHasAuthor(){
+
+        let getAuthorUrl=config.baseUrl+config.api.rebate.list;
+
+      return await request.get(getAuthorUrl)
+                .then(data=>{
+                    if(data.code==1&&data.data){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                })
+                .catch(err=>{
+                    console.log(err);
+                })
+    }
+
     leftPress(){
 
     }

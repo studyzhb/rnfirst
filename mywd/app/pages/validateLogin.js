@@ -26,9 +26,42 @@ let {width,height} = Dimensions.get('window');
 export default class LoginIndex extends Component{
     constructor(props){
         super(props);
+        this.state={
+            phoneNumber:'',
+            password:''
+        }
     }
     _submit(){
-        this.props.enterLogin();
+        let self=this;
+        let phoneNumber=this.state.phoneNumber;
+        let pass=this.state.password;
+
+        if(!phoneNumber){
+            return isIOS?AlertIOS.alert('手机号不能为空！'):Alert.alert('手机号不能为空！');
+        }
+
+        if(!pass){
+            return isIOS?AlertIOS.alert('密码不能为空！'):Alert.alert('密码不能为空！');
+        }
+
+        let body={
+            tel:phoneNumber,
+            password:pass
+        }
+
+        let loginUrl=config.baseUrl+config.api.user.login;
+
+        request.post(loginUrl,body)
+                .then((data)=>{
+                    if(data.code==1){
+                        this.props.enterLogin(data.data);
+                    }else{
+                        isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
+                    }
+                })
+                .catch((err)=>{
+                    console.log(JSON.stringify(err));
+                }) 
     }
 
     leftPress(){
@@ -91,7 +124,7 @@ export default class LoginIndex extends Component{
                         keyboardType='number-pad' //弹出软键盘类型
                         onChangeText={(text)=>{
                             this.setState({
-                                phoneNumber:text
+                                password:text
                             })
                         }}
                     />

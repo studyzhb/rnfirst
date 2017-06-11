@@ -12,7 +12,16 @@ export default class Wrapper extends Component{
       }
     }
 
-    _afterLogin(){
+    _afterLogin(user){
+        console.log(user);
+        storage.save({
+            key:'loginUser',
+            data:user
+        })
+        storage.save({
+            key:'token',
+            data:user.login_token
+        })
         this.setState({
             isLogin:true
         })

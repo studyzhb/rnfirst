@@ -65,7 +65,7 @@ export default class Register extends Component{
 
         request.post(verifyURL,body)
                 .then((data)=>{
-                    
+                    console.log(JSON.stringify(data))
                     if(data&&data.success){
                         self.props.afterLogin(data.data)
                     }else{
@@ -73,6 +73,7 @@ export default class Register extends Component{
                     }
                 })
                 .catch((err)=>{
+                    console.log(err)
                     isIOS?AlertIOS.alert('获取验证码失败，请检查网络是否良好'):Alert.alert('获取验证码失败，请检查网络是否良好');
                 })
     }
@@ -102,10 +103,11 @@ export default class Register extends Component{
             type:'reg'
         }
         //注册URL
-        let signupURL=config.baseUrl + config.api.user.sendmessage;;
-        
+        let signupURL=config.baseUrl + config.api.user.sendmessage;
+
         request.get(signupURL,body)
                 .then((data)=>{
+                    console.log(JSON.stringify(data)+'shuju')
                     if(data&&data.success){
                         self._showVerifyCode()
                     }else{
@@ -113,6 +115,7 @@ export default class Register extends Component{
                     }
                 })
                 .catch((err)=>{
+                    console.log(err)
                      isIOS?AlertIOS.alert('获取验证码失败，请检查网络是否良好!'):Alert.alert('获取验证码失败，请检查网络是否良好');
                 })
     }

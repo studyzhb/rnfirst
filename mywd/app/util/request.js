@@ -2,25 +2,39 @@
 /**
  * 请求
  */
-var queryString=require('qs');
-var _=require('lodash');
-var config=require('./config');
 
-var request={};
+import queryString from 'qs';
+import _ from 'lodash';
+import config from './config';
 
-request.get=(url,params)=>{
+let request={};
+
+request.get=async (url,params)=>{
+    let token=await storage.load({
+        key:'token'
+    })
+    console.log(token)
     if(params){
         url+='?'+queryString.stringify(params)
     }
-
-    return fetch(url)
+    let options={
+        method:'GET',
+        headers:{
+            token:token
+        }
+        
+    }
+    console.log(options)
+    return fetch(url,options)
             .then((response)=>response.json())
 }
 
 request.post=(url,body)=>{
-    let options=_.extend(config.header,{
+    
+    let options=_.assign(config.header,{
         body:JSON.stringify(body)
     });
+
     return fetch(url,options)
             .then((response)=>response.json())
 }
