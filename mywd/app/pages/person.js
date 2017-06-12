@@ -20,12 +20,17 @@ import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import {CheckBox} from 'react-native-elements';
+
 const isIOS=Platform.OS==='ios';
 let {width,height} = Dimensions.get('window');
 
 export default class Person extends Component{
     constructor(props){
         super(props);
+        this.state={
+            checked:true,
+        }
     }
     _submit(){
        
@@ -73,6 +78,23 @@ export default class Person extends Component{
                                 phoneNumber:text
                             })
                         }}
+                    />
+
+                </View>
+                <View style={styles.inputWrapper}>
+                    <View style={{flexDirection:'row',alignItems:'center'}}>
+                        <Icon name='ios-contact-outline' size={18} />
+                        <Text style={styles.labelinput}>昵称</Text>
+                    </View>
+                    
+                    <CheckBox
+                    center
+                    title='男'
+                    containerStyle={{backgroundColor:'#fff',borderWidth:0}}
+                    checkedIcon='dot-circle-o'
+                    uncheckedIcon='circle-o'
+                    checkedColor='red'
+                    checked={this.state.checked}
                     />
 
                 </View>

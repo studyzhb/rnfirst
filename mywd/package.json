@@ -16,6 +16,7 @@
     "jest": "20.0.4",
     "react-addons-update": "^15.5.2",
     "react-native-button": "^1.8.2",
+    "react-native-elements": "^0.12.2",
     "react-native-sk-countdown": "^1.0.1",
     "react-native-tab-navigator": "^0.3.3",
     "react-native-vector-icons": "^4.2.0",

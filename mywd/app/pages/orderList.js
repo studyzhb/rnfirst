@@ -24,6 +24,8 @@ import NavBar from '../component/NavBar';
 import px2dp from '../util/px2dp';
 import OrderDetail from './orderDetail';
 
+import config from '../util/config';
+import request from '../util/request';
 
 let {width,height} = Dimensions.get('window');
 let isIOS=Platform.OS==='ios';
@@ -32,6 +34,18 @@ export default class OrderList extends Component{
 
     constructor(props){
         super(props);
+    }
+
+    componentWillMount(){
+        this.getOrderList();
+    }
+
+    getOrderList(){
+        let orUrl=config.baseUrl+config.api.rebate.getHisOrder;
+        request.get(orUrl)
+            .then(data=>{
+
+            })
     }
 
     gotoDetail(){

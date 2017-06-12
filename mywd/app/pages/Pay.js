@@ -23,6 +23,8 @@ import NavBar from '../component/NavBar';
 import px2dp from '../util/px2dp';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import config from '../util/config'
+import request from '../util/request'
 
 let {width,height} = Dimensions.get('window');
 let isIOS=Platform.OS==='ios';
@@ -34,7 +36,17 @@ export default class Pay extends Component{
     }
 
     createOrder(){
-        
+        let createOrderUrl=config.baseUrl+config.api.rebate.createOrder;
+        let body={
+            goods_arr:JSON.stringify(this.props.totalArr),
+            is_back:this.props.isback,
+            creditor_id:this.props.queueid
+        };
+        console.log(body)
+        request.post(createOrderUrl,body)
+            .then(data=>{
+                console.log(data);
+            })
     }
 
 
@@ -70,7 +82,7 @@ export default class Pay extends Component{
                 <View style={styles.footerCon}>
                     <View style={{flexDirection:'row',alignItems:'center'}}>
                         <Text style={{fontSize:14,color:'#626262'}}>总计：</Text>
-                        <Text style={{fontSize:14,color:'#ff0000'}}>￥4000</Text>
+                        <Text style={{fontSize:14,color:'#ff0000'}}>￥{this.props.total}</Text>
                     </View>
                     <Button
                         style={styles.paybtn}
