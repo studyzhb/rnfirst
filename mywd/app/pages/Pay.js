@@ -18,13 +18,15 @@ import {
 } from 'react-native';
 
 import Button from 'react-native-button';
-
+import Item from '../component/Item';
 import NavBar from '../component/NavBar';
 import px2dp from '../util/px2dp';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import {CheckBox} from 'react-native-elements';
 import config from '../util/config'
 import request from '../util/request'
+
+import LbsModal from '../component/LbsModal'
 
 let {width,height} = Dimensions.get('window');
 let isIOS=Platform.OS==='ios';
@@ -33,6 +35,20 @@ export default class Pay extends Component{
 
     constructor(props){
         super(props);
+        this.payinfo=[
+            {icon:"ios-pin", name:"安全中心"},
+            {icon:"ios-bulb-outline", name:"意见反馈", color:"#fc7b53"},
+            {icon:"ios-information-circle-outline", name:"关于我们", subName:"分润奖励金", color:"#fc7b53"}
+        ]
+        this.state={
+            checked:true,
+            modalVisible:false
+        }
+    }
+
+    openLbs(){
+        console.log('zhifu');
+        this.setState({modalVisible: true})
     }
 
     createOrder(){
@@ -45,23 +61,66 @@ export default class Pay extends Component{
         console.log(body)
         request.post(createOrderUrl,body)
             .then(data=>{
+                if(data.code==1){
+                    // this._goPay(data.data);
+                    this.openLbs();
+                }else{
+                    isIOS
+                    ?AlertIOS.alert(data.message)
+                    :Alert.alert(data.message)
+                }
                 console.log(data);
             })
     }
 
 
+    _goPay(data){
+        let createOrderUrl=config.baseUrl+config.api.pay.balance;
+        let body={
+            order_sn:data.order_sn,
+            pay_pwd:''
+        };
+        console.log(body)
+        request.post(createOrderUrl,body)
+            .then(data=>{
+                if(data.code==1){
+                   
+                }else{
+                    isIOS
+                    ?AlertIOS.alert(data.message)
+                    :Alert.alert(data.message)
+                }
+                console.log(data);
+            })
+    }
+
     renderGoodsList(){
         return (
-            <View style={styles.items}>
-                {/*<Image source={require('../images/goods.png')} style={{width:100,height:100}} />*/}
-                <View style={{marginLeft:20,justifyContent:'space-between'}}>
-                    <Text style={{fontSize:14,width:158,lineHeight:20,color:'#666'}}>备注：</Text>
-                    <View style={[{flexDirection:'row',marginTop:-10,height:18}]}>
-                        <Text>选择自提点：</Text>
-                        <Text style={{ color: "#999", fontSize: 12, textAlign: "center",marginLeft:9, fontWeight: "bold" }}>e+便利凤台路店</Text>
-                    </View>
+            <View>
+
+                <View style={{alignItems:'flex-end'}}>
+                    <CheckBox
+                        center
+                        title='余额支付'
+                        containerStyle={{backgroundColor:'#fff',borderWidth:0}}
+                        checkedIcon='dot-circle-o'
+                        uncheckedIcon='circle-o'
+                        checkedColor='red'
+                        checked={this.state.checked}
+                        />
                 </View>
-            </View> 
+
+                <View style={styles.items}>
+                    {/*<Image source={require('../images/goods.png')} style={{width:100,height:100}} />*/}
+                    <View style={{marginLeft:20,justifyContent:'space-between'}}>
+                        {/*<Text style={{fontSize:14,width:158,lineHeight:20,color:'#666'}}>备注：</Text>*/}
+                        <View style={[{flexDirection:'row',marginTop:-10,height:18}]}>
+                            <Text>自提点：</Text>
+                            <Text style={{ color: "#999", fontSize: 12, textAlign: "center",marginLeft:9, fontWeight: "bold" }}>e+便利凤台路店</Text>
+                        </View>
+                    </View>
+                </View> 
+            </View>
         )
     }
 
@@ -79,6 +138,10 @@ export default class Pay extends Component{
                         this.renderGoodsList()
                     }
                 </View>
+                <LbsModal
+                    modalVisible={this.state.modalVisible}
+                    closeModal={(()=>this.setState({modalVisible: false})).bind(this)}
+                    />
                 <View style={styles.footerCon}>
                     <View style={{flexDirection:'row',alignItems:'center'}}>
                         <Text style={{fontSize:14,color:'#626262'}}>总计：</Text>
@@ -92,7 +155,7 @@ export default class Pay extends Component{
                         提交
                     </Button>
                 </View>
-
+                
             </View>
         )
         

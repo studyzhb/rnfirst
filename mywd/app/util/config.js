@@ -13,6 +13,7 @@ export default {
             register:'/user/reg',
             //发送验证码
             sendmessage:'/send/sms',
+            updatePay:'/user/editpaypwd'
             
         },
         //返利模块
@@ -29,8 +30,13 @@ export default {
             getGoodsList:'/goods/list',
             //获取订单列表
             getHisOrder:'/order/list',
+            //兑换回购记录列表
+            getBackOrConverce:'/creditor/apply_list',
             //创建订单
             createOrder:'/order/create'
+        },
+        pay:{
+            balance:'/defray/balance'
         }
     }
 

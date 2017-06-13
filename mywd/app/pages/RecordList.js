@@ -6,6 +6,7 @@ import {
     Image,
     StyleSheet,
     ScrollView,
+    ListView,
     Dimensions,
     Platform,
     AlertIOS,
@@ -14,7 +15,8 @@ import {
     TouchableHighlight,
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
-    RefreshControl
+    RefreshControl,
+    ActivityIndicator
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -22,43 +24,230 @@ import Button from 'react-native-button';
 import NavBar from '../component/NavBar';
 import px2dp from '../util/px2dp';
 import Icon from 'react-native-vector-icons/Ionicons';
+
+import config from '../util/config';
+import request from '../util/request';
+
 let { width, height } = Dimensions.get('window');
 let isIOS = Platform.OS === 'ios';
+
+let cachedResults = {
+    nextPage: 1,
+    items: [],
+    total: 0
+}
+
 export default class RecordList extends Component {
 
     constructor(props) {
         super(props);
+
+        let ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+        })
+
+        this.state = {
+            orderArr: [],
+            tabStatus: 1,
+            isRefreshing: false,
+            isLoadingTail: false,
+            dataSource: ds.cloneWithRows([])
+        }
+    }
+
+    componentDidMount() {
+
+        // this.getOrderList();
+        this._getIndexInfo();
+    }
+
+    changeTabStatus(value) {
+        console.log('status' + value)
+        let cachedResults = {
+            nextPage: 1,
+            items: [],
+            total: 0
+        }
+        this.setState({
+            tabStatus: value,
+            isRefreshing: true
+        })
+
+        this._fetchData(0, { status: value });
+    }
+
+    _fetchData(page, to) {
+
+        let that = this;
+        let self = this;
+        if (page !== 0) {
+            this.setState({
+                isLoadingTail: true
+            })
+        }
+        else {
+            this.setState({
+                isRefreshing: true
+            })
+        }
+
+        let getIndexUrl = config.baseUrl + config.api.rebate.getBackOrConverce;
+        let obj = {
+            page: page,
+            id: this.props.obid,
+            type: to ? to.status : 1
+        }
+
+        request.get(getIndexUrl, obj)
+            .then((data) => {
+                console.log(data)
+
+                if (data.code == 1 && data.data) {
+
+                    let list = data.data.list || [];
+
+                    if (list.length > 0) {
+
+                        let items = cachedResults.items.slice()
+
+                        if (page !== 0) {
+                            items = items.concat(data.data.list)
+                            cachedResults.nextPage += 1
+                        }
+                        else {
+                            items = data.data.list.concat(items)
+                        }
+
+                        cachedResults.items = items
+                        cachedResults.total = data.data.total
+
+                        if (page !== 0) {
+                            that.setState({
+                                isLoadingTail: false,
+                                dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
+                            })
+                        }
+                        else {
+                            that.setState({
+                                isRefreshing: false,
+                                dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
+                            })
+                        }
+                    } else {
+
+                        cachedResults.items = []
+                        cachedResults.total = data.data.total
+                        that.setState({
+                            isRefreshing: false,
+                            dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
+                        })
+                    }
+
+                } else {
+                    isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
+                }
+            })
+            .catch(err => {
+                if (page !== 0) {
+                    this.setState({
+                        isLoadingTail: false
+                    })
+                }
+                else {
+                    this.setState({
+                        isRefreshing: false
+                    })
+                }
+            })
+
+    }
+
+    _hasMore() {
+        return cachedResults.items.length !== cachedResults.total;
+    }
+
+    _fetchMoreData() {
+        if (!this._hasMore() || this.state.isLoadingTail) {
+
+            this.setState({
+                isLoadingTail: false
+            })
+
+            return
+        }
+
+        let page = cachedResults.nextPage
+
+        this._fetchData(page)
     }
 
 
+    _onRefresh() {
+        console.log('执行刷新');
+        if (!this._hasMore() || this.state.isRefreshing) {
+            return
+        }
+        this._fetchData(0)
+    }
 
-    renderGoodsList() {
+    _renderFooter() {
+        if (!this._hasMore() && cachedResults.total !== 0) {
+            return (
+                <View style={styles.loadingMore}>
+                    <Text style={styles.loadingText}>没有更多了</Text>
+                </View>
+            )
+        }
+
+        if (!this.state.isLoadingTail) {
+            return <View style={styles.loadingMore} />
+        }
+
+        return <ActivityIndicator style={styles.loadingMore} />
+    }
+
+
+    async _getIndexInfo() {
+        this._fetchData(1);
+    }
+
+    _renderRow(item) {
+        let info = '';
+        if (item.status == 0) {
+            info = '未付款';
+        } else if (item.status == 1) {
+            info = '付款中';
+        } else if (item.status == 2) {
+            info = '交易完成';
+        } else if (item.status == 3) {
+            info = '付款失败';
+        }
         return (
             <View style={{ paddingLeft: 20, paddingVertical: 12, paddingRight: 20, backgroundColor: '#fff', marginTop: 12 }}>
                 <View style={[styles.flexRow, { justifyContent: 'space-between' }]}>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{ color: '#333', fontSize: 14 }}>兑换积分</Text>
-                        <Text style={styles.baseText}>1400</Text>
+                        <Text style={styles.baseText}>{item.money}</Text>
                     </View>
-                    <Text style={{ color: "#666", fontSize: 14 }}>申请中</Text>
+                    <Text style={{ color: "#666", fontSize: 14 }}>{info}</Text>
                 </View>
 
                 <View style={styles.flexRow}>
                     <Text style={styles.baseText}>兑换比例：</Text>
-                    <Text style={styles.baseText}>1：1</Text>
-                   
+                    <Text style={styles.baseText}>{item.proportion}</Text>
+
                 </View>
                 <View style={styles.flexRow}>
                     <Text style={styles.baseText}>实际到账：</Text>
-                    <Text style={{ color: "#21bb58", fontSize: 14 }}>￥1372.00</Text>
+                    <Text style={{ color: "#21bb58", fontSize: 14 }}>￥{item.real_money}</Text>
                 </View>
                 <View style={styles.flexRow}>
                     <Text style={styles.baseText}>维护费用：</Text>
-                    <Text style={{ color: "#21bb58", fontSize: 14 }}>￥28（2%）</Text>
+                    <Text style={{ color: "#21bb58", fontSize: 14 }}>￥{item.ping_money}（{item.ping_fee}%）</Text>
                 </View>
                 <View style={{ marginTop: 7 }}>
-                    <Text style={styles.baseText}>兑换时间：2017-03-24</Text>
-                    
+                    <Text style={styles.baseText}>兑换时间：{item.draw_date}</Text>
+
                 </View>
             </View>
         )
@@ -75,21 +264,41 @@ export default class RecordList extends Component {
                     />
                     <View style={styles.tabTitle}>
                         <Button
-                            containerStyle={[styles.backBuyWrapper, styles.backActive]}
+                            onPress={this.changeTabStatus.bind(this, 1)}
+                            containerStyle={[styles.backBuyWrapper, this.state.tabStatus == 1 ? styles.backActive : null]}
                             style={styles.backBuy}
                         >
                             兑换记录
                         </Button>
                         <Button
-                            containerStyle={[styles.backBuyWrapper]}
+                            onPress={this.changeTabStatus.bind(this, 2)}
+                            containerStyle={[styles.backBuyWrapper, this.state.tabStatus == 2 ? styles.backActive : null]}
                             style={styles.backBuy}
                         >
                             回购记录
                         </Button>
                     </View>
-                    {
-                        this.renderGoodsList()
-                    }
+                    <ListView
+                        style={{ paddingBottom: 100 }}
+                        dataSource={this.state.dataSource}
+                        renderRow={this._renderRow.bind(this)}
+                        renderFooter={this._renderFooter.bind(this)}
+                        onEndReached={this._fetchMoreData.bind(this)}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.isRefreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                                tintColor='#ff6600'
+                                title='拼命加载中'
+                            />
+                        }
+                        pageSize={2}
+                        onEndReachedThreshold={20}
+                        enableEmptySections={true}
+                        showsVerticalScrollIndicator={false}
+                        automaticallyAdjustContentInsets={false}
+                        removeClippedSubviews={false}
+                    />
                 </View>
 
             </View>
@@ -135,13 +344,21 @@ const styles = StyleSheet.create({
     nowbuybtn: {
         fontSize: 14, color: '#fff',
     },
-    flexRow:{
-        flexDirection:'row',
-        marginTop:7
+    flexRow: {
+        flexDirection: 'row',
+        marginTop: 7
     },
     baseText: {
         color: '#999',
         fontSize: 12
+    },
+    loadingMore: {
+        marginVertical: 20
+    },
+
+    loadingText: {
+        color: '#777',
+        textAlign: 'center'
     }
 
 })

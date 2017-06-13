@@ -108,6 +108,7 @@ countDown.prototype = {
                 second = this.ten(Math.floor(this.timePassed) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60));
             this.onInterval(day, hour, minute, second); // 回调
         } else if (this.countType == "seconds") {
+            console.log(this.timePassed)
             this.onInterval(this.timePassed); // 回调
         }
         if (isStart)// 是否开始计时

@@ -60,7 +60,8 @@ export default class GoodsList extends Component {
     }
 
     confirmPay() {
-        
+        let self=this;
+       
         let info = this.state.total<1400?'您的订单不足1400元，将无法生成队列订单，您可以继续购物凑够金额。':'您的购物金额为：'+this.state.total+' ,将拆分为'+Math.floor(this.state.total/1400);
         isIOS
             ? AlertIOS.alert(
@@ -87,6 +88,7 @@ export default class GoodsList extends Component {
         let totalArr=this.state.totalArr.map((item,i)=>{
             return {id:item.id,num:1}
         })
+        console.log(this.props)
         this.props.navigator.push({
             name: 'pay',
             component: Pay,

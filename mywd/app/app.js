@@ -35,8 +35,8 @@ const storage=new Storage({
 // 对于react native
 global.storage = storage;
 
-storage.clearMapForKey('loginUser');
-storage.clearMapForKey('token');
+// storage.clearMapForKey('loginUser');
+// storage.clearMapForKey('token');
 
 export default class Navigation extends Component{
 	constructor(props){

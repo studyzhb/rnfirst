@@ -83,14 +83,20 @@ export default class ObligationList extends Component {
 
         this.props.navigator.push({
             name: 'orderlist',
-            component: OrderList
+            component: OrderList,
+            params:{
+                obid:this.props.id
+            }
         })
     }
 
     gotoConvercePage() {
         this.props.navigator.push({
             name: 'RecordList',
-            component: RecordList
+            component: RecordList,
+            params:{
+                obid:this.props.id
+            }
         })
     }
     // 订单信息

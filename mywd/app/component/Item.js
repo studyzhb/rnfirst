@@ -60,12 +60,13 @@ export default class Item extends Component {
     onPress: PropTypes.func
   }
   _render(){
-    let {icon, iconSize, name, subName, color, first, avatar, disable, font} = this.props
+    let {icon, iconSize, name, subName, color, first, avatar,image, disable, font} = this.props
     font = font||"Ionicons"
     const Icon = Font[font]
     return (
       <View style={styles.listItem}>
         {icon?(<Icon name={icon} size={px2dp(iconSize||20)} style={{width: 22, marginRight:5, textAlign:"center"}} color={color || "#4da6f0"} />):null}
+        {image?(<Image source={image} style={{width: 36, height: 36, resizeMode: "cover", overflow:"hidden", borderRadius: 18}}/>):null}
         <View style={[styles.listInfo, {borderTopWidth: !first?1:0}]}>
           <View style={{flex: 1}}><Text>{name}</Text></View>
           <View style={styles.listInfoRight}>

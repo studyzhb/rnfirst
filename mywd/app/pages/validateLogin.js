@@ -18,7 +18,7 @@ import request from '../util/request';
 import config from '../util/config';
 import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
-import Register from './Register';
+import Register from './payPass';
 import ForgetPass from './ForgetPass';
 
 const isIOS=Platform.OS==='ios';
