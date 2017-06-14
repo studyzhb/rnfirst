@@ -1,0 +1,3 @@
+rootProject.name = 'rebate'
+
+include ':app'
