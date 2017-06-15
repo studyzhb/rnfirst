@@ -8,7 +8,8 @@ import Alipay from 'react-native-yunpeng-alipay'
 import config from './config'
 import request from './request'
 
-export function alipay(opt) {
+export default function alipay(opt) {
+  console.log(opt)
   return (dispatch) => {
     const uri =config.baseUrl + config.api.pay.alipay;  /*支付接口*/
     let body=opt;

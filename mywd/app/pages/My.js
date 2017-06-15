@@ -22,6 +22,7 @@ import Setting from './Setting';
 // import UserProfile from './UserProfile';
 import Person from './person';
 import Address from './Address';
+import SafeCenter from './safeCenter';
 import px2dp from '../util/px2dp';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -39,7 +40,7 @@ export default class My extends Component{
         }
 
         this.config=[
-            {icon:"ios-pin", name:"安全中心", onPress:this.goPage.bind(this, "address")},
+            {icon:"ios-pin", name:"安全中心", onPress:this.goPage.bind(this, "safeCenter")},
             {icon:"ios-bulb-outline", name:"意见反馈", color:"#fc7b53"},
             {icon:"ios-information-circle-outline", name:"关于我们", subName:"分润奖励金", color:"#fc7b53"},
             // {icon:"md-flower", name:"服务中心"},
@@ -48,7 +49,7 @@ export default class My extends Component{
 
     goPage(key, data = {}){
     let pages = {
-      "address1": Address
+      "safeCenter": SafeCenter
     }
     if(pages[key]){
       this.props.navigator.push({

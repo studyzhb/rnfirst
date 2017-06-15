@@ -38,12 +38,18 @@ export default class ObligationList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            queueInfo: {}
+            queueInfo: {},
+            isRefreshing:false
         }
     }
 
     componentDidMount() {
         this.getQueueList();
+    }
+    shouldComponentUpdate(){
+
+        // this.getQueueList()
+        return true;
     }
 
     //获取队列列表信息
@@ -64,16 +70,30 @@ export default class ObligationList extends Component {
             })
     }
 
-    goConverce() {
-
+    goConverce(id) {
+        this.setState({
+            isRefreshing:true
+        })
+        let getQueueUrl = config.baseUrl + config.api.rebate.converse;
+        request.post(getQueueUrl, { id: id })
+            .then(data => {
+                console.log(data)
+                if (data.code == 1 && data.data) {
+                    self.setState({
+                        isRefreshing:false
+                    })
+                } else {
+                    isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
+                }
+            })
     }
 
     gotoshopping() {
         this.props.navigator.push({
             name: '',
             component: GoodsList,
-            params:{
-                obid:this.props.id
+            params: {
+                obid: this.props.id
             }
         })
     }
@@ -84,8 +104,8 @@ export default class ObligationList extends Component {
         this.props.navigator.push({
             name: 'orderlist',
             component: OrderList,
-            params:{
-                obid:this.props.id
+            params: {
+                obid: this.props.id
             }
         })
     }
@@ -94,17 +114,20 @@ export default class ObligationList extends Component {
         this.props.navigator.push({
             name: 'RecordList',
             component: RecordList,
-            params:{
-                obid:this.props.id
+            params: {
+                obid: this.props.id
             }
         })
     }
     // 订单信息
-    gotoRecordList() {
+    gotoRecordList(id) {
 
         this.props.navigator.push({
             name: 'OrderInfo',
-            component: OrderInfo
+            component: OrderInfo,
+            params:{
+                id:id
+            }
         })
     }
 
@@ -115,31 +138,31 @@ export default class ObligationList extends Component {
          */
 
 
-
+        //`isback` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可以回购 1 是 2 否',
         let items = this.state.queueInfo.list_queque
-            ? this.state.queueInfo.list_queque.queque?this.state.queueInfo.list_queque.queque.map((item, key) => {
-                if(item.queque_status=='0'){
-                    item.queueStatusText='队列中';
-                }else if(item.queque_status=='1'){
-                    item.queueStatusText='可提现';
-                }else if(item.queque_status=='2'){
-                    item.queueStatusText='提现中';
-                }else if(item.queque_status=='3'){
-                    item.queueStatusText='已提现';
-                }else if(item.queque_status=='4'){
-                    item.queueStatusText='被踢出';
+            ? this.state.queueInfo.list_queque.queque ? this.state.queueInfo.list_queque.queque.map((item, key) => {
+                if (item.queque_status == '0') {
+                    item.queueStatusText = '队列中';
+                } else if (item.queque_status == '1') {
+                    item.queueStatusText = '可提现';
+                } else if (item.queque_status == '2') {
+                    item.queueStatusText = '提现中';
+                } else if (item.queque_status == '3') {
+                    item.queueStatusText = '已提现';
+                } else if (item.queque_status == '4') {
+                    item.queueStatusText = '被踢出';
                 }
 
                 return (
-                    <TouchableWithoutFeedback onPress={this.gotoRecordList.bind(this)} key={key}>
+                    <TouchableWithoutFeedback onPress={this.gotoRecordList.bind(this,item.id)} key={key}>
                         <View style={styles.recordWrapper}>
                             <View style={{ borderBottomColor: '#eaeaea', borderBottomWidth: 1 }}>
 
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 16 }}>
                                     <Text style={styles.normalText}>订单号：{item.order_sn}</Text>
                                     <Text>{
-                                          item.queueStatusText  
-                                        }
+                                        item.queueStatusText
+                                    }
                                     </Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 16 }}>
@@ -149,36 +172,42 @@ export default class ObligationList extends Component {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 16 }}>
                                     <Text style={[styles.normalText, { marginTop: 10 }]}>{item.created_at}</Text>
                                     <View style={{ flexDirection: 'row', }}>
-                                        <Button style={styles.convercebtn} containerStyle={styles.convercebtnWrapper}>
-                                            提货
+                                        <Button style={styles.convercebtn} containerStyle={[styles.convercebtnWrapper,styles.disabled]} disabled={true} disabledText={{color:'#666'}}>
+                                                    提货
+                                            </Button>
+                                        {
+                                            item.queque_status != 1
+                                                ? <Button onPress={this.goConverce.bind(this,item.id)} style={[styles.convercebtn]} containerStyle={[styles.convercebtnWrapper, { marginLeft: 15 }]}>
+                                                    兑换
                                         </Button>
-                                        <Button style={[styles.convercebtn]} containerStyle={[styles.convercebtnWrapper, { marginLeft: 15 }]}>
-                                            兑换
-                                        </Button>
+                                                : null
+                                        }
+
                                     </View>
                                 </View>
+
+                                
 
                             </View>
 
                             <View style={[styles.numbers, { paddingVertical: 20, height: 58 }]}>
 
-                                <View style={[styles.numItem, { flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 10, marginTop: -10, height: 18 }]}>
-                                    <Icon name='logo-yen' size={12} />
-                                    <Text style={{ color: "#999", fontSize: 12, marginLeft: 9, fontWeight: "bold" }}>返还状态：{item.queque_status==0?'等待中':'已完成'}</Text>
-
-                                </View>
-                                {/*<View style={[styles.numItem, { flexDirection: 'row', marginTop: -10, borderLeftWidth: 1, height: 18, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
+                                    <View style={[styles.numItem, { flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 10, marginTop: -10, height: 18 }]}>
+                                        <Icon name='logo-yen' size={12} />
+                                        <Text style={{ color: "#999", fontSize: 12, marginLeft: 9, fontWeight: "bold" }}>返还状态：{item.queque_status == 0 ? '等待中' : '已完成'}</Text>
+                                    </View>
+                                    {/*<View style={[styles.numItem, { flexDirection: 'row', marginTop: -10, borderLeftWidth: 1, height: 18, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
                             <Icon name='ios-people-outline' size={12} />
                             <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>队列编号</Text>
                         </View>*/}
 
-                            </View>
+                                </View>
 
                         </View>
                     </TouchableWithoutFeedback>
 
                 )
-            }):null
+            }) : null
             : null;
 
         return items;
@@ -196,6 +225,7 @@ export default class ObligationList extends Component {
                     />
                     <ScrollView
                         showsVerticalScrollIndicator={false}
+                        
                     >
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: px2dp(106), backgroundColor: '#fff', borderBottomColor: '#eaeaea', borderBottomWidth: 1 }}>
                             <View style={{ flexDirection: 'column', height: px2dp(106), justifyContent: 'center', marginLeft: px2dp(18) }}>
@@ -208,10 +238,9 @@ export default class ObligationList extends Component {
                                     <Text style={{ color: '#333', fontSize: 12 }}>{this.state.queueInfo.refund}</Text>
                                 </View>
                             </View>
-                            <TouchableWithoutFeedback onPress={this.goConverce.bind(this)}>
+                            <TouchableWithoutFeedback  >
                                 <Button
                                     style={styles.btn}
-
                                 >
                                     兑换
                             </Button>
@@ -221,7 +250,8 @@ export default class ObligationList extends Component {
                             <TouchableWithoutFeedback>
                                 <View style={[styles.numItem, { flexDirection: 'row' }]}>
                                     <View style={{ marginLeft: 36 }}>
-                                        <Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />
+                                        <Image source={require('../images/base01.png')} style={{width:34,height:34,}} />
+                                        {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
                                     </View>
 
                                     <View style={{ marginLeft: 20 }}>
@@ -234,7 +264,8 @@ export default class ObligationList extends Component {
                                 <View style={[styles.numItem, { flexDirection: 'row', borderLeftWidth: 1, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
 
                                     <View style={{ marginLeft: 36 }}>
-                                        <Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />
+                                        <Image source={require('../images/base02.png')} style={{width:34,height:34,}} />
+                                        {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
                                     </View>
                                     <View style={{ marginLeft: 20 }}>
                                         <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"未返积分"}</Text>
@@ -247,18 +278,21 @@ export default class ObligationList extends Component {
                             <View style={styles.numbers}>
                                 <TouchableWithoutFeedback onPress={this.gotoOrderPage.bind(this)}>
                                     <View style={styles.numItem}>
-                                        <Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />
+                                        {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
+                                        <Image source={require('../images/base03.png')} style={{width:34,height:40,}} />
                                         <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"消费订单"}</Text>
                                     </View>
                                 </TouchableWithoutFeedback>
                                 <TouchableWithoutFeedback onPress={this.gotoConvercePage.bind(this)}>
                                     <View style={[styles.numItem, { borderLeftWidth: 1, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
-                                        <Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />
+                                        {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
+                                        <Image source={require('../images/base04.png')} style={{width:44,height:40,}} />
                                         <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"兑换明细"}</Text>
                                     </View>
                                 </TouchableWithoutFeedback>
                             </View>
-                            <View style={{ height: 26, justifyContent: 'center' }}>
+                            <View style={{ flexDirection:'row',height: 26, alignItems: 'center' }}>
+                                <Image source={require('../images/title_1.png')} style={{width:20,height:20,}} />
                                 <Text style={{ fontSize: 14, color: '#3a3a3a' }}>信息</Text>
                             </View>
                             <View style={styles.numbers}>
@@ -293,6 +327,7 @@ export default class ObligationList extends Component {
                             </View>
 
                             <View style={{ height: 26, justifyContent: 'center' }}>
+                                <Image source={require('../images/title_2.png')} style={{width:20,height:20,}} />
                                 <Text style={{ fontSize: 14, color: '#3a3a3a' }}>返利记录</Text>
                             </View>
 
@@ -367,6 +402,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         backgroundColor: "#fff",
         height: 74,
+        paddingLeft:16
         // borderBottomColor: '#f3f3f3',
         // borderBottomWidth: 1
     },
@@ -398,6 +434,7 @@ const styles = StyleSheet.create({
     recordWrapper: {
         height: px2dp(166),
         backgroundColor: '#fff',
+        marginBottom:10,
         // paddingHorizontal:20
     },
     nowbuybtn: {
@@ -420,6 +457,9 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         // marginTop:-16
         // marginBottom:16
+    },
+    disabled:{
+        backgroundColor:'#f3f3f3'
     }
 
 })

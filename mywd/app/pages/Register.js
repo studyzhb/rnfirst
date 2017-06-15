@@ -66,7 +66,7 @@ export default class Register extends Component{
         request.post(verifyURL,body)
                 .then((data)=>{
                     console.log(JSON.stringify(data))
-                    if(data&&data.success){
+                    if(data.code==1){
                         self.props.afterLogin(data.data)
                     }else{
                         isIOS?AlertIOS.alert('获取验证码失败，请检查手机号是否正确!'):Alert.alert('获取验证码失败，请检查手机号是否正确!');
@@ -108,7 +108,7 @@ export default class Register extends Component{
         request.get(signupURL,body)
                 .then((data)=>{
                     console.log(JSON.stringify(data)+'shuju')
-                    if(data&&data.success){
+                    if(data.code==1){
                         self._showVerifyCode()
                     }else{
                         isIOS?AlertIOS.alert('获取验证码失败，请检查手机号是否正确!'):Alert.alert('获取验证码失败，请检查手机号是否正确');

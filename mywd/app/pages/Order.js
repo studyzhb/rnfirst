@@ -62,7 +62,11 @@ export default class Order extends Component{
     if(pages[key]){
       this.props.navigator.push({
           component: pages[key],
-          args: { data }
+          args: { data },
+          params:{
+              is_pay:this.state.ispay,
+              isrealname:this.state.isrealname
+          }
       })
     }
   }
@@ -82,8 +86,23 @@ export default class Order extends Component{
     // });
   }
   componentDidMount(){
-    this._onRefresh()
+      console.log('componentDidMount')
+        this._onRefresh()
   }
+
+  shouldComponentUpdate(){
+      console.log('shouldComponentUpdate')
+      return true;
+  }
+  componentWillUpdate(){
+      console.log('componentWillUpdate')
+      
+  }
+  componentDidUpdate(){
+      console.log('componentDidUpdate')
+      
+  }
+
   _onRefresh(){
     this.setState({isRefreshing: true});
     let getIndexUrl = config.baseUrl + config.api.user.showBalance;

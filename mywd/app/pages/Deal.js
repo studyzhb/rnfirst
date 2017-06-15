@@ -25,16 +25,24 @@ import px2dp from '../util/px2dp';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-
+import request from '../util/request';
+import config from '../util/config';
 
 let {width,height} = Dimensions.get('window');
+
+let cachedResults = {
+    nextPage: 1,
+    items: [],
+    total: 0
+}
 
 export default class Deal extends Component{
     constructor(props){
         super(props);
         this.state={
             isRefreshing:false,
-            isLogin:false
+            isLogin:false,
+            config:[]
         }
 
         this.config=[
@@ -62,12 +70,31 @@ export default class Deal extends Component{
   }
   _onRefresh(){
     this.setState({isRefreshing: true});
+    let getIndexUrl = config.baseUrl + config.api.user.showDealList;
+    request.get(getIndexUrl)
+        .then((data)=>{
+            console.log(data)
+            if(data.code==1){
+                this.setState({
+                    isRefreshing:false,
+                    config:data.data.data
+                })
+            }else{
+                isIOS
+                ?AlertIOS.alert(data.message)
+                :Alert.alert(data.message)
+            }
+        })
+        .catch(err=>{
+            console.log(err);
+            console.log(JSON.stringify(err));
+        })
     setTimeout(() => {
       this.setState({isRefreshing: false});
     }, 1500)
   }
   _renderListItem(){
-    return this.config.map((item, i) => {
+    return this.state.config.map((item, i) => {
     //   if(i%3==0){
     //     item.first = true
     //   }

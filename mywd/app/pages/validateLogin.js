@@ -18,7 +18,7 @@ import request from '../util/request';
 import config from '../util/config';
 import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
-import Register from './payPass';
+import Register from './Register';
 import ForgetPass from './ForgetPass';
 
 const isIOS=Platform.OS==='ios';
@@ -27,8 +27,8 @@ export default class LoginIndex extends Component{
     constructor(props){
         super(props);
         this.state={
-            phoneNumber:'18137826957',
-            password:'123456'
+            phoneNumber:'',
+            password:''
         }
     }
     _submit(){

@@ -21,7 +21,12 @@ export default {
             //实名认证
             realNameAuthor:'/userbalance/saverealname',
             //转余额
-            tabMoney:'/userbalance/editbalance'
+            tabMoney:'/userbalance/editbalance',
+            //用户银行卡信息
+            userBanklist:'/usercard/show',
+            addBank:'/usercard/create',
+            //用户更改密码
+            changePass:'/user/update_pwd'
         },
         //返利模块
         rebate:{
@@ -40,7 +45,9 @@ export default {
             //兑换回购记录列表
             getBackOrConverce:'/creditor/apply_list',
             //创建订单
-            createOrder:'/order/create'
+            createOrder:'/order/create',
+            //兑换积分
+            converse:'/creditor/exchange'
         },
         pay:{
             balance:'/defray/balance',

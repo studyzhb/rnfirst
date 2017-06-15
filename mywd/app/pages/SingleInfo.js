@@ -25,7 +25,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 let { width, height } = Dimensions.get('window');
 
-export default class AllobList extends Component {
+export default class SingleInfo extends Component {
     constructor(props) {
         super(props);
     }

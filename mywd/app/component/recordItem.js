@@ -27,15 +27,15 @@ export default class RecordItem extends Component{
 
     render(){
         
-        let {name,image,time,money}=this.props;
+        let {note,image,updated_at,money}=this.props;
         return (
             <TouchableHighlight style={styles.container}>
                 
                 <View  style={{flexDirection:'row'}}>
                     <Image />
                     <View style={[styles.item,styles.itemtop]}>
-                        <Text style={{color:'#666',fontSize:14}}>{name}</Text>
-                        <Text style={{color:'#999',fontSize:12,marginTop:5}}>{time}</Text>
+                        <Text style={{color:'#666',fontSize:14}}>{note}</Text>
+                        <Text style={{color:'#999',fontSize:12,marginTop:5}}>{updated_at}</Text>
                     </View>
                     <View style={[styles.item,styles.itembottom]}>
                         <Text style={{color:'#3a3a3a',fontSize:14}}>{money}</Text>

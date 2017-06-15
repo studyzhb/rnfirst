@@ -24,7 +24,7 @@ request.get=async (url,params)=>{
         }
         
     }
-    console.log(options)
+    console.log(url)
     return fetch(url,options)
             .then((response)=>response.json())
 }

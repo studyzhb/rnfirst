@@ -21,8 +21,6 @@ import Button from 'react-native-button';
 import px2dp from '../util/px2dp';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-
-
 let { width, height } = Dimensions.get('window');
 
 export default class Popularize extends Component {

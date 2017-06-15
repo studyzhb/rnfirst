@@ -25,6 +25,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import NavBar from '../component/NavBar';
 import px2dp from '../util/px2dp';
 import OrderDetail from './orderDetail';
+import OrderInfo from './OrderInfo';
 
 import config from '../util/config';
 import request from '../util/request';
@@ -107,7 +108,7 @@ export default class OrderList extends Component {
     }
 
     _fetchData(page, to) {
-        
+
         let that = this;
         let self = this;
         if (page !== 0) {
@@ -120,7 +121,7 @@ export default class OrderList extends Component {
                 isRefreshing: true
             })
         }
-        
+
         let getIndexUrl = config.baseUrl + config.api.rebate.getHisOrder;
         let obj = {
             page: page,
@@ -130,12 +131,12 @@ export default class OrderList extends Component {
 
         request.get(getIndexUrl, obj)
             .then((data) => {
-                
+
 
                 if (data.code == 1 && data.data) {
-                    
-                    let list=data.data.list||[];
-                    
+
+                    let list = data.data.list || [];
+
                     if (list.length > 0) {
 
                         let items = cachedResults.items.slice()
@@ -163,14 +164,14 @@ export default class OrderList extends Component {
                                 dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
                             })
                         }
-                    }else{
-                        
-                         cachedResults.items = []
+                    } else {
+
+                        cachedResults.items = []
                         cachedResults.total = data.data.total
                         that.setState({
-                                isRefreshing: false,
-                                dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
-                            })
+                            isRefreshing: false,
+                            dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
+                        })
                     }
 
                 } else {
@@ -239,10 +240,20 @@ export default class OrderList extends Component {
         this._fetchData(1);
     }
 
+    // 订单信息
+    gotoRecordList(id) {
 
+        this.props.navigator.push({
+            name: 'OrderInfo',
+            component: OrderInfo,
+            params:{
+                id:id
+            }
+        })
+    }
 
     _renderRow(item) {
-
+        console.log(item)
         let info = '';
         if (item.pay_status == 0) {
             info = '未付款';
@@ -254,40 +265,41 @@ export default class OrderList extends Component {
             info = '付款失败';
         }
         return (
-            <View>
-                <View style={styles.items}>
-                    <Image source={{ uri: 'item.img' }} style={{ width: 50, height: 50 }} />
-                    <View style={{ marginLeft: 20, justifyContent: 'space-between', flex: 1 }}>
-                        <View style={[{ flexDirection: 'row', height: 18, justifyContent: 'space-between' }]}>
-                            <Text style={{ fontSize: 12, width: 158, color: '#3a3a3a' }}>订单号：{item.order_sn}</Text>
-                            <Text style={{ fontSize: 12, width: 158, marginLeft: 9, textAlign: "center", color: '#3a3a3a' }}>{info}</Text>
-                        </View>
-                        <View style={[{ flexDirection: 'row', height: 26, marginTop: 17, justifyContent: 'space-between' }]}>
-                            <Text style={{ fontSize: 12, width: 158, color: '#3a3a3a' }}>{item.created_at}</Text>
-                            <View style={[{ flexDirection: 'row', height: 18, alignItems: 'center' }]}>
-                                <Icon name='logo-yen' size={12} />
-                                <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>{item.order_amount}</Text>
+            <TouchableWithoutFeedback onPress={this.gotoRecordList.bind(this,item.id)} key={item.id}>
+                <View>
+                    <View style={styles.items}>
+                        <Image source={{ uri: 'item.img' }} style={{ width: 50, height: 50 }} />
+                        <View style={{ marginLeft: 20, justifyContent: 'space-between', flex: 1 }}>
+                            <View style={[{ flexDirection: 'row', height: 18, justifyContent: 'space-between' }]}>
+                                <Text style={{ fontSize: 12, width: 158, color: '#3a3a3a' }}>订单号：{item.order_sn}</Text>
+                                <Text style={{ fontSize: 12, width: 158, marginLeft: 9, textAlign: "center", color: '#3a3a3a' }}>{info}</Text>
+                            </View>
+                            <View style={[{ flexDirection: 'row', height: 26, marginTop: 17, justifyContent: 'space-between' }]}>
+                                <Text style={{ fontSize: 12, width: 158, color: '#3a3a3a' }}>{item.created_at}</Text>
+                                <View style={[{ flexDirection: 'row', height: 18, alignItems: 'center' }]}>
+                                    <Icon name='logo-yen' size={12} />
+                                    <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>{item.order_amount}</Text>
+                                </View>
                             </View>
                         </View>
                     </View>
-                </View>
-                {
-                    item.is_split
-                        ? <View style={[{ flexDirection: 'row', height: 40, justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center', backgroundColor: '#fff' }]}>
-                            <Text style={{ fontSize: 12, color: '#999' }}>该订单拆分队列订单（个）：</Text>
-                            <Button
-                                onPress={this.gotoDetail.bind(this)}
-                                containerStyle={{ backgroundColor: 'white', width: 56, height: 20, overflow: 'hidden' }}
-                                style={{ color: '#f6a623', fontSize: 14 }}
-                            >
-                                点击查看
+                    {
+                        item.is_split
+                            ? <View style={[{ flexDirection: 'row', height: 40, justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center', backgroundColor: '#fff' }]}>
+                                <Text style={{ fontSize: 12, color: '#999' }}>该订单拆分队列订单（个）：</Text>
+                                <Button
+                                    onPress={this.gotoDetail.bind(this)}
+                                    containerStyle={{ backgroundColor: 'white', width: 56, height: 20, overflow: 'hidden' }}
+                                    style={{ color: '#f6a623', fontSize: 14 }}
+                                >
+                                    点击查看
                             </Button>
-                        </View>
-                        : null
-                }
+                            </View>
+                            : null
+                    }
 
-            </View>
-
+                </View>
+            </TouchableWithoutFeedback>
         )
 
     }
@@ -295,7 +307,7 @@ export default class OrderList extends Component {
 
 
     render() {
-        
+
         return (
             <View style={styles.container}>
                 <View style={styles.container}>
@@ -327,8 +339,8 @@ export default class OrderList extends Component {
                         </Button>
                     </View>
                     <View style={{ height: 30, flexDirection: 'row', alignItems: 'center', paddingLeft: 12 }}>
-                        <Icon name='ios-information-circle-outline' size={16} color='#0058be' />
-                        <Text style={{ fontSize: 12, color: '#0058be', marginLeft: 6 }}>此处仅展示不可回购订单，查看返利订单消费记录请返回上一页</Text>
+                        {/*<Icon name='ios-information-circle-outline' size={16} color='#0058be' />
+                        <Text style={{ fontSize: 12, color: '#0058be', marginLeft: 6 }}>此处仅展示不可回购订单，查看返利订单消费记录请返回上一页</Text>*/}
                     </View>
                     <ListView
                         style={{ paddingBottom: 100 }}

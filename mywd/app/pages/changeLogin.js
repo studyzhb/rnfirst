@@ -9,8 +9,7 @@ import {
     AlertIOS,
     Alert,
     Platform,
-    Dimensions,
-    Image
+    Dimensions
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -19,103 +18,133 @@ import config from '../util/config';
 import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
 
+import CountDownText from '../util/CountDownText';
+
 const isIOS=Platform.OS==='ios';
 let {width,height} = Dimensions.get('window');
-export default class AddBank extends Component{
+// console.log(CountDownText)
+export default class ChangeLogin extends Component{
     constructor(props){
         super(props);
         this.state={
-            card_num:'',
-            card_tip:'',
+            verifyCode:'',
+            phoneNumber:'',
+            password:'',
+            password1:'',
+            countingDone:false,
+            codeSent:false
         }
     }
-    _submit(){
-        let {navigator}=this.props;
-        let self=this;
-        console.log(this.state)
-        let card_num=this.state.card_num;
-        let card_tip=this.state.card_tip;
 
-        if(!card_num){
-            return isIOS?AlertIOS.alert('银行卡号不能为空！'):Alert.alert('银行卡号不能为空！');
+    leftPress(){
+        console.log(this.props.navigator)
+        this.props.navigator.pop();
+    }
+    rightPress(){
+       
+    }
+
+     _submit(){
+        let self=this;
+        let phoneNumber=this.state.phoneNumber;
+        let verifyCode=this.state.verifyCode;
+        let password = this.state.password;
+        let password1 = this.state.password1;
+        if(!phoneNumber||!verifyCode){
+            return isIOS?AlertIOS.alert('手机号或验证码不能为空！'):Alert.alert('手机号或验证码不能为空！');
         }
 
-        if(!card_tip){
-            return isIOS?AlertIOS.alert('开户行不能为空！'):Alert.alert('开户行不能为空！');
+        if(!password){
+            return isIOS?AlertIOS.alert('密码不能为空！'):Alert.alert('密码不能为空！');
         }
 
         let body={
-            card_num:card_num,
-            card_tip:card_tip
+            tel:phoneNumber,
+            code:verifyCode,
+            password:password,
         }
 
-        let loginUrl=config.baseUrl+config.api.user.addBank;
+        let verifyURL=config.baseUrl + config.api.user.changePass;
 
-        request.post(loginUrl,body)
+        request.post(verifyURL,body)
                 .then((data)=>{
-                    console.log(data)
+                    console.log(JSON.stringify(data))
                     if(data.code==1){
-                         if(navigator){
-                            navigator.pop();
-                        }
+                        this.props.navigator.pop();
                     }else{
                         isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
                     }
                 })
                 .catch((err)=>{
-                    console.log(JSON.stringify(err));
-                }) 
-       
+                    console.log(err)
+                    isIOS?AlertIOS.alert('获取验证码失败，请检查网络是否良好'):Alert.alert('获取验证码失败，请检查网络是否良好');
+                })
+    }
+    
+    _showVerifyCode(){
+        this.setState({
+            codeSent:true
+        })
     }
 
-    leftPress(){
-        this.props.navigator.pop();
+    _countingDone(){
+        console.log('1111jieshu')
+        this.setState({
+            countingDone:true
+        })
     }
-    rightPress(){
-        
-        this.props.navigator.push({
-            component: Register,
-            args: {}
-        });
+
+    _sendVerifyCode(){
+        let self=this;
+        let phoneNumber=this.state.phoneNumber;
+
+        if(!phoneNumber){
+            return isIOS?AlertIOS.alert('手机号不能为空!'):Alert.alert('手机号不能为空');
+        }
+
+        let body={
+            tel:phoneNumber,
+            type:'find'
+        }
+        //注册URL
+        let signupURL=config.baseUrl + config.api.user.sendmessage;
+
+        request.get(signupURL,body)
+                .then((data)=>{
+                    console.log(JSON.stringify(data)+'shuju')
+                    if(data.code==1){
+                        isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
+                        self._showVerifyCode()
+                    }else{
+                        isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
+                    }
+                })
+                .catch((err)=>{
+                    console.log(err)
+                     isIOS?AlertIOS.alert('获取验证码失败，请检查网络是否良好!'):Alert.alert('获取验证码失败，请检查网络是否良好');
+                })
     }
 
     render(){
-        
         return (
             <View style={styles.container} > 
                 <NavBar 
-                    title='银行卡'
+                    title='设置登录密码'
                     style={{'backgroundColor':'#fff'}}
                     titleStyle={{'color':'#666'}}
                     leftIcon='ios-close-outline'
                     leftPress={this.leftPress.bind(this)}
+                    
                     rightPress={this.rightPress.bind(this)}
                 />
-                {/*<View style={styles.inputWrapper}>
-                    <Text style={styles.labelinput}>持卡人</Text>
-                    <TextInput 
-                        style={styles.inputField}
-                        placeholder="请输入姓名"
-                        //是否自动将特定字符切换为大写
-                        autoCapitalize={'none'}
-                        //关闭拼写自动修正
-                        autoCorrect={false}
-                        //去除android下的底部边框问题
-                        underlineColorAndroid="transparent"
-                        keyboardType='number-pad' //弹出软键盘类型
-                        onChangeText={(text)=>{
-                            this.setState({
-                                card_num:text
-                            })
-                        }}
-                    />
-
+                <View style={styles.logo}>
+                    
                 </View>
                 <View style={styles.inputWrapper}>
-                    <Text style={styles.labelinput}>身份证号</Text>
+                    <Text>+86</Text>
                     <TextInput 
                         style={styles.inputField}
-                        placeholder="请输入"
+                        placeholder="请输入手机号"
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
@@ -130,12 +159,12 @@ export default class AddBank extends Component{
                         }}
                     />
 
-                </View>*/}
+                </View>
                 <View style={styles.inputWrapper}>
-                    <Text style={styles.labelinput}>卡号</Text>
+                    
                     <TextInput 
                         style={styles.inputField}
-                        placeholder="请输入"
+                        placeholder="请输入收到的验证码"
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
@@ -145,17 +174,35 @@ export default class AddBank extends Component{
                         keyboardType='number-pad' //弹出软键盘类型
                         onChangeText={(text)=>{
                             this.setState({
-                                card_num:text
+                                verifyCode:text
                             })
                         }}
                     />
-
+                    {
+                        !this.state.codeSent
+                        ?<Button onPress={this._sendVerifyCode.bind(this)} style={[styles.countBtn,{backgroundColor:'#fff',color:'#2ac945',fontSize:14,height:px2dp(50),paddingTop:px2dp(18)}]}>
+                        获取验证码
+                        </Button>
+                        :
+                        <CountDownText 
+                            style={styles.countBtn}
+                            countType='seconds' //计时类型 seconds/date
+                            auto={true} //自动开始
+                            afterEnd={this._countingDone.bind(this)} //结束回调
+                            timeLeft={60} //正向计时 时间起点为0秒
+                            step={-1} //计时步长,以秒为单位，正数为正计时，负数为倒计时
+                            startText='获取验证码' //开始的文本
+                            endText='获取验证码' //结束文本
+                            intervalText={(sec)=>'剩余秒数：'+sec} //定时的文本回调
+                        />
+                    }
+                    
                 </View>
                 <View style={styles.inputWrapper}>
-                    <Text style={styles.labelinput}>银行</Text>
+                    
                     <TextInput 
                         style={styles.inputField}
-                        placeholder="请输入"
+                        placeholder="请设置密码"
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
@@ -165,30 +212,25 @@ export default class AddBank extends Component{
                         keyboardType='number-pad' //弹出软键盘类型
                         onChangeText={(text)=>{
                             this.setState({
-                                card_tip:text
+                                password:text
                             })
                         }}
                     />
-
+                    
                 </View>
+
                 <View style={{width:width,flexDirection:'row',justifyContent:'center'}}>
                     <Button
                         style={styles.btn}
                         onPress={this._submit.bind(this)}
                     >
-                        提交
+                        确认
                     </Button>
                 </View>
-                <View style={{paddingLeft:px2dp(50),marginTop:8}}>
-                    <Text style={{color:'#999',fontSize:12}}>为了资金安全，只能绑定当前实名认证人的银行卡</Text>
-
-                </View>
+                
             </View>
         )
     }
-
-
-
 }
 
 const styles=StyleSheet.create({
@@ -200,23 +242,22 @@ const styles=StyleSheet.create({
         // justifyContent:'center'
     },
     logo:{
-        height:px2dp(200),
-        alignItems:'center',
-        justifyContent:'center',
+        height:px2dp(100)
     },
     inputWrapper:{
         // backgroundColor:'#eaeaea',
         height:px2dp(50),
-        // width:width,
         borderBottomWidth:1,
         borderBottomColor:"#eaeaea",
+        paddingLeft:10,
+        // width:width,
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'center'
     },
     labelinput:{
         fontSize:16,
-        flex:2,
+        flex:1,
         paddingLeft:10,
         height:px2dp(50),
         color:'#3a3a3a',
@@ -228,7 +269,8 @@ const styles=StyleSheet.create({
     inputField:{
         padding:0,
         fontSize:14,
-        flex:6,
+        flex:1,
+        paddingLeft:10,
         height:px2dp(50),
         color:'#999',
         alignItems:'center',
@@ -250,12 +292,23 @@ const styles=StyleSheet.create({
         padding:10,
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'#2ac945',
+        backgroundColor:'#d8d8d8',
         // borderColor:'#ee735c',
         // borderWidth:1,
         borderRadius:4,
         color:'#fff'
-    }
+    },
+    countBtn:{
+        width:110,
+        height:40,
+        padding:10,
+        marginLeft:8,
+        backgroundColor:'#ee735c',
+        borderColor:'#ee735c',
+        color:'#fff',
+        textAlign:'left',
+        fontWeight:'600',
+        fontSize:15,
+        borderRadius:2
+    },
 })
-
-
