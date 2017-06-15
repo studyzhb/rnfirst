@@ -115,6 +115,7 @@ export default class Order extends Component{
                     ispay:data.data.is_pay,
                     isrealname:data.data.is_real_name
                 })
+
             }else{
                 isIOS
                 ?AlertIOS.alert(data.message)
@@ -224,7 +225,7 @@ export default class Order extends Component{
                                     <Text style={{color: "#fff", fontSize:14}}>当前总资产（元）</Text>
                                     <View style={{marginTop: px2dp(-10), flexDirection: "row"}}>
                                     {/*<Icon name="ios-phone-portrait-outline" size={px2dp(14)} color="#fff" />*/}
-                                    <Text style={{color: "#fff", fontSize: 48, paddingLeft: 5}}>{this.state.userData?(this.state.userData.balance-0+this.state.userData.creditor-0+this.state.userData.share_gold-0):0}</Text>
+                                    <Text style={{color: "#fff", fontSize: 48, paddingLeft: 5}}>{this.state.userData?((this.state.userData.balance-0)+(this.state.userData.creditor-0)+(this.state.userData.share_gold-0)):0}</Text>
                                     </View>
                                 </View>
                                 <View style={{marginRight: px2dp(20), paddingVertical: 0}}>

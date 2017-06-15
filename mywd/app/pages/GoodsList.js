@@ -39,6 +39,11 @@ let cachedResults = {
     total: 0
 }
 
+let Goods={
+    total:0,
+    totalArr:[]
+}
+
 export default class GoodsList extends Component {
 
     constructor(props) {
@@ -85,7 +90,7 @@ export default class GoodsList extends Component {
     }
 
     gotoPay() {
-        let totalArr=this.state.totalArr.map((item,i)=>{
+        let totalArr=Goods.totalArr.map((item,i)=>{
             return {id:item.id,num:1}
         })
         console.log(this.props)
@@ -117,10 +122,10 @@ export default class GoodsList extends Component {
         }
 
         total=0;
-
+        Goods.totalArr=[];
         for(let i=0;i<selected.length;i++){
             if(selected[i].selected){
-                this.state.totalArr.push(selected[i]);
+                Goods.totalArr.push(selected[i]);
                 total+=selected[i].price-0;
             }
         }

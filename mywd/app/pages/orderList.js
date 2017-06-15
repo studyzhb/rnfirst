@@ -30,6 +30,8 @@ import OrderInfo from './OrderInfo';
 import config from '../util/config';
 import request from '../util/request';
 
+import FINALNUM from '../util/FinalNum'
+
 let { width, height } = Dimensions.get('window');
 let isIOS = Platform.OS === 'ios';
 
@@ -50,7 +52,7 @@ export default class OrderList extends Component {
 
         this.state = {
             orderArr: [],
-            tabStatus: 0,
+            tabStatus: FINALNUM.ORDERLISTNOFINISHED,
             isRefreshing: false,
             isLoadingTail: false,
             dataSource: ds.cloneWithRows([])
@@ -100,14 +102,17 @@ export default class OrderList extends Component {
             })
     }
 
-    gotoDetail() {
+    gotoDetail(queuelist) {
         this.props.navigator.push({
             name: 'orderdetail',
-            component: OrderDetail
+            component: OrderDetail,
+            pramas:{
+                queuelist:queuelist
+            }
         })
     }
 
-    _fetchData(page, to) {
+    async _fetchData(page, to) {
 
         let that = this;
         let self = this;
@@ -129,7 +134,7 @@ export default class OrderList extends Component {
             status: to ? to.status : 0
         }
 
-        request.get(getIndexUrl, obj)
+       await request.get(getIndexUrl, obj)
             .then((data) => {
 
 
@@ -240,18 +245,6 @@ export default class OrderList extends Component {
         this._fetchData(1);
     }
 
-    // 订单信息
-    gotoRecordList(id) {
-
-        this.props.navigator.push({
-            name: 'OrderInfo',
-            component: OrderInfo,
-            params:{
-                id:id
-            }
-        })
-    }
-
     _renderRow(item) {
         console.log(item)
         let info = '';
@@ -265,7 +258,7 @@ export default class OrderList extends Component {
             info = '付款失败';
         }
         return (
-            <TouchableWithoutFeedback onPress={this.gotoRecordList.bind(this,item.id)} key={item.id}>
+            <TouchableWithoutFeedback key={item.id}>
                 <View>
                     <View style={styles.items}>
                         <Image source={{ uri: 'item.img' }} style={{ width: 50, height: 50 }} />
@@ -285,10 +278,10 @@ export default class OrderList extends Component {
                     </View>
                     {
                         item.is_split
-                            ? <View style={[{ flexDirection: 'row', height: 40, justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center', backgroundColor: '#fff' }]}>
-                                <Text style={{ fontSize: 12, color: '#999' }}>该订单拆分队列订单（个）：</Text>
+                            ? <View style={[{ flexDirection: 'row', height: 40, justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center', backgroundColor: '#fff',marginBottom:10 }]}>
+                                <Text style={{ fontSize: 12, color: '#999' }}>该订单拆分队列订单（个）：{item.queque_num}</Text>
                                 <Button
-                                    onPress={this.gotoDetail.bind(this)}
+                                    onPress={this.gotoDetail.bind(this,item.queque_list)}
                                     containerStyle={{ backgroundColor: 'white', width: 56, height: 20, overflow: 'hidden' }}
                                     style={{ color: '#f6a623', fontSize: 14 }}
                                 >
@@ -318,8 +311,8 @@ export default class OrderList extends Component {
                     />
                     <View style={styles.tabTitle}>
                         <Button
-                            onPress={this.changeTabStatus.bind(this, 0)}
-                            containerStyle={[styles.backBuyWrapper, this.state.tabStatus == 0 ? styles.backActive : null]}
+                            onPress={this.changeTabStatus.bind(this, FINALNUM.ORDERLISTNOFINISHED)}
+                            containerStyle={[styles.backBuyWrapper, this.state.tabStatus == FINALNUM.ORDERLISTNOFINISHED ? styles.backActive : null]}
                             style={styles.backBuy}
                         >
                             未付款
@@ -331,8 +324,8 @@ export default class OrderList extends Component {
                             已处理
                         </Button>*/}
                         <Button
-                            onPress={this.changeTabStatus.bind(this, 2)}
-                            containerStyle={[styles.backBuyWrapper, this.state.tabStatus == 2 ? styles.backActive : null]}
+                            onPress={this.changeTabStatus.bind(this, FINALNUM.ORDERLISTFINISHED)}
+                            containerStyle={[styles.backBuyWrapper, this.state.tabStatus == FINALNUM.ORDERLISTFINISHED ? styles.backActive : null]}
                             style={styles.backBuy}
                         >
                             已完成

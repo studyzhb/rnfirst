@@ -250,7 +250,7 @@ export default class ObligationList extends Component {
                             <TouchableWithoutFeedback>
                                 <View style={[styles.numItem, { flexDirection: 'row' }]}>
                                     <View style={{ marginLeft: 36 }}>
-                                        <Image source={require('../images/base01.png')} style={{width:34,height:34,}} />
+                                        <Image source={require('../images/base01.png')} resizeMode='contain' style={{width:34,height:34,}} />
                                         {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
                                     </View>
 
@@ -264,7 +264,7 @@ export default class ObligationList extends Component {
                                 <View style={[styles.numItem, { flexDirection: 'row', borderLeftWidth: 1, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
 
                                     <View style={{ marginLeft: 36 }}>
-                                        <Image source={require('../images/base02.png')} style={{width:34,height:34,}} />
+                                        <Image source={require('../images/base02.png')} resizeMode='contain'  style={{width:34,height:34,}} />
                                         {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
                                     </View>
                                     <View style={{ marginLeft: 20 }}>
@@ -279,20 +279,20 @@ export default class ObligationList extends Component {
                                 <TouchableWithoutFeedback onPress={this.gotoOrderPage.bind(this)}>
                                     <View style={styles.numItem}>
                                         {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
-                                        <Image source={require('../images/base03.png')} style={{width:34,height:40,}} />
+                                        <Image source={require('../images/base03.png')} resizeMode='contain'  style={{width:34,height:40,}} />
                                         <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"消费订单"}</Text>
                                     </View>
                                 </TouchableWithoutFeedback>
                                 <TouchableWithoutFeedback onPress={this.gotoConvercePage.bind(this)}>
                                     <View style={[styles.numItem, { borderLeftWidth: 1, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
                                         {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
-                                        <Image source={require('../images/base04.png')} style={{width:44,height:40,}} />
+                                        <Image source={require('../images/base04.png')} resizeMode='contain'  style={{width:44,height:40,}} />
                                         <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"兑换明细"}</Text>
                                     </View>
                                 </TouchableWithoutFeedback>
                             </View>
                             <View style={{ flexDirection:'row',height: 26, alignItems: 'center' }}>
-                                <Image source={require('../images/title_1.png')} style={{width:20,height:20,}} />
+                                <Image source={require('../images/title_1.png')} resizeMode='contain'  style={{width:20,height:20,}} />
                                 <Text style={{ fontSize: 14, color: '#3a3a3a' }}>信息</Text>
                             </View>
                             <View style={styles.numbers}>
@@ -326,8 +326,8 @@ export default class ObligationList extends Component {
 
                             </View>
 
-                            <View style={{ height: 26, justifyContent: 'center' }}>
-                                <Image source={require('../images/title_2.png')} style={{width:20,height:20,}} />
+                            <View style={{ flexDirection:'row',height: 26, alignItems: 'center' }}>
+                                <Image source={require('../images/title_2.png')} resizeMode='contain'  style={{width:20,height:20,}} />
                                 <Text style={{ fontSize: 14, color: '#3a3a3a' }}>返利记录</Text>
                             </View>
 
