@@ -68,6 +68,7 @@ export default class My extends Component{
     });
   }
   goProfile(){
+    
     this.props.navigator.push({
         component: Person,
         args: {}

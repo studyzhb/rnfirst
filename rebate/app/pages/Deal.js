@@ -22,10 +22,11 @@ import Setting from './Setting';
 // import UserProfile from './UserProfile';
 import Address from './Address';
 import px2dp from '../util/px2dp';
+import request from '../util/request';
+import config from '../util/config';
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
 
 let {width,height} = Dimensions.get('window');
 
@@ -34,7 +35,8 @@ export default class Deal extends Component{
         super(props);
         this.state={
             isRefreshing:false,
-            isLogin:false
+            isLogin:false,
+            config:[]
         }
 
         this.config=[
@@ -62,12 +64,32 @@ export default class Deal extends Component{
   }
   _onRefresh(){
     this.setState({isRefreshing: true});
+
+    let getIndexUrl = config.baseUrl + config.api.user.showDealList;
+    request.get(getIndexUrl)
+        .then((data)=>{
+            console.log(data)
+            if(data.code==1){
+                this.setState({
+                    config:data.data
+                })
+            }else{
+                isIOS
+                ?AlertIOS.alert(data.message)
+                :Alert.alert(data.message)
+            }
+        })
+        .catch(err=>{
+            console.log(err);
+            console.log(JSON.stringify(err));
+        })
+
     setTimeout(() => {
       this.setState({isRefreshing: false});
     }, 1500)
   }
   _renderListItem(){
-    return this.config.map((item, i) => {
+    return this.state.config.map((item, i) => {
     //   if(i%3==0){
     //     item.first = true
     //   }

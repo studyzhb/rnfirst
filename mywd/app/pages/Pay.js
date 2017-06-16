@@ -197,6 +197,7 @@ export default class Pay extends Component {
                     }
                 </View>
                 <LbsModal
+                    total={this.props.total}
                     modalVisible={this.state.modalVisible}
                     closeModal={this.closeModal.bind(this)}
                 />

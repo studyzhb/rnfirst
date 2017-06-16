@@ -52,6 +52,7 @@ export default class Order extends Component{
             {icon:"ios-card-outline", name:"银行卡管理", subName:"",onPress:this.goPage.bind(this,'banklist')},
         ]
     }
+    
     static topbarHeight=(Platform.OS==='ios'?64:42)
 
     goPage(key, data = {}){
@@ -208,15 +209,15 @@ export default class Order extends Component{
                 >
                     <Image source={require('../images/moneybg.png')} style={{width:width,height:px2dp(150)+this.topbarHeight}}>
                         <View style={styles.topbar}>
-                            {
-                                Platform.OS==='android'
+                            
+                                {/*Platform.OS==='android'
                                 ?<TouchableNativeFeedback  style={styles.btn}>
                                     <Icon name={'ios-arrow-back-outline'} size={px2dp(26)} color="#fff" />
                                 </TouchableNativeFeedback>
                                 :<TouchableOpacity  style={styles.btn}>
                                     <Icon name={'ios-arrow-back-outline'} size={px2dp(26)} color="#fff" />
-                                </TouchableOpacity>
-                            }
+                                </TouchableOpacity>*/}
+                            
                             
                         </View>
                          <View style={{height:px2dp(150) }}>

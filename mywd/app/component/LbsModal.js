@@ -94,8 +94,8 @@ export default class LbsModal extends Component {
           <TextInput ref="search" style={styles.textInput} underlineColorAndroid="transparent" placeholder="请输入地址" placeholderTextColor="#666"/>
         </View>*/}
               <View style={{flex:1,justifyContent:'space-between',alignItems:'center'}}>
-                <Text style={{color:'#353535',fontSize:18,marginTop:20}}>提现</Text>
-                <Text style={{color:'#c72d1b',fontSize:36}}>￥100</Text>
+                <Text style={{color:'#353535',fontSize:18,marginTop:10,marginBottom:10}}>支付</Text>
+                <Text style={{color:'#c72d1b',fontSize:36}}>￥{this.props.total}</Text>
               </View>
               <View style={{ width: 288,overflow:'hidden', alignSelf: 'center', flexDirection: 'row', alignItems: 'center', borderColor: '#666', borderWidth: 1,}}>
                 <TextInput

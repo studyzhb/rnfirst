@@ -14,7 +14,8 @@ import {
     TouchableHighlight,
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
-    RefreshControl
+    RefreshControl,
+    NativeModules
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -28,7 +29,7 @@ import request from '../util/request'
 
 import LbsModal from '../component/LbsModal'
 
-import alipay from '../util/alipay'
+// import alipay from '../util/alipay'
 
 
 let {width,height} = Dimensions.get('window');
@@ -69,13 +70,15 @@ export default class Pay extends Component{
                 if(data.code==1){
                     // this._goPay(data.data);
                     orderData=data.data;
-                    alipay({
-                        type:"alipay",
-                        ordernum:data.data.order_sn,
-                        money:this.props.total,
-                        remark:'支付宝支付'
-                    })
+                    // alipay({
+                    //     type:"alipay",
+                    //     ordernum:data.data.order_sn,
+                    //     money:this.props.total,
+                    //     remark:'支付宝支付'
+                    // })
                     // this.openLbs();
+                    console.log(NativeModules)
+                    NativeModules.AliPAY.show('nihao')
                 }else{
                     isIOS
                     ?AlertIOS.alert(data.message)

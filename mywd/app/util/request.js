@@ -13,6 +13,9 @@ request.get=async (url,params)=>{
     let token=await storage.load({
         key:'token'
     })
+    .catch(err=>{
+        console.log(err)
+    })
     console.log(token)
     if(params){
         url+='?'+queryString.stringify(params)
@@ -20,7 +23,7 @@ request.get=async (url,params)=>{
     let options={
         method:'GET',
         headers:{
-            token:token
+            token:token||''
         }
         
     }

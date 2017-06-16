@@ -33,10 +33,15 @@ export default class Register extends Component{
             countingDone:false,
             codeSent:false
         }
+        this.interval=null;
     }
 
     leftPress(){
-
+        console.log(this.props)
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop()
+        }
     }
     rightPress(){
        
@@ -67,9 +72,10 @@ export default class Register extends Component{
                 .then((data)=>{
                     console.log(JSON.stringify(data))
                     if(data.code==1){
+                        isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
                         self.props.afterLogin(data.data)
                     }else{
-                        isIOS?AlertIOS.alert('获取验证码失败，请检查手机号是否正确!'):Alert.alert('获取验证码失败，请检查手机号是否正确!');
+                        isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
                     }
                 })
                 .catch((err)=>{
@@ -86,9 +92,11 @@ export default class Register extends Component{
 
     _countingDone(){
         this.setState({
-            countingDone:true
+            codeSent:false
         })
     }
+
+
 
     _sendVerifyCode(){
         let self=this;
@@ -109,14 +117,15 @@ export default class Register extends Component{
                 .then((data)=>{
                     console.log(JSON.stringify(data)+'shuju')
                     if(data.code==1){
+                        isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
                         self._showVerifyCode()
                     }else{
-                        isIOS?AlertIOS.alert('获取验证码失败，请检查手机号是否正确!'):Alert.alert('获取验证码失败，请检查手机号是否正确');
+                        isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
                     }
                 })
                 .catch((err)=>{
                     console.log(err)
-                     isIOS?AlertIOS.alert('获取验证码失败，请检查网络是否良好!'):Alert.alert('获取验证码失败，请检查网络是否良好');
+                     isIOS?AlertIOS.alert('获取验证码失败，请检查网络是否良好!'):Alert.alert('获取验证码失败，请检查网络是否良好!');
                 })
     }
 
@@ -173,6 +182,7 @@ export default class Register extends Component{
                             })
                         }}
                     />
+
                     {
                         !this.state.codeSent
                         ?<Button onPress={this._sendVerifyCode.bind(this)} style={[styles.countBtn,{backgroundColor:'#fff',color:'#2ac945',fontSize:14,height:px2dp(50),paddingTop:px2dp(18)}]}>

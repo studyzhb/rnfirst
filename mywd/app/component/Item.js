@@ -86,7 +86,9 @@ export default class Item extends Component {
       <Button style={{marginTop: first?10:0}} onPress={onPress}>{this._render()}</Button>
   }
 }
+
 Item.Button = ItemButton
+
 const styles = StyleSheet.create({
   listItem: {
     height: itemHeight,

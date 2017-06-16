@@ -13,6 +13,8 @@ export default {
             register:'/user/reg',
             //发送验证码
             sendmessage:'/send/sms',
+            //用户个人中心信息
+            userinfo:'/user/center',
             updatePay:'/user/editpaypwd',
             //余额展示
             showBalance:'/userbalance/showbalance',

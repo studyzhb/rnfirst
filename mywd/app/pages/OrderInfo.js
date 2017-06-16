@@ -61,6 +61,14 @@ export default class OrderInfo extends Component {
 
         let { back_date, draw_date, finsh_date, isback, order, pick_date, pick_up_status, queque_status, retail_id, return_date, product } = this.state.orderInfo;
 
+        console.log(this.state.orderInfo)
+
+        switch (queque_status){
+            case '':
+                break;
+            
+        }
+
         return (
             <View>
                 {/*订单内容*/}
@@ -129,14 +137,19 @@ export default class OrderInfo extends Component {
                         <Text style={styles.baseText}>返还状态：</Text>
                         <Text style={styles.subText}>可兑换</Text>
                     </View>
-                    <View style={[styles.flexRow, styles.sitem]}>
+                    {/*<View style={[styles.flexRow, styles.sitem]}>
                         <Text style={styles.baseText}>队列编号：</Text>
                         <Text style={styles.subText}>6</Text>
-                    </View>
-                    <View style={[styles.flexRow, styles.sitem]}>
-                        <Text style={styles.baseText}>返现时间：</Text>
-                        <Text style={styles.subText}>2017-04-15 15:50</Text>
-                    </View>
+                    </View>*/}
+                    {
+                        return_date-0>0
+                        ?<View style={[styles.flexRow, styles.sitem]}>
+                            <Text style={styles.baseText}>返现时间：</Text>
+                            <Text style={styles.subText}>2017-04-15 15:50</Text>
+                        </View>
+                        :null
+                    }
+                    
                 </View>
             </View>
 

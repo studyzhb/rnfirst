@@ -60,9 +60,13 @@ export default class OrderList extends Component {
     }
 
     componentDidMount() {
-
+        console.log('componentDidMount')
         // this.getOrderList();
         this._getIndexInfo();
+    }
+
+    componentShouldWillMount(){
+        console.log('componentShouldWillMount')
     }
 
     changeTabStatus(value) {
@@ -82,13 +86,13 @@ export default class OrderList extends Component {
 
     getOrderList() {
         let orUrl = config.baseUrl + config.api.rebate.getHisOrder;
-        console.log('tijiao' + this.state)
+        
         let obj = {
             creditor_id: this.props.obid,
             status: this.state.tabStatus
         }
 
-        console.log(obj);
+        
 
         request.get(orUrl, obj)
             .then(data => {
@@ -98,7 +102,7 @@ export default class OrderList extends Component {
                         orderArr: data.data.list
                     });
                 }
-                console.log(data);
+                
             })
     }
 
@@ -131,7 +135,7 @@ export default class OrderList extends Component {
         let obj = {
             page: page,
             creditor_id: this.props.obid,
-            status: to ? to.status : 0
+            status: to ? to.status : this.state.tabStatus
         }
 
        await request.get(getIndexUrl, obj)
@@ -258,7 +262,7 @@ export default class OrderList extends Component {
             info = '付款失败';
         }
         return (
-            <TouchableWithoutFeedback key={item.id}>
+            <TouchableWithoutFeedback key={item.id} style={{marginBottom:10 }}>
                 <View>
                     <View style={styles.items}>
                         <Image source={{ uri: 'item.img' }} style={{ width: 50, height: 50 }} />
@@ -278,7 +282,7 @@ export default class OrderList extends Component {
                     </View>
                     {
                         item.is_split
-                            ? <View style={[{ flexDirection: 'row', height: 40, justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center', backgroundColor: '#fff',marginBottom:10 }]}>
+                            ? <View style={[{ flexDirection: 'row', height: 40, justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center', backgroundColor: '#fff'}]}>
                                 <Text style={{ fontSize: 12, color: '#999' }}>该订单拆分队列订单（个）：{item.queque_num}</Text>
                                 <Button
                                     onPress={this.gotoDetail.bind(this,item.queque_list)}

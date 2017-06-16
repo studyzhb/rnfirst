@@ -5,4 +5,4 @@ import {
 
 import Eapp from './app/root';
 
-AppRegistry.registerComponent('mywd', () => Eapp);
+AppRegistry.registerComponent('rebate', () => Eapp);

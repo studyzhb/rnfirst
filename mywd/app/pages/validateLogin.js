@@ -10,7 +10,7 @@ import {
     Alert,
     Platform,
     Dimensions,
-    Image
+    Image,TouchableOpacity
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -20,9 +20,11 @@ import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
 import Register from './Register';
 import ForgetPass from './ForgetPass';
+import ChangeLogin from './changeLogin';
 
 const isIOS=Platform.OS==='ios';
 let {width,height} = Dimensions.get('window');
+
 export default class LoginIndex extends Component{
     constructor(props){
         super(props);
@@ -73,6 +75,14 @@ export default class LoginIndex extends Component{
         
         this.props.navigator.push({
             component: Register,
+            args: {}
+        });
+    }
+
+    changeLoginPass(){
+        
+        this.props.navigator.push({
+            component: ChangeLogin,
             args: {}
         });
     }
@@ -142,8 +152,10 @@ export default class LoginIndex extends Component{
                     </Button>
                 </View>
                 <View style={{paddingLeft:px2dp(50),marginTop:8}}>
-                    <Text style={{color:'#999',fontSize:12}}>忘记密码</Text>
-
+                    <TouchableOpacity onPress={this.changeLoginPass.bind(this)}>
+                         <Text style={{color:'#999',fontSize:12}}>忘记密码</Text>
+                    </TouchableOpacity>
+                   
                 </View>
             </View>
         )

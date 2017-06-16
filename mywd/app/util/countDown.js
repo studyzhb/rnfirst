@@ -84,6 +84,7 @@ countDown.prototype = {
         console.log(1000 * Math.abs(this.step));
         // 开始计时
         var self = this;
+        clearTimeout(this.timerId);
         this.timerId = setTimeout(function() {
             if (self.timePassed <= 0 && self.step < 0) {// 倒计时到0停止计时
                 self.end();

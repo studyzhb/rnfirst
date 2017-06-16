@@ -41,28 +41,11 @@ global.storage = storage;
 export default class Navigation extends Component{
 	constructor(props){
 		super(props)
+		
 	}
 
-	componentWillMount() {
-    if (Platform.OS === 'android') {
-      // BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid);
-    }
-  }
-  componentWillUnmount() {
-    if (Platform.OS === 'android') {
-      // BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid);
-    }
-  }
-  onBackAndroid = () => {
-		console.log(this)
-    const nav = this.navigator;
-    const routers = nav.getCurrentRoutes();
-    if (routers.length > 1) {
-      nav.pop();
-      return true;
-    }
-    return false;
-  };
+
+
 
 	render(){
 		return Platform.OS=='ios'?(

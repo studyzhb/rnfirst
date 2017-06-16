@@ -10,7 +10,7 @@ import {
     Alert,
     Platform,
     Dimensions,
-    Image
+    Image, BackAndroid
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -31,44 +31,42 @@ export default class SafeCenter extends Component {
             phoneNumber: '',
             password: ''
         }
-        this.config=[
-            {icon:"ios-pin", name:"修改登录密码", onPress:this.goPage.bind(this, "changeLogin")},
-            {icon:"ios-bulb-outline", name:"修改支付密码", color:"#fc7b53",onPress:this.goPage.bind(this, "changePay")},
+        this.config = [
+            { icon: "ios-pin", name: "修改登录密码", onPress: this.goPage.bind(this, "changeLogin") },
+            { icon: "ios-bulb-outline", name: "修改支付密码", color: "#fc7b53", onPress: this.goPage.bind(this, "changePay") },
         ]
     }
     _submit() {
-        let self = this;
+        let {navigator} = this.props;   
 
-        let loginUrl = config.baseUrl + config.api.user.login;
+        storage.remove({
+            key: 'loginUser'
+        });
+        storage.remove({
+            key: 'user'
+        });
+        storage.remove({
+            key: 'token'
+        });
 
-        // request.post(loginUrl, body)
-        //     .then((data) => {
-        //         console.log(data)
-        //         if (data.code == 1) {
-        //             this.props.enterLogin(data.data);
-        //         } else {
-        //             isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.log(JSON.stringify(err));
-        //     })
+        BackAndroid.exitApp(0);
+
     }
 
-    goPage(key, data = {}){
+    goPage(key, data = {}) {
         let pages = {
-        "changeLogin": ChangeLogin,
-        'changePay':ChangePay
+            "changeLogin": ChangeLogin,
+            'changePay': ChangePay
         }
-        if(pages[key]){
-        this.props.navigator.push({
-            component: pages[key],
-            args: { data },
-            params:{
-                is_pay:this.state.ispay,
-                isrealname:this.state.isrealname
-            }
-        })
+        if (pages[key]) {
+            this.props.navigator.push({
+                component: pages[key],
+                args: { data },
+                params: {
+                    is_pay: this.state.ispay,
+                    isrealname: this.state.isrealname
+                }
+            })
         }
     }
 

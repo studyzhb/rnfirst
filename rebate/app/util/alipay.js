@@ -4,7 +4,7 @@
  * @detetime 2016-11-08
  **/
 
-import Alipay from 'react-native-yunpeng-alipay'
+// import Alipay from 'react-native-yunpeng-alipay'
 import config from './config'
 import request from './request'
 
