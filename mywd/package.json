@@ -9,6 +9,7 @@
   "dependencies": {
     "react": "16.0.0-alpha.6",
     "react-native": "0.43.4",
+    "react-native-image-picker": "^0.26.3",
     "react-native-progress": "^3.2.1",
     "react-native-yunpeng-alipay": "^1.1.4"
   },

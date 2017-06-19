@@ -15,7 +15,8 @@ import {
     TouchableHighlight,
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
-    RefreshControl
+    RefreshControl,
+    ActivityIndicator
 } from 'react-native';
 
 import NavBar from '../component/NavBar';
@@ -24,6 +25,7 @@ import px2dp from '../util/px2dp';
 import Item from '../component/indexItem';
 import ObligationList from './ObligationList';
 import AllObligationList from './AllobList';
+import SingleInfo from './SingleInfo'
 import Popularize from './Popularize';
 import MyExpense from './myExpenseList';
 import Notice from './notice';
@@ -46,8 +48,8 @@ export default class Home extends Component {
         this.tabArr = [
             { img: require('../images/index01.png'), text: '我的推广', onPress: this.goPage.bind(this, 'popularize') },
             { img: require('../images/index02.png'), text: '我的二维码', onPress: this.goPage.bind(this, 'popularize') },
-            { img: require('../images/index03.png'), text: '历史返利', onPress: this.goPage.bind(this, 'myExpense') },
-            { img: require('../images/index04.png'), text: '债权资料', onPress: this.goPage.bind(this, 'oblist') }
+            { img: require('../images/index03.png'), text: '历史返利', onPress: this.goPage.bind(this, 'oblist') },
+            { img: require('../images/index04.png'), text: '债权资料', onPress: this.goPage.bind(this, 'SingleInfo') }
         ]
         let ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2
@@ -55,7 +57,7 @@ export default class Home extends Component {
         this.state = {
             isRefreshing: false,
             isLoadingTail: false,
-            isAuthor: 0,
+            isAuthor: 10,
             rebateInfo: null,
             rebatelist: [],
             dataSource: ds.cloneWithRows([]),
@@ -223,7 +225,8 @@ export default class Home extends Component {
         let pages = {
             "oblist": AllObligationList,
             "popularize": Popularize,
-            'myExpense': MyExpense
+            'myExpense': MyExpense,
+            'SingleInfo':SingleInfo
         }
         if (pages[key]) {
             this.props.navigator.push({
@@ -341,6 +344,12 @@ export default class Home extends Component {
                         automaticallyAdjustContentInsets={false}
                         removeClippedSubviews={false}
                     />
+                </View>
+            )
+        }else{
+            return (
+                <View style={{backgroundColor:'#fff',justifyContent:'center',flex:1}}>
+                    <ActivityIndicator color="#aa00aa"/>
                 </View>
             )
         }

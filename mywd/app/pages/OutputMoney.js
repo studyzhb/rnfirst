@@ -9,7 +9,10 @@ import {
     AlertIOS,
     Alert,
     Platform,
-    Dimensions
+    Picker,
+    PickerIOS,
+    Dimensions,
+    ActivityIndicator
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -19,6 +22,8 @@ import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
 
 import CountDownText from '../util/CountDownText';
+
+import { ListItem } from 'react-native-elements'
 
 const isIOS = Platform.OS === 'ios';
 let { width, height } = Dimensions.get('window');
@@ -31,7 +36,10 @@ export default class Register extends Component {
             phoneNumber: '',
             password: '',
             countingDone: false,
-            codeSent: false
+            codeSent: false,
+            selectedItem: '',
+            banklist: [],
+            selectedPosition: 0
         }
         this.interval = null;
     }
@@ -93,6 +101,32 @@ export default class Register extends Component {
     }
 
 
+    componentDidMount() {
+        let loginUrl = config.baseUrl + config.api.user.userBanklist;
+
+        request.get(loginUrl)
+            .then((data) => {
+                console.log(data)
+                if (data.code == 1) {
+                    console.log('bank shuaxin')
+                    this.setState({
+                        banklist: data.data,
+                        selectedItem: data.data[0].id
+                    })
+                } else {
+                    isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
+                }
+            })
+            .catch((err) => {
+                console.warn(err)
+                // console.log(JSON.stringify(err));
+            })
+    }
+
+    changeBankSelected() {
+
+    }
+
 
     _sendVerifyCode() {
         let self = this;
@@ -126,55 +160,93 @@ export default class Register extends Component {
     }
 
     render() {
-        return (
-            <View style={styles.container} >
-                <NavBar
-                    title='提现'
-                    style={{ 'backgroundColor': '#fff' }}
-                    titleStyle={{ 'color': '#666' }}
-                    leftIcon='ios-close-outline'
-                    leftPress={this.leftPress.bind(this)}
+        console.log(this.state.banklist)
+        console.log(this.state.banklist.length)
+        if (this.state.banklist.length > 0) {
+            return (
+                <View style={styles.container}>
+                    <View style={styles.container} >
+                        <NavBar
+                            title='提现'
+                            style={{ 'backgroundColor': '#fff' }}
+                            titleStyle={{ 'color': '#666' }}
+                            leftIcon='ios-close-outline'
+                            leftPress={this.leftPress.bind(this)}
 
-                    rightPress={this.rightPress.bind(this)}
-                />
+                            rightPress={this.rightPress.bind(this)}
+                        />
 
-                <View style={{flexDirection:'row',}}>
+                        <View style={{ backgroundColor: '#fff', marginTop: 10 }}>
+                            <ListItem
+                                roundAvatar
+                                onPress={this.changeBankSelected.bind(this)}
+                                title={this.state.banklist.length > 0 ? this.state.banklist[this.state.selectedPosition].card_tip : ''}
+                                subtitle={this.state.banklist.length > 0 ? this.state.banklist[this.state.selectedPosition].card_num : ''}
+                                avatar={{ uri: this.state.banklist[this.state.selectedPosition].card.logo }}
+                            />
+                            <View style={{ flex: 1, position: 'absolute', left: 0, top: 0, width: width }}>
+                                {
+                                    <Picker
+                                        selectedValue={this.state.selectedItem}
+                                        style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0)', color: 'rgba(0,0,0,0)' }}
+                                        onValueChange={(lang, itemPosition) => this.setState({ selectedItem: lang, selectedPosition: itemPosition })}>
 
-                </View>
+                                        {
+                                            this.state.banklist.length > 0 ? this.state.banklist.map((item, key) => {
+                                                <Picker.Item key={key} label={item.card_tip} value={item.id} />
+                                            }) : null
+                                        }
+                                    </Picker>
 
-                <View style={styles.inputWrapper}>
+                                }
 
-                    <Text style={styles.labelinput}>金额</Text>   
-                    <TextInput
-                        style={styles.inputField}
-                        placeholder="请输入提现金额"
-                        //是否自动将特定字符切换为大写
-                        autoCapitalize={'none'}
-                        //关闭拼写自动修正
-                        autoCorrect={false}
-                        //去除android下的底部边框问题
-                        underlineColorAndroid="transparent"
-                        keyboardType='numeric' //弹出软键盘类型
-                        onChangeText={(text) => {
+                            </View>
+                        </View>
 
-                            this.setState({
-                                phoneNumber: text
-                            })
-                        }}
-                    />
+                        <View style={styles.inputWrapper}>
 
-                </View>
-                <View style={{ width: width, flexDirection: 'row', justifyContent: 'center' }}>
-                    <Button
-                        style={styles.btn}
-                        onPress={this._submit.bind(this)}
-                    >
-                        下一步
+                            <Text style={styles.labelinput}>金额</Text>
+                            <TextInput
+                                style={styles.inputField}
+                                placeholder="请输入提现金额"
+                                //是否自动将特定字符切换为大写
+                                autoCapitalize={'none'}
+                                //关闭拼写自动修正
+                                autoCorrect={false}
+                                //去除android下的底部边框问题
+                                underlineColorAndroid="transparent"
+                                keyboardType='numeric' //弹出软键盘类型
+                                onChangeText={(text) => {
+
+                                    this.setState({
+                                        phoneNumber: text
+                                    })
+                                }}
+                            />
+
+                        </View>
+                        <View style={{ width: width, flexDirection: 'row', justifyContent: 'center' }}>
+                            <Button
+                                style={styles.btn}
+                                onPress={this._submit.bind(this)}
+                            >
+                                下一步
                     </Button>
+                        </View>
+
+                    </View>
+
                 </View>
 
-            </View>
-        )
+            )
+        } else {
+            return (
+                <View style={{ backgroundColor: '#fff', justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+                    <ActivityIndicator color="#aa00aa" />
+                </View>
+            )
+        }
+
     }
 }
 
@@ -182,7 +254,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         // padding:10,
-        backgroundColor: '#fff',
+        backgroundColor: '#eaeaea',
         // alignItems:'center'
         // justifyContent:'center'
     },
@@ -190,15 +262,16 @@ const styles = StyleSheet.create({
         height: px2dp(100)
     },
     inputWrapper: {
-        // backgroundColor:'#eaeaea',
+        backgroundColor: '#fff',
         height: px2dp(50),
-        borderBottomWidth: 1,
-        borderBottomColor: "#eaeaea",
+        // borderBottomWidth: 1,
+        // borderBottomColor: "#eaeaea",
+        marginTop: 10,
         paddingLeft: 10,
         // width:width,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'flex-start'
     },
     labelinput: {
         fontSize: 16,
@@ -214,7 +287,7 @@ const styles = StyleSheet.create({
     inputField: {
         padding: 0,
         fontSize: 14,
-        flex: 1,
+        flex: 3,
         paddingLeft: 10,
         height: px2dp(50),
         color: '#999',
