@@ -28,7 +28,8 @@ import SingleInfo from './SingleInfo'
 
 import config from '../util/config';
 import request from '../util/request';
-
+import Author from './authorize';
+import FINAL from '../util/FinalNum'
 
 let { width, height } = Dimensions.get('window');
 
@@ -50,7 +51,8 @@ export default class AllobList extends Component {
         this.state = {
             isRefreshing: false,
             isLoadingTail: false,
-            dataSource: ds.cloneWithRows([])
+            dataSource: ds.cloneWithRows([]),
+            isAuthor:0
         }
     }
 
@@ -109,7 +111,7 @@ export default class AllobList extends Component {
         await request.get(getIndexUrl, obj)
             .then((data) => {
 
-                console.log(data);
+
                 if (data.code == 1 && data.data) {
 
                     let list = data.data.list || [];
@@ -195,7 +197,7 @@ export default class AllobList extends Component {
     }
 
     _onRefresh() {
-        console.log('执行刷新');
+
         if (!this._hasMore() || this.state.isRefreshing) {
             return
         }
@@ -222,8 +224,18 @@ export default class AllobList extends Component {
         this._fetchData(1);
     }
 
+    gotoAuthor(){
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.push({
+                name:'author',
+                component:Author
+            })
+        }
+    }
+
     _renderRow(item) {
-        console.log(item)
+
         let info = '';
         if (item.pay_status == 0) {
             info = '未付款';
@@ -351,6 +363,7 @@ export default class AllobList extends Component {
                     />
                 </View>
                 <Button
+                    onPress={this.gotoAuthor.bind(this)}
                     containerStyle={{ padding: 10, height: 45, overflow: 'hidden', backgroundColor: '#21bb58' }}
                     style={styles.nowbuybtn}>
                     添加新的债权

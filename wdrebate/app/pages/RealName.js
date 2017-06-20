@@ -34,7 +34,7 @@ export default class RealName extends Component {
     }
     _submit() {
         let self = this;
-        console.log(this.state)
+       
         let phoneNumber = this.state.phoneNumber;
         let name = this.state.name;
 
@@ -57,7 +57,7 @@ export default class RealName extends Component {
 
         request.post(loginUrl, body)
             .then((data) => {
-                console.log(data)
+             
                 if (data.code == 1) {
                     if (this.props.getUser) {
                         this.props.getUser({ isrealname: staticNum.ISREALNAME })
@@ -90,7 +90,7 @@ export default class RealName extends Component {
     }
 
     render() {
-        console.log(this.props)
+        
         return (
             <View style={styles.container} >
                 <NavBar

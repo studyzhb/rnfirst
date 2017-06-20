@@ -100,7 +100,7 @@ export default class Account extends Component{
     let url=config.baseUrl+config.api.user.userinfo;
     request.get(url)
         .then(data=>{
-            console.log(data);
+         
             if(data.code==1){
                 storage.save({
                     key:'user',
@@ -197,7 +197,7 @@ export default class Account extends Component{
     var xhr = new XMLHttpRequest()
     var url = config.qiniu.upload
 
-    console.log(body)
+
 
     this.setState({
       avatarUploading: true,
@@ -208,7 +208,7 @@ export default class Account extends Component{
     xhr.onload = () => {
       if (xhr.status !== 200) {
         AlertIOS.alert('请求失败')
-        console.log(xhr.responseText)
+
 
         return
       }

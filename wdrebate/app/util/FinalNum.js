@@ -10,7 +10,11 @@ const final={
     //登录状态
     LOGINDEFAULT:0,//等待中
     LOGINFINISHED:1,
-    LOGINNOFINISHED:2
+    LOGINNOFINISHED:2,
+    //认证状态
+    AUTHORING:1,
+    BACKGOODS:2,
+    PICKUPGOODS:1,
 }
 
 export default  final;

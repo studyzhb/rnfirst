@@ -35,7 +35,7 @@ export default class LoginIndex extends Component{
     }
     _submit(){
         let self=this;
-        console.log(this.state)
+
         let phoneNumber=this.state.phoneNumber;
         let pass=this.state.password;
 
@@ -53,10 +53,10 @@ export default class LoginIndex extends Component{
         }
 
         let loginUrl=config.baseUrl+config.api.user.login;
-
+        
         request.post(loginUrl,body)
                 .then((data)=>{
-                    console.log(data)
+                  
                     if(data.code==1){
                         this.props.enterLogin(data.data);
                     }else{
@@ -66,6 +66,8 @@ export default class LoginIndex extends Component{
                 .catch((err)=>{
                     console.log(err);
                 }) 
+
+
     }
 
     leftPress(){

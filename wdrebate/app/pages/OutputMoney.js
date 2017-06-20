@@ -24,7 +24,7 @@ import NavBar from '../component/NavBar';
 import CountDownText from '../util/CountDownText';
 
 import { ListItem } from 'react-native-elements'
-
+import LbsModal from '../component/LbsModal'
 const isIOS = Platform.OS === 'ios';
 let { width, height } = Dimensions.get('window');
 // console.log(CountDownText)
@@ -39,7 +39,8 @@ export default class Register extends Component {
             codeSent: false,
             selectedItem: '',
             banklist: [],
-            selectedPosition: 0
+            selectedPosition: 0,
+            modalVisible:false,
         }
         this.interval = null;
     }
@@ -51,41 +52,48 @@ export default class Register extends Component {
 
     }
 
-    _submit() {
-        let self = this;
-        let phoneNumber = this.state.phoneNumber;
-        let verifyCode = this.state.verifyCode;
-        let password = this.state.password;
-        if (!phoneNumber || !verifyCode) {
-            return isIOS ? AlertIOS.alert('手机号或验证码不能为空！') : Alert.alert('手机号或验证码不能为空！');
+    closeModal(pass) {
+        
+        
+        this.setState({
+            modalVisible: false,
+        })
+        if(pass){
+            this._goPay.bind(this, pass)();
         }
+    }
 
-        if (!password) {
-            return isIOS ? AlertIOS.alert('密码不能为空！') : Alert.alert('密码不能为空！');
-        }
+    openLbs() {
+        
+        this.setState({ modalVisible: true })
+    }
 
+    _goPay(pass){
+        let createOrderUrl = config.baseUrl + config.api.user.useroutput;
         let body = {
-            tel: phoneNumber,
-            code: verifyCode,
-            password: password
-        }
-
-        let verifyURL = config.baseUrl + config.api.user.register;
-
-        request.post(verifyURL, body)
-            .then((data) => {
-                console.log(JSON.stringify(data))
+            money: this.state,
+            pay_pwd: pass,
+            user_card_id:this.state.selectedItem
+        };
+    
+        request.post(createOrderUrl, body)
+            .then(data => {
+                
                 if (data.code == 1) {
-                    isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
-                    self.props.afterLogin(data.data)
+                    //支付成功
+                    this.props.navigator.popToTop();
                 } else {
-                    isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
+                    isIOS
+                        ? AlertIOS.alert(data.message)
+                        : Alert.alert(data.message)
                 }
+               
             })
-            .catch((err) => {
-                console.log(err)
-                isIOS ? AlertIOS.alert('获取验证码失败，请检查网络是否良好') : Alert.alert('获取验证码失败，请检查网络是否良好');
-            })
+    }
+
+    _submit() {
+       this.openLbs.bind(this)();
+
     }
 
     _showVerifyCode() {
@@ -106,9 +114,9 @@ export default class Register extends Component {
 
         request.get(loginUrl)
             .then((data) => {
-                console.log(data)
+                
                 if (data.code == 1) {
-                    console.log('bank shuaxin')
+                    
                     this.setState({
                         banklist: data.data,
                         selectedItem: data.data[0].id
@@ -145,7 +153,7 @@ export default class Register extends Component {
 
         request.get(signupURL, body)
             .then((data) => {
-                console.log(JSON.stringify(data) + 'shuju')
+                
                 if (data.code == 1) {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                     self._showVerifyCode()
@@ -160,8 +168,7 @@ export default class Register extends Component {
     }
 
     render() {
-        console.log(this.state.banklist)
-        console.log(this.state.banklist.length)
+
         if (this.state.banklist.length > 0) {
             return (
                 <View style={styles.container}>
@@ -175,7 +182,7 @@ export default class Register extends Component {
 
                             rightPress={this.rightPress.bind(this)}
                         />
-
+                        
                         <View style={{ backgroundColor: '#fff', marginTop: 10 }}>
                             <ListItem
                                 roundAvatar
@@ -229,7 +236,7 @@ export default class Register extends Component {
                                 onChangeText={(text) => {
 
                                     this.setState({
-                                        phoneNumber: text
+                                        money: text
                                     })
                                 }}
                             />
@@ -245,7 +252,11 @@ export default class Register extends Component {
                         </View>
 
                     </View>
-
+                    <LbsModal
+                            total={this.state.money}
+                            modalVisible={this.state.modalVisible}
+                            closeModal={this.closeModal.bind(this)}
+                        />
                 </View>
 
             )

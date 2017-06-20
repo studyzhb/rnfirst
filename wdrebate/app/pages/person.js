@@ -43,6 +43,8 @@ let photoOptions = {
     }
 }
 
+let userObj=null;
+
 export default class Person extends Component {
     constructor(props) {
         super(props);
@@ -57,11 +59,15 @@ export default class Person extends Component {
     _submit() {
         let url = config.baseUrl + config.api.user.updateUserInfo;
         let { navigator } = this.props;
+
+
+
         let body = {
-            age: this.state.age,
+            age: this.state.age||userObj.age,
             sex: this.state.sex,
-            nickname: this.state.nickname
+            nickname: this.state.nickname||userObj.nickname
         };
+
 
         request.post(url, body)
             .then(data => {
@@ -84,8 +90,9 @@ export default class Person extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props, 'person')
+
         let { user } = this.props;
+        userObj=user;
         this.setState({
             age: user.age,
             avatar: user.avatar,
@@ -96,38 +103,77 @@ export default class Person extends Component {
     }
 
     shouldComponentUpdate() {
-        console.log('shouldComponentUpdate  person')
+
         return true;
     }
 
     imageupload() {
-        console.log('shangchuan')
-        console.log(ImagePicker)
+
+        let formData = new FormData();
         if (!!ImagePicker) {
-           ImagePicker.showImagePicker? ImagePicker.showImagePicker(photoOptions, (response) => {
-                console.log('response' + response);
+            ImagePicker.showImagePicker ? ImagePicker.showImagePicker(photoOptions, (response) => {
+                
+
+                /**
+                 * response {
+                 *  fileName
+                 * fileSize
+                 * path
+                 * data
+                 * }
+                 */
 
                 if (response.didCancel) {
                     return
                 }
+                else if (response.error) {
+                    console.log('ImagePicker 出错: ', response.error);
+                }
+                else {
+                    let source = { uri: 'data:image/jpeg;base64,' + response.data, isStatic: true };
+                    if (Platform.OS === 'ios') {
+                        source = { uri: response.uri.replace('file://', ''), isStatic: true };
+                    } else {
+                        source = { uri: response.uri, isStatic: true };
+                    }
+                    // let file = { uri: source.uri, type: 'multipart/form-data', name: response.fileName };
+                    let file = { uri: source.uri, type: 'image/jpeg', name: response.fileName };
 
-                // let url = config.baseUrl + config.api.user.uploadImage;
+                    // let file=source.uri;
 
-                // let body = {
-                //     type: 'avatar',
-                //     avatar: response
-                // }
+                    // formData.append("avatar", file);
+                    // formData.append("type", 'avatar');
+                    // {
+                    //     headers:{
+                    //         'Content-Type':'multipart/form-data',
+                    //         'UserAgent':Platform.OS
+                    //     },
+                    //     body:formData
+                    // }
+                    let url = config.baseUrl + config.api.user.uploadImage;
+                    
+                    request.post(url, {
+                        avatar:file,
+                        type:'avatar'
+                    },)
+                        .then(data => {
+                            
+                            if (data.code == 1) {
+                                this.setState({
+                                    avatar: data.data.url
+                                })
+                            }else{
+                                isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
+                            }
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                        })
+                }
 
-                // request.post(url, body)
-                //     .then(data => {
-                //         if (data.code == 1) {
-                //             this.setState({
-                //                 avatar: response
-                //             })
-                //         }
-                //     })
 
-            }):null
+
+            }) : null
         }
 
     }
@@ -147,7 +193,7 @@ export default class Person extends Component {
                     rightPress={this.rightPress.bind(this)}
                 />
                 <TouchableOpacity style={styles.logo} onPress={this.imageupload.bind(this)}>
-                    <Image source={this.state.avatar ? { uri: this.state.avatar } : require('../images/avatar.jpg')} style={{ width: px2dp(124), height: px2dp(124), borderRadius: 62 }} />
+                    <Image source={this.state.avatar ? { uri: this.state.avatar } : require('../images/avatar.jpg')} style={{ width: px2dp(124), height: px2dp(124), overflow: 'hidden', borderRadius: 62, borderColor: '#000', borderWidth: 1 }} />
                 </TouchableOpacity>
                 <View style={styles.inputWrapper}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -165,12 +211,9 @@ export default class Person extends Component {
                         underlineColorAndroid="transparent"
                         keyboardType='number-pad' //弹出软键盘类型
                         onChangeText={(text) => {
-                            if (text.trim()) {
-                                this.setState({
+                            this.setState({
                                     nickname: text
                                 })
-                            }
-
                         }}
                     />
 
@@ -210,7 +253,7 @@ export default class Person extends Component {
                     </View>
                     <TextInput
                         style={styles.inputField}
-                        value={this.state.age + ''}
+                        value={this.state.age+''}
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
@@ -219,12 +262,9 @@ export default class Person extends Component {
                         underlineColorAndroid="transparent"
                         keyboardType='number-pad' //弹出软键盘类型
                         onChangeText={(text) => {
-                            if (text.trim()) {
-                                this.setState({
+                            this.setState({
                                     age: text
                                 })
-                            }
-
                         }}
                     />
 

@@ -37,7 +37,7 @@ export default class IndexItem extends Component{
                     </View>
                     <View style={[styles.item,styles.itembottom]}>
                         <Text style={{color:'#3a3a3a',fontSize:14,marginTop:-10}}>购买后应返积分：{row.back_point}</Text>
-                        <Text style={{color:'#999',fontSize:12,marginTop:-11}}>{row.isEnter?'已参加':'未参加'}</Text>
+                        <Text style={{color:'#999',fontSize:12,marginTop:-11}}>{row.num-0>0?'已参加':'未参加'}</Text>
                     </View>
                 </View>
             </TouchableHighlight>

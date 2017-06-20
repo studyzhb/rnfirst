@@ -42,7 +42,7 @@ export default class OrderInfo extends Component {
 
         request.get(url, { id: this.props.id })
             .then(data => {
-                console.log(data)
+               
                 if (data.code == 1) {
                     this.setState({
                         orderInfo: data.data
@@ -59,14 +59,51 @@ export default class OrderInfo extends Component {
 
     renderGoodsList() {
 
-        let { back_date, draw_date, finsh_date, isback, order, pick_date, pick_up_status, queque_status, retail_id, return_date, product } = this.state.orderInfo;
+        let { back_date, draw_date, finsh_date, isback, order, pick_date, pick_up_status, queque_status, retail_id, return_date, product, created_at } = this.state.orderInfo;
 
-        console.log(this.state.orderInfo)
 
-        switch (queque_status){
-            case '':
+        let backstatus = '';
+        let pickstatus = '';
+
+        switch (pick_up_status) {
+            case 0:
+                pickstatus = '已备货，未操作'
                 break;
-            
+            case 1:
+                pickstatus = '提货中'
+                break;
+            case 2:
+                pickstatus = '回购中'
+                break;
+            case 3:
+                pickstatus = '回购成功'
+                break;
+            case 4:
+                pickstatus = '回购失败'
+                break;
+            case 5:
+                pickstatus = '提货完成'
+                break;
+
+        }
+
+        switch (queque_status) {
+            case 0:
+                backstatus = '返利中'
+                break;
+            case 1:
+                backstatus = '可兑换'
+                break;
+            case 2:
+                backstatus = '兑换中'
+                break;
+            case 3:
+                backstatus = '兑换完成'
+                break;
+            case 4:
+                backstatus = '违规踢出'
+                break;
+
         }
 
         return (
@@ -75,13 +112,13 @@ export default class OrderInfo extends Component {
                 <View >
                     <View style={[styles.flexRow, { borderBottomColor: '#eaeaea', borderBottomWidth: 1, height: 44, alignItems: 'center', paddingLeft: 20, backgroundColor: '#fff' }]}>
                         <Text style={styles.baseText}>订单号：</Text>
-                        <Text style={{ color: "#666", fontSize: 14 }}>{order?order.order_sn:0}</Text>
+                        <Text style={{ color: "#666", fontSize: 14 }}>{order ? order.order_sn : 0}</Text>
                     </View>
                     {
                         product ? product.map((item, key) => {
                             return (
                                 <View style={styles.items} key={key}>
-                                    <Image source={{uri:item.img}} style={{ width: 60, height: 60 }} />
+                                    <Image source={{ uri: item.img }} style={{ width: 60, height: 60 }} />
                                     <View style={{ marginLeft: 20, justifyContent: 'space-between', paddingBottom: 20 }}>
                                         <View style={styles.flexRow}>
                                             <Text style={{ fontSize: 14, lineHeight: 20, color: '#666', marginRight: 30 }}>{item.title}</Text>
@@ -103,53 +140,58 @@ export default class OrderInfo extends Component {
                     <View style={[styles.flexRow, { justifyContent: 'flex-end', paddingRight: 8, height: 42, backgroundColor: '#fff', alignItems: 'center' }]}>
                         <Text style={styles.baseText}>共{product ? product.length : 0}件商品 </Text>
                         <Text style={styles.baseText}> 实付款：</Text>
-                        <Text style={{ color: "#999", fontSize: 14 }}>￥{order?order.order_amount:0}</Text>
+                        <Text style={{ color: "#999", fontSize: 14 }}>￥{order ? order.order_amount : 0}</Text>
                     </View>
                 </View>
                 {/*订单状态*/}
                 <View style={[styles.itemWrapper]}>
                     <View style={[styles.flexRow, styles.sitem]}>
                         <Text style={styles.baseText}>订单状态：</Text>
-                        <Text style={styles.subText}>已取货</Text>
+                        <Text style={styles.subText}>{pickstatus}</Text>
                     </View>
                     <View style={[styles.flexRow, styles.sitem]}>
                         <Text style={styles.baseText}>支付方式：</Text>
-                        <Text style={styles.subText}>微信支付</Text>
+                        <Text style={styles.subText}></Text>
                     </View>
-                    <View style={[styles.flexRow, { justifyContent: 'space-between' }]}>
+                    {/*<View style={[styles.flexRow, { justifyContent: 'space-between' }]}>
                         <View style={[styles.flexRow, styles.sitem, { flex: 1 }]}>
                             <Text style={styles.baseText}>提货地点：</Text>
                             <Text style={styles.subText}>已取货</Text>
                         </View>
-                    </View>
+                    </View>*/}
                     <View style={[styles.flexRow, styles.sitem]}>
                         <Text style={styles.baseText}>下单时间：</Text>
-                        <Text style={styles.subText}>2017-04-15 15:50</Text>
+                        <Text style={styles.subText}>{new Date(order.pay_date * 1000).toLocaleString()}</Text>
                     </View>
-                    <View style={[styles.flexRow, styles.sitem]}>
-                        <Text style={styles.baseText}>取货时间：</Text>
-                        <Text style={styles.subText}>2017-04-15 15:50</Text>
-                    </View>
+                    {
+                        pick_date - 0 > 0
+                            ? <View style={[styles.flexRow, styles.sitem]}>
+                                <Text style={styles.baseText}>取货时间：</Text>
+                                <Text style={styles.subText}>{new Date(pick_date * 1000).toLocaleString()}</Text>
+                            </View>
+                            : null
+                    }
+
                 </View>
                 {/*返还状态*/}
                 <View style={[styles.itemWrapper]}>
                     <View style={[styles.flexRow, styles.sitem]}>
                         <Text style={styles.baseText}>返还状态：</Text>
-                        <Text style={styles.subText}>可兑换</Text>
+                        <Text style={styles.subText}>{backstatus}</Text>
                     </View>
                     {/*<View style={[styles.flexRow, styles.sitem]}>
                         <Text style={styles.baseText}>队列编号：</Text>
                         <Text style={styles.subText}>6</Text>
                     </View>*/}
                     {
-                        return_date-0>0
-                        ?<View style={[styles.flexRow, styles.sitem]}>
-                            <Text style={styles.baseText}>返现时间：</Text>
-                            <Text style={styles.subText}>2017-04-15 15:50</Text>
-                        </View>
-                        :null
+                        return_date - 0 > 0
+                            ? <View style={[styles.flexRow, styles.sitem]}>
+                                <Text style={styles.baseText}>返现时间：</Text>
+                                <Text style={styles.subText}>{new Date(return_date * 1000).toLocaleString()}</Text>
+                            </View>
+                            : null
                     }
-                    
+
                 </View>
             </View>
 

@@ -37,7 +37,7 @@ export default class AddBank extends Component {
         let url = config.baseUrl + config.api.user.showBanklist;
         request.get(url)
             .then(data => {
-                console.log(data);
+
                 if (data.code == 1) {
                     this.setState({
                         banklist: data.data
@@ -54,7 +54,7 @@ export default class AddBank extends Component {
     _submit() {
         let { navigator,updateBank } = this.props;
         let self = this;
-        console.log(this.props)
+
         let card_num = this.state.card_num;
         let card_tip = this.state.card_tip;
 
@@ -73,11 +73,11 @@ export default class AddBank extends Component {
 
         let loginUrl = config.baseUrl + config.api.user.addBank;
 
-        console.log(body)
+
 
         request.post(loginUrl, body)
             .then((data) => {
-                console.log(data)
+
                 if (data.code == 1) {
                     if(updateBank){
                         updateBank()

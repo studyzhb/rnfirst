@@ -32,6 +32,8 @@ import OrderInfo from './OrderInfo';
 import request from '../util/request';
 import config from '../util/config';
 
+import FINAL from '../util/FinalNum'
+
 let { width, height } = Dimensions.get('window');
 let isIOS = Platform.OS === 'ios';
 
@@ -49,6 +51,7 @@ export default class ObligationList extends Component {
         })
         this.state = {
             queueInfo: {},
+            update:false,
             isRefreshing: false,
             isLoadingTail: false,
             dataSource: ds.cloneWithRows([])
@@ -64,6 +67,53 @@ export default class ObligationList extends Component {
         return true;
     }
 
+    converseOrPickup(item) {
+       
+        if (item.isback == 1) {
+            let info = '选择回购时，平台将回购您的商品，需要收取2%的手续费。 选择提货时，你将需要亲自去提货点（订单详情界面查看提货地址）提取货物';
+            isIOS
+                ? AlertIOS.alert(
+                    '提示',
+                    info,
+                    [
+                        { text: '回购', onPress: this.pickupGoods.bind(this, item.id, FINAL.BACKGOODS) },
+                        { text: '提货', onPress: this.pickupGoods.bind(this, item.id, FINAL.PICKUPGOODS), style: 'cancel' }
+                    ],
+                    { cancelable: false }
+                )
+                : Alert.alert(
+                    '提示',
+                    info,
+                    [
+                        { text: '回购', onPress: this.pickupGoods.bind(this, item.id, FINAL.BACKGOODS) },
+                        { text: '提货', onPress: this.pickupGoods.bind(this, item.id, FINAL.PICKUPGOODS), style: 'cancel' }
+                    ],
+                    { cancelable: false }
+                )
+        } else {
+            let info = '选择提货时，你将需要亲自去提货点（订单详情界面查看提货地址）提取货物';
+            isIOS
+                ? AlertIOS.alert(
+                    '提示',
+                    info,
+                    [
+                        { text: '取消', onPress: ()=>{}},
+                        { text: '提货', onPress: this.pickupGoods.bind(this, item.id, FINAL.PICKUPGOODS), style: 'cancel' }
+                    ],
+                    { cancelable: false }
+                )
+                : Alert.alert(
+                    '提示',
+                    info,
+                    [
+                        { text: '取消', onPress: ()=>{}},
+                        { text: '提货', onPress: this.pickupGoods.bind(this, item.id, FINAL.PICKUPGOODS), style: 'cancel' }
+                    ],
+                    { cancelable: false }
+                )
+        }
+    }
+
     _onRefresh() {
         if (!this._hasMore() || this.state.isRefreshing) {
             return
@@ -73,32 +123,54 @@ export default class ObligationList extends Component {
 
     //获取队列列表信息
     async  _fetchData(page) {
-        console.log(this.props);
+    
         let that = this;
         let self = this;
-        if (page !== 0) {
+
+        let obj = {
+            id: this.props.id
+        }
+        if (page == 1) {
+            obj.page = page;
+            cachedResults = {
+                nextPage: 1,
+                items: [],
+                total: 0
+            }
+            this.setState({
+                isRefreshing: true
+            })
+        }
+        else if (page !== 0) {
+            obj.page = page;
             this.setState({
                 isLoadingTail: true
             })
         }
         else {
+            obj.page = 1;
+            cachedResults = {
+                nextPage: 1,
+                items: [],
+                total: 0
+            }
             this.setState({
                 isRefreshing: true
             })
         }
         let getQueueUrl = config.baseUrl + config.api.rebate.getQueueInfoByQueueId;
-        let body = {
-            id: this.props.id,
-            page: page
-        }
-        console.log(body)
-        await request.get(getQueueUrl, body)
-            .then(data => {
-                console.log(data)
-                if (data.code == 1 && data.data) {
 
+
+        await request.get(getQueueUrl, obj)
+            .then(data => {
+              
+                if (data.code == 1 && data.data) {
+                    if(page==1){
+
+                    }
                     let list = data.data.list_queque.queque || [];
-                    
+
+
                     if (list.length > 0) {
 
                         let items = cachedResults.items.slice()
@@ -113,8 +185,15 @@ export default class ObligationList extends Component {
 
                         cachedResults.items = items
                         cachedResults.total = data.data.list_queque.total
-
-                        if (page !== 0) {
+                        if (page == 1) {
+                            self.setState({
+                                isRefreshing: false,
+                                queueInfo: data.data,
+                                update:true,
+                                dataSource: self.state.dataSource.cloneWithRows(cachedResults.items)
+                            })
+                        }
+                        else if (page !== 0) {
                             that.setState({
                                 isLoadingTail: false,
                                 queueInfo: data.data,
@@ -128,15 +207,24 @@ export default class ObligationList extends Component {
                                 dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
                             })
                         }
-                    } else {
-
-                        cachedResults.items = []
-                        cachedResults.total = data.data.total
-                        that.setState({
-                            isRefreshing: false,
-                            queueInfo: data.data,
-                            dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
+                    } else {  
+                        cachedResults = {
+                            nextPage: 1,
+                            items: [],
+                            total: 0
+                        }
+                        
+                        this.setState({
+                            update:true,
+                            queueInfo:data.data,
+                            isRefreshing:false
                         })
+                        cachedResults.total = data.data.total
+                        
+                        if(page>1){
+                            this._fetchData(1);
+                        }
+                        
                     }
                 } else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
@@ -163,11 +251,30 @@ export default class ObligationList extends Component {
         let getQueueUrl = config.baseUrl + config.api.rebate.converse;
         request.post(getQueueUrl, { id: id })
             .then(data => {
-                console.log(data)
+                
                 if (data.code == 1 && data.data) {
+                    this._fetchData(1)
                     self.setState({
                         isRefreshing: false
                     })
+                } else {
+                    isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
+                }
+            })
+    }
+
+    pickupGoods(id, type) {
+        
+        let url = config.baseUrl + config.api.rebate.applyBackOrPick;
+        let body = {
+            id: id,
+            type: type
+        }
+        request.post(url, body)
+            .then(data => {
+               
+                if (data.code == 1) {
+                    this._fetchData(1)
                 } else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
@@ -261,8 +368,8 @@ export default class ObligationList extends Component {
 
 
         //`isback` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可以回购 1 是 2 否',
-        console.log(item)
-
+        
+        let pickupinfo = '提货';
         if (item.queque_status == '0') {
             item.queueStatusText = '队列中';
         } else if (item.queque_status == '1') {
@@ -273,6 +380,27 @@ export default class ObligationList extends Component {
             item.queueStatusText = '已提现';
         } else if (item.queque_status == '4') {
             item.queueStatusText = '被踢出';
+        }
+
+        switch (item.pick_up_status) {
+            case 0:
+                pickupinfo = '提货';
+                break;
+            case 1:
+                pickupinfo = '提货中';
+                break;
+            case 2:
+                pickupinfo = '回购中';
+                break;
+            case 3:
+                pickupinfo = '回购成功';
+                break;
+            case 4:
+                pickupinfo = '回购失败';
+                break;
+            case 5:
+                pickupinfo = '提货完成';
+                break;
         }
 
         return (
@@ -294,11 +422,11 @@ export default class ObligationList extends Component {
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 16 }}>
                             <Text style={[styles.normalText, { marginTop: 10 }]}>{item.created_at}</Text>
                             <View style={{ flexDirection: 'row', }}>
-                                <Button style={styles.convercebtn} containerStyle={[styles.convercebtnWrapper, styles.disabled]} disabled={true} disabledText={{ color: '#666' }}>
-                                    提货
-                                            </Button>
+                                <Button onPress={this.converseOrPickup.bind(this, item)} style={styles.convercebtn} containerStyle={[styles.convercebtnWrapper, item.pick_up_status !== 0 ? styles.disabled : null]} disabled={item.pick_up_status !== 0 ? true : false} disabledText={{ color: '#666' }}>
+                                    {pickupinfo}
+                                </Button>
                                 {
-                                    item.queque_status != 1
+                                    item.queque_status == 2
                                         ? <Button onPress={this.goConverce.bind(this, item.id)} style={[styles.convercebtn]} containerStyle={[styles.convercebtnWrapper, { marginLeft: 15 }]}>
                                             兑换
                                         </Button>
@@ -389,7 +517,7 @@ export default class ObligationList extends Component {
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
-                <View style={{  marginTop: 12, paddingBottom: 0, backgroundColor: '#f3f3f3' }}>
+                <View style={{ marginTop: 12, paddingBottom: 0, backgroundColor: '#f3f3f3' }}>
                     <View style={styles.numbers}>
                         <TouchableWithoutFeedback onPress={this.gotoOrderPage.bind(this)}>
                             <View style={styles.numItem}>
@@ -455,11 +583,18 @@ export default class ObligationList extends Component {
     }
 
     _changeCon(w, h) {
-        console.log(w, h)
+      
     }
 
     render() {
-        console.log(this.state)
+       
+        if(!this.state.update){
+            return (
+                <View style={{ backgroundColor: '#fff', justifyContent: 'center', flex: 1 }}>
+                    <ActivityIndicator color="#aa00aa" />
+                </View>
+            )
+        }
         return (
             <View style={styles.container}>
                 <View style={styles.container}>

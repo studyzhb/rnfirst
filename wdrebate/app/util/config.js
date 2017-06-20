@@ -34,7 +34,15 @@ export default {
             //用户更改密码
             changePass:'/user/update_pwd',
             //用户上传头像 type avatar
-            uploadImage:'/image'
+            uploadImage:'/image',
+            //用户状态
+            userStatus:'/user/status',
+            //余额提现\
+            useroutput:'/userbalance/withdraw',
+            //我的推广
+            popular:'/user/promotion',
+            //我的二维码
+            mycode:'/user/myurl'
         },
         //返利模块
         rebate:{
@@ -58,7 +66,9 @@ export default {
             //创建订单
             createOrder:'/order/create',
             //兑换积分
-            converse:'/creditor/exchange'
+            converse:'/creditor/exchange',
+            //申请回购与提货
+            applyBackOrPick:'/creditor/apply'
         },
         pay:{
             balance:'/defray/balance',

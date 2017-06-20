@@ -44,7 +44,7 @@ export default class Register extends Component {
     }
 
     leftPress() {
-        console.log(this.props)
+       
         let { navigator } = this.props;
         if (navigator) {
             navigator.pop()
@@ -77,7 +77,7 @@ export default class Register extends Component {
 
         request.post(verifyURL, body)
             .then((data) => {
-                console.log(JSON.stringify(data))
+                
                 if (data.code == 1) {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                     self.props.afterLogin(data.data)
@@ -136,7 +136,7 @@ export default class Register extends Component {
 
         request.get(signupURL, body)
             .then((data) => {
-                console.log(JSON.stringify(data) + 'shuju')
+               
                 if (data.code == 1) {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                     self._showVerifyCode()

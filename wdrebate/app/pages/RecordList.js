@@ -100,7 +100,7 @@ export default class RecordList extends Component {
 
         request.get(getIndexUrl, obj)
             .then((data) => {
-                console.log(data)
+               
 
                 if (data.code == 1 && data.data) {
 
@@ -183,7 +183,7 @@ export default class RecordList extends Component {
 
 
     _onRefresh() {
-        console.log('执行刷新');
+        
         if (!this._hasMore() || this.state.isRefreshing) {
             return
         }

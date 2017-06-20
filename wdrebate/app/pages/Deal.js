@@ -73,7 +73,7 @@ export default class Deal extends Component{
     let getIndexUrl = config.baseUrl + config.api.user.showDealList;
     request.get(getIndexUrl)
         .then((data)=>{
-            console.log(data)
+        
             if(data.code==1){
                 this.setState({
                     isRefreshing:false,
@@ -87,7 +87,7 @@ export default class Deal extends Component{
         })
         .catch(err=>{
             console.log(err);
-            console.log(JSON.stringify(err));
+       
         })
     setTimeout(() => {
       this.setState({isRefreshing: false});

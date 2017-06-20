@@ -82,6 +82,7 @@ export default class Wrapper extends Component {
 
     onBackAndroid() {
         console.log(this)
+        console.log('huitui')
         const nav = this.props.navigator;
         const routers = nav.getCurrentRoutes();
         if (routers.length > 1) {

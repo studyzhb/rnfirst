@@ -82,7 +82,7 @@ export default class Banklist extends Component {
 
 
     goPage(key, data = {}) {
-        console.log(key)
+
         let self = this;
         let pages = {
             "address": RealName,
@@ -142,7 +142,7 @@ export default class Banklist extends Component {
 
         request.get(loginUrl)
             .then((data) => {
-                console.log(data)
+    
                 if (data.code == 1) {
                     this.setState({
                         banklist: data.data,
@@ -154,7 +154,7 @@ export default class Banklist extends Component {
             })
             .catch((err) => {
                 console.warn(err)
-                console.log(JSON.stringify(err));
+
             })
         // setTimeout(() => {
         //     this.setState({ isRefreshing: false });

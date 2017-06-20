@@ -44,7 +44,7 @@ export default class ChangeLogin extends Component{
     }
 
     leftPress(){
-        console.log(this.props.navigator)
+       
         this.props.navigator.pop();
     }
     rightPress(){
@@ -75,7 +75,7 @@ export default class ChangeLogin extends Component{
 
         request.post(verifyURL,body)
                 .then((data)=>{
-                    console.log(JSON.stringify(data))
+                 
                     if(data.code==1){
                         this.props.navigator.pop();
                     }else{
@@ -109,7 +109,7 @@ export default class ChangeLogin extends Component{
     }
 
     _countingDone(){
-        console.log('1111jieshu')
+       
         this.setState({
             countingDone:true
         })
@@ -132,7 +132,7 @@ export default class ChangeLogin extends Component{
 
         request.get(signupURL,body)
                 .then((data)=>{
-                    console.log(JSON.stringify(data)+'shuju')
+                   
                     if(data.code==1){
                         isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
                         self._showVerifyCode()

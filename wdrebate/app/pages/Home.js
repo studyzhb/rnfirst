@@ -25,7 +25,7 @@ import px2dp from '../util/px2dp';
 import Item from '../component/indexItem';
 import ObligationList from './ObligationList';
 import AllObligationList from './AllobList';
-import SingleInfo from './SingleInfo'
+import SingleInfo from './SingleInfo';
 import Popularize from './Popularize';
 import MyExpense from './myExpenseList';
 import Notice from './notice';
@@ -40,6 +40,10 @@ let cachedResults = {
     nextPage: 1,
     items: [],
     total: 0
+}
+
+let user={
+    status:10
 }
 
 export default class Home extends Component {
@@ -68,6 +72,35 @@ export default class Home extends Component {
         this._getIndexInfo();
     }
 
+    shouldComponentUpdate() {
+       
+        let url=config.baseUrl+config.api.user.userStatus;
+        let oldvalue=user.status;
+        if(user.status!=2){
+             request.get(url)
+            .then(data=>{
+               
+                if(data.code==1){
+                    user.status=data.data.creditor_status;
+                    if(user.status==oldvalue){
+                        return false;
+                    }else{
+                        this.setState({
+                            isAuthor:user.status
+                        })
+                        return true;
+                    }
+                }
+            })
+            .catch(err=>{
+                console.warn(err);
+            })
+        }
+
+
+        return true;
+    }
+
     _fetchData(page) {
         let that = this;
         let self = this;
@@ -86,17 +119,16 @@ export default class Home extends Component {
 
         request.get(getIndexUrl)
             .then((data) => {
-                console.log(data)
+               
 
                 if (data.code == 1 && data.data) {
                     self.setState({
                         isAuthor: 2,
                         rebateInfo: data.data.rebate || {},
-                        dataSource: self.state.dataSource.cloneWithRows(data.data.creditor_list||[])
+                        dataSource: self.state.dataSource.cloneWithRows(data.data.creditor_list || [])
                     })
 
                     // if (data.data.length > 0) {
-
 
                     //     let items = cachedResults.items.slice()
 
@@ -141,7 +173,6 @@ export default class Home extends Component {
                     })
                 }
             })
-
     }
 
     _hasMore() {
@@ -192,19 +223,22 @@ export default class Home extends Component {
         let user = await storage.load({
             key: 'loginUser'
         })
-        console.log(user);
+      
         //'0未申请1第一次申请中2申请过'
         if (user.creditor_status == 0) {
+            user.status=0
             self.setState({
                 isAuthor: 0
             })
         } else if (user.creditor_status == 1) {
-            console.log('1111')
+           
+            user.status=1
             self.setState({
                 isAuthor: 1
             })
         } else if (user.creditor_status == 2) {
-            console.log('s2222')
+           
+            user.status=2
             self._fetchData(1);
         }
     }
@@ -222,7 +256,7 @@ export default class Home extends Component {
             "oblist": AllObligationList,
             "popularize": Popularize,
             'myExpense': MyExpense,
-            'SingleInfo':SingleInfo
+            'SingleInfo': SingleInfo
         }
         if (pages[key]) {
             this.props.navigator.push({
@@ -269,9 +303,8 @@ export default class Home extends Component {
 
         if (this.state.isAuthor === 1) {
             return <MyExpense />;
-        } else if (this.state.isAuthor === 2){
+        } else if (this.state.isAuthor === 2) {
             return (
-
                 <View style={styles.container}>
                     <NavBar
                         title='我的债权金'
@@ -285,23 +318,24 @@ export default class Home extends Component {
 
                         <View style={styles.leftShow}>
                             <Text style={{ fontSize: 10, color: '#999' }}>我的债权金</Text>
-                            <Text >{this.state.rebateInfo.money}</Text>
+                            <Text >{this.state.rebateInfo ? this.state.rebateInfo.money : ''}</Text>
                         </View>
-                        <View style={styles.residueNum}>
-                            <Text style={{ textAlign: 'center' }}>剩余</Text>
-                            <Text style={{ textAlign: 'center' }}>{this.state.rebateInfo.per}%</Text>
-                        </View>
+                        <TouchableOpacity>
+                            <View style={styles.residueNum}>
+                                <Text style={{ textAlign: 'center' }}>剩余</Text>
+                                <Text style={{ textAlign: 'center' }}>{this.state.rebateInfo ? this.state.rebateInfo.per : ''}%</Text>
+                            </View>
+                        </TouchableOpacity>
                         <View style={styles.rightShow}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={{ fontSize: 10, color: '#999' }}>已用债权：</Text>
-                                <Text style={{ fontSize: 10, color: '#999' }}>{this.state.rebateInfo.repayment_money}</Text>
+                                <Text style={{ fontSize: 10, color: '#999' }}>{this.state.rebateInfo ? this.state.rebateInfo.repayment_money : ''}</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={{ fontSize: 10, color: '#999' }}>待用债权：</Text>
-                                <Text style={{ fontSize: 10, color: '#999' }}>{this.state.rebateInfo.stay_money}</Text>
+                                <Text style={{ fontSize: 10, color: '#999' }}>{this.state.rebateInfo ? this.state.rebateInfo.stay_money : ''}</Text>
                             </View>
                         </View>
-
                     </View>
                     {/*return*/}
 
@@ -342,15 +376,17 @@ export default class Home extends Component {
                     />
                 </View>
             )
-        }else{
+        } else {
             return (
-                <View style={{backgroundColor:'#fff',justifyContent:'center',flex:1}}>
-                    <ActivityIndicator color="#aa00aa"/>
+                <View style={{ backgroundColor: '#fff', justifyContent: 'center', flex: 1 }}>
+                    <ActivityIndicator color="#aa00aa" />
                 </View>
             )
         }
     }
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -371,11 +407,11 @@ const styles = StyleSheet.create({
     },
     residueNum: {
         width: px2dp(90),
-        height:px2dp(90),
-        borderWidth:1,
-        borderColor:"#f00",
+        height: px2dp(90),
+        borderWidth: 1,
+        borderColor: "#f00",
         borderRadius: 45,
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     rightShow: {
 

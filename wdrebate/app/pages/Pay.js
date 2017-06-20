@@ -53,7 +53,7 @@ export default class Pay extends Component {
     }
 
     openLbs() {
-        console.log('zhifu');
+      
         this.setState({ modalVisible: true })
     }
 
@@ -64,11 +64,10 @@ export default class Pay extends Component {
             is_back: this.props.isback,
             creditor_id: this.props.queueid
         };
-        console.log(body)
+
         request.post(createOrderUrl, body)
             .then(data => {
-                console.log(data)
-                console.log(alipay)
+
                 if (data.code == 1) {
                     orderData = data.data;
                     switch(this.state.checked){
@@ -94,22 +93,22 @@ export default class Pay extends Component {
                         ? AlertIOS.alert(data.message)
                         : Alert.alert(data.message)
                 }
-                console.log(data);
+                
             })
     }
 
 
     _goPay(data, pass) {
-        console.log(pass);
+        
         let createOrderUrl = config.baseUrl + config.api.pay.balance;
         let body = {
             order_sn: data.order_sn,
             pay_pwd: pass
         };
-        console.log(body)
+       
         request.post(createOrderUrl, body)
             .then(data => {
-                console.log(data);
+               
                 if (data.code == 1) {
                     //支付成功
                     this.props.navigator.popToTop();
@@ -118,12 +117,12 @@ export default class Pay extends Component {
                         ? AlertIOS.alert(data.message)
                         : Alert.alert(data.message)
                 }
-                console.log(data);
+                
             })
     }
 
     closeModal(pass) {
-        console.log(pass);
+        
         
         this.setState({
             modalVisible: false,

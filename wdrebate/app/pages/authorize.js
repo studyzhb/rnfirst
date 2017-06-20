@@ -56,7 +56,7 @@ export default class Authorize extends Component{
         }
 
         let loginUrl=config.baseUrl+config.api.rebate.applyInfo;
-        console.log(body);
+    
         request.post(loginUrl,body)
                 .then((data)=>{
                     if(data.code==1){
@@ -138,8 +138,7 @@ export default class Authorize extends Component{
                     <Text style={styles.labelinput}>编号</Text>
                     <TextInput 
                         style={styles.inputField}
-                        placeholder="请输入编号"
-                        defaultValue="1-59367118-3887"
+                        placeholder="请输入编号1-59367118-3887"
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
@@ -160,7 +159,7 @@ export default class Authorize extends Component{
                         style={styles.btn}
                         onPress={this._submit.bind(this)}
                     >
-                        登录
+                        立即申请
                     </Button>
                 </View>
                 <View style={{paddingLeft:px2dp(50),marginTop:8}}>

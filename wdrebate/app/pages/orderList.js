@@ -61,17 +61,17 @@ export default class OrderList extends Component {
     }
 
     componentDidMount() {
-        console.log('componentDidMount')
+        
         // this.getOrderList();
         this._getIndexInfo();
     }
 
     componentShouldWillMount() {
-        console.log('componentShouldWillMount')
+       
     }
 
     changeTabStatus(value) {
-        console.log('status' + value)
+      
         
         this.setState({
             tabStatus: value,
@@ -242,7 +242,7 @@ export default class OrderList extends Component {
     }
 
     _onRefresh() {
-        console.log('执行刷新');
+        
         if (!this._hasMore() || this.state.isRefreshing) {
             return
         }
@@ -270,7 +270,7 @@ export default class OrderList extends Component {
     }
 
     _renderRow(item) {
-        console.log(item)
+      
         let info = '';
         if (item.pay_status == 0) {
             info = '未付款';

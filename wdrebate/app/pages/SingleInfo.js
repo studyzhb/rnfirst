@@ -39,6 +39,7 @@ export default class SingleInfo extends Component {
         let url = config.baseUrl + config.api.rebate.his;
         request.get(url)
             .then(data => {
+                
                 if (data.code == 1) {
                     this.setState({
                         currentInfo: data.data
@@ -48,6 +49,9 @@ export default class SingleInfo extends Component {
                 }
 
 
+            })
+            .catch(err=>{
+                console.warn(err)
             })
     }
 
