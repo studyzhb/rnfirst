@@ -93,7 +93,7 @@ export default class GoodsList extends Component {
         let totalArr=Goods.totalArr.map((item,i)=>{
             return {id:item.id,num:1}
         })
-        console.log(this.props)
+   
         this.props.navigator.push({
             name: 'pay',
             component: Pay,
@@ -164,7 +164,7 @@ export default class GoodsList extends Component {
 
         request.get(getIndexUrl,newObj)
             .then((data) => {
-                console.log(data)
+             
 
                 if (data.code == 1 && data.data) {
                     data=data.data;

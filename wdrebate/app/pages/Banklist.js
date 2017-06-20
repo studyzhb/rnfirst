@@ -99,6 +99,7 @@ export default class Banklist extends Component {
                         self.setState({
                             isrealname: user.isrealname
                         })
+                        
                     },
                     updateBank(){
                         self._onRefresh()

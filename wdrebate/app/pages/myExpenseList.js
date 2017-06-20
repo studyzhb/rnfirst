@@ -75,7 +75,7 @@ export default class MyExpenseList extends Component {
     }
 
     _fetchMoreData() {
-        console.log('gengduo')
+       
         if (!this._hasMore() || this.state.isLoadingTail) {
 
             this.setState({
@@ -128,11 +128,11 @@ export default class MyExpenseList extends Component {
         }
 
 
-        console.log(body,getAuthorUrl)
+       
 
         await request.get(getAuthorUrl, body)
             .then(data => {
-                console.log(data);
+              
                 let self = this;
                 if (data.code == 1 && data.data) {
                     if (data.data.data.length > 0) {
@@ -146,7 +146,7 @@ export default class MyExpenseList extends Component {
                         }
                         cachedResults.items = items;
                         cachedResults.total = data.data.total;
-                        console.log(cachedResults)
+                       
                         if(page==1){
                             self.setState({
                                 isRefreshing: false,
@@ -201,7 +201,7 @@ export default class MyExpenseList extends Component {
     }
 
     _renderRow(row) {
-        console.log(row);
+     
         return (
             <View style={styles.items}>
                 <View style={[styles.flexRow, { marginBottom: 10 }]}>

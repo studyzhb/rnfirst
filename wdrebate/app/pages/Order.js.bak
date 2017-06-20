@@ -20,7 +20,7 @@ import {
 import NavBar from '../component/NavBar';
 import Item from '../component/Item';
 import Setting from './Setting';
-
+// import UserProfile from './UserProfile';
 import Deal from './Deal';
 import BankList from './Banklist';
 import px2dp from '../util/px2dp';
@@ -47,6 +47,7 @@ export default class Order extends Component {
             ispay: '',
             isrealname: ''
         }
+        // onPress:this.goPage.bind(this, "address")
         this.config = [
 
             { icon: "ios-albums-outline", name: "交易记录", subName: "", onPress: this.goPage.bind(this, 'record') },
@@ -147,20 +148,20 @@ export default class Order extends Component {
     }
 
     componentDidMount() {
-
+ 
         this._onRefresh()
     }
 
     shouldComponentUpdate() {
-
+        
         return true;
     }
     componentWillUpdate() {
-
+        
 
     }
     componentDidUpdate() {
-
+       
 
     }
 
@@ -169,7 +170,7 @@ export default class Order extends Component {
         let getIndexUrl = config.baseUrl + config.api.user.showBalance;
         request.get(getIndexUrl)
             .then((data) => {
-
+               
                 if (data.code == 1) {
                     this.setState({
                         userData: data.data.user_data,
@@ -185,7 +186,7 @@ export default class Order extends Component {
             })
             .catch(err => {
                 console.log(err);
-
+              
             })
         setTimeout(() => {
             this.setState({ isRefreshing: false });
@@ -248,7 +249,13 @@ export default class Order extends Component {
         }
         return (
             <View style={{ flex: 1, backgroundColor: '#f0f0f0' }}>
-
+                {/*<NavBar 
+                    title=''
+                    style={{backgroundColor:'#79e089',borderBottomColor:"#79e089"}}
+                    leftIcon='ios-arrow-back-outline'
+                    leftPress={this.leftPress.bind(this)}
+                    rightPress={this.rightPress.bind(this)}
+                />*/}
                 <ScrollView
                     style={styles.scrollView}
                     refreshControl={
@@ -265,52 +272,84 @@ export default class Order extends Component {
                         <Image source={require('../images/moneybg.png')} style={{ width: width, height: px2dp(150) + this.topbarHeight }} onStartShouldSetResponder={() => false}>
                             <View style={styles.topbar} onStartShouldSetResponder={() => false}>
 
+                                {/*Platform.OS==='android'
+                                ?<TouchableNativeFeedback  style={styles.btn}>
+                                    <Icon name={'ios-arrow-back-outline'} size={px2dp(26)} color="#fff" />
+                                </TouchableNativeFeedback>
+                                :<TouchableOpacity  style={styles.btn}>
+                                    <Icon name={'ios-arrow-back-outline'} size={px2dp(26)} color="#fff" />
+                                </TouchableOpacity>*/}
+
+
                             </View>
-                            <View style={{ height: px2dp(150),justifyContent:'space-between'}} onStartShouldSetResponder={() => false}>
+                            <View style={{ height: px2dp(150), flexDirection: 'row' }} onStartShouldSetResponder={() => false}>
                                 <View style={{ flex: 1, justifyContent: 'flex-start' }}>
                                     <TouchableWithoutFeedback>
                                         <View style={{ paddingVertical: 0, height: 90 }}>
-                                            <Text style={{ color: "#fff", fontSize: 14, flexWrap: 'nowrap', textAlign: 'center' }}>我的钱包（元）</Text>
-                                            <Text style={{ color: "#fff", textAlign: 'center', fontSize: 36, paddingLeft: 5, flexWrap: 'nowrap', overflow: 'hidden' }}>{this.state.userData ? this.state.userData.balance : 0}</Text>
+                                            <Text style={{ color: "#fff", fontSize: 14, flexWrap: 'nowrap', textAlign: 'center' }}>当前总资产（元）</Text>
+                                            <Text style={{ color: "#fff", textAlign: 'center', fontSize: 36, paddingLeft: 5, flexWrap: 'nowrap', overflow: 'hidden' }}>{this.state.userData ? ((this.state.userData.balance - 0) + (this.state.userData.creditor - 0) + (this.state.userData.share_gold - 0)) : 0}</Text>
+                                            {/*<View style={{ marginTop: px2dp(-10), flexDirection: "row",flexWrap:'nowrap' }} onStartShouldSetResponder={()=>false}>
+                                            <Icon name="ios-phone-portrait-outline" size={px2dp(14)} color="#fff" />
+                                            <Text onStartShouldSetResponder={()=>false} style={{ color: "#fff", fontSize: 20, paddingLeft: 5,flexWrap:'nowrap',overflow :'hidden' }}>{this.state.userData ? ((this.state.userData.balance - 0) + (this.state.userData.creditor - 0) + (this.state.userData.share_gold - 0)) : 0}</Text>
+                                        </View>*/}
                                         </View>
                                     </TouchableWithoutFeedback>
+                                    <View style={{ flexDirection: "row", marginTop: 0, marginLeft: px2dp(35) }}>
+                                        <TouchableOpacity style={{ marginLeft: 0, paddingVertical: 5 }} onPress={this.outputBalance.bind(this)}>
+                                            <View style={{ marginTop: px2dp(10), flexDirection: "row" }}>
+                                                <Icon name="ios-ribbon-outline" size={px2dp(14)} color="#fff" />
+                                                <Text style={{ color: "#fff", fontSize: 12, paddingLeft: 5 }}>提现</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={{ marginLeft: 38, paddingVertical: 5 }}>
+                                            <View style={{ marginTop: px2dp(10), flexDirection: "row" }}>
+                                                <Icon name="ios-ribbon-outline" size={px2dp(14)} color="#fff" />
+                                                <Text style={{ color: "#fff", fontSize: 12, paddingLeft: 5 }}>充值</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                                <View style={{ flex: 1,flexDirection:'row', justifyContent: 'space-between',padding:10,marginTop:10 }}>
-                                    <TouchableOpacity style={{  paddingVertical: 0 }} onPress={this.alltoBalance.bind(this, 1)}>
+                                <View style={{ flex: 1, justifyContent: 'space-around', paddingBottom: 20, marginLeft: px2dp(28) }}>
+                                    <TouchableOpacity style={{ marginRight: px2dp(20), paddingVertical: 0 }} >
+                                        <Text style={{ color: "#fff", fontSize: px2dp(12), flexWrap: 'nowrap' }}>我的钱包（元）：{this.state.userData ? this.state.userData.balance : 0}</Text>
+                                        {/*<View style={{ marginTop: px2dp(10), flexDirection: "row" }}>
+
+                                            <Text style={{ color: "#fff", fontSize: 18, paddingLeft: 5 }}>{this.state.userData ? this.state.userData.balance : 0}</Text>
+                                        </View>*/}
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{ marginRight: px2dp(20), paddingVertical: 0 }} onPress={this.alltoBalance.bind(this, 1)}>
                                         <Text style={{ color: "#fff", fontSize: px2dp(12) }}>我的债权金（元）：{this.state.userData ? this.state.userData.creditor : 0}</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={{  paddingVertical: 0 }} onPress={this.alltoBalance.bind(this, 2)}>
+                                    <TouchableOpacity style={{ marginRight: px2dp(20), paddingVertical: 0 }} onPress={this.alltoBalance.bind(this, 2)}>
                                         <Text style={{ color: "#fff", fontSize: px2dp(12) }}>我的分润金（元）：{this.state.userData ? this.state.userData.share_gold : 0}</Text>
                                     </TouchableOpacity>
+                                    {/*<View style={{ flexDirection: "row", marginTop: 30 }}>
+                                        <TouchableOpacity style={{ marginLeft: 0, paddingVertical: 5 }} onPress={this.outputBalance.bind(this)}>
+                                            <View style={{ marginTop: px2dp(10), flexDirection: "row" }}>
+                                                <Icon name="ios-ribbon-outline" size={px2dp(14)} color="#fff" />
+                                                <Text style={{ color: "#fff", fontSize: 12, paddingLeft: 5 }}>提现</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={{ marginLeft: 38, paddingVertical: 5 }}>
+                                            <View style={{ marginTop: px2dp(10), flexDirection: "row" }}>
+                                                <Icon name="ios-ribbon-outline" size={px2dp(14)} color="#fff" />
+                                                <Text style={{ color: "#fff", fontSize: 12, paddingLeft: 5 }}>充值</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+
+                                    <View style={{ marginRight: px2dp(5), paddingVertical: 5 }}>
+                                        <Text style={{ color: "#fff", fontSize: px2dp(12) }}>我的债权金（元）</Text>
+                                        <View style={{ marginTop: px2dp(10), flexDirection: "row" }}>
+                                            <Text style={{ color: "#fff", fontSize: 18, paddingLeft: 5 }}>{this.state.userData ? this.state.userData.creditor : 0}</Text>
+                                        </View>
+                                    </View>*/}
                                 </View>
                             </View>
                         </Image>
                     </TouchableOpacity>
-                    <View style={[styles.numbers, { height: 68 }]}>
-                        <TouchableOpacity onPress={this.outputBalance.bind(this)} style={[styles.numItem]}>
-                            <View style={[styles.numItem,{ flexDirection: 'row' }]}>
-                                <View style={{ marginLeft: 36 }}>
-                                    <Image source={require('../images/m1.png')} resizeMode='contain' style={{ width: 34, height: 34 }} />
-                                    {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
-                                </View>
-                                <View style={{ marginLeft: 20 }}>
-                                    <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"提现"}</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableWithoutFeedback style={[styles.numItem]}>
-                            <View style={[styles.numItem, { flexDirection: 'row',borderLeftWidth: 1, borderLeftColor: "#f5f5f5" }]}>
 
-                                <View style={{ marginLeft: 36 }}>
-                                    <Image source={require('../images/m2.png')} resizeMode='contain' style={{ width: 34, height: 34 }} />
-                                    {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
-                                </View>
-                                <View style={{ marginLeft: 20 }}>
-                                    <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"充值"}</Text>
-                                </View>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
+
                     <View>
                         {this._renderListItem()}
                     </View>

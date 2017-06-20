@@ -23,7 +23,9 @@ import CountDownText from '../util/CountDownText';
 const isIOS=Platform.OS==='ios';
 let {width,height} = Dimensions.get('window');
 // console.log(CountDownText)
-
+let count = {
+    num: 60
+}
 export default class PayPass extends Component{
     constructor(props){
         super(props);
