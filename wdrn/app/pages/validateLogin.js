@@ -96,8 +96,6 @@ export default class LoginIndex extends Component{
                     title='登录'
                     style={{'backgroundColor':'#fff'}}
                     titleStyle={{'color':'#666'}}
-                    leftIcon='ios-close-outline'
-                    leftPress={this.leftPress.bind(this)}
                     rightText='注册'
                     rightPress={this.rightPress.bind(this)}
                 />

@@ -37,9 +37,9 @@ export default class RecordItem extends Component{
                         <Text style={{color:'#666',fontSize:14}}>{note}</Text>
                         <Text style={{color:'#999',fontSize:12,marginTop:5}}>{updated_at}</Text>
                     </View>
-                    <View style={[styles.item,styles.itembottom]}>
+                    {/*<View style={[styles.item,styles.itembottom]}>
                         <Text style={{color:'#3a3a3a',fontSize:14}}>{money}</Text>
-                    </View>
+                    </View>*/}
                 </View>
             </TouchableHighlight>
         )

@@ -42,7 +42,9 @@ export default {
             //我的推广
             popular:'/user/promotion',
             //我的二维码
-            mycode:'/user/myurl'
+            mycode:'/user/myurl',
+            //删除银行卡
+            deleteBank:'/usercard/del'
         },
         //返利模块
         rebate:{

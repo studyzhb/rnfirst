@@ -53,11 +53,16 @@ export default class OrderDetail extends Component {
             )
     }
 
+    componentDidMount(){
+        
+    }
+
     renderGoodsList() {
         let { queuelist } = this.props;
+       
         let items = queuelist ?queuelist.length>0? queuelist.map((item, key) => {
             return (
-                <View style={styles.items}>
+                <View style={styles.items} key={key}>
                     <View style={{ flex: 1 }}>
                         <View style={[{ flexDirection: 'row', height: 18, marginBottom: 12, justifyContent: 'space-between' }]}>
                             <Text style={{ fontSize: 12, width: 158, color: '#3a3a3a' }}>订单号：{item.queque_sn}</Text>
@@ -80,11 +85,20 @@ export default class OrderDetail extends Component {
 
     }
 
+    leftPress() {
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop()
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.container}>
                     <NavBar
+                        leftIcon='ios-arrow-back-outline'
+                        leftPress={this.leftPress.bind(this)}
                         title="订单详情"
                         titleStyle={{ color: '#666', fontSize: 18 }}
                         style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea" }}

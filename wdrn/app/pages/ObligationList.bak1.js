@@ -59,13 +59,20 @@ export default class ObligationList11 extends Component {
     }
 
     componentDidMount() {
-        setTimeout(()=>{
+        setTimeout(() => {
             this._fetchData(1);
-        },1000);
+        }, 1000);
     }
     shouldComponentUpdate() {
         // this._fetchData()
         return true;
+    }
+
+    leftPress(){
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop()
+        }
     }
 
     converseOrPickup(item) {
@@ -164,7 +171,7 @@ export default class ObligationList11 extends Component {
 
         await request.get(getQueueUrl, obj)
             .then(data => {
-                
+
                 if (data.code == 1 && data.data) {
 
                     let list = data.data.list_queque.queque || [];
@@ -285,7 +292,7 @@ export default class ObligationList11 extends Component {
             component: GoodsList,
             params: {
                 obid: this.props.id,
-                money:this.state.queueInfo.list_info ? this.state.queueInfo.list_info.money:1400
+                money: this.state.queueInfo.list_info ? this.state.queueInfo.list_info.money : 1400
             }
         })
     }
@@ -469,16 +476,24 @@ export default class ObligationList11 extends Component {
     _renderHeader() {
         return (
             <View >
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: px2dp(110), backgroundColor: '#fff', borderBottomColor: '#eaeaea', borderBottomWidth: 1 }}>
-                    <View style={{ flexDirection: 'column', height: px2dp(110), justifyContent: 'center', marginLeft: px2dp(18) }}>
-                        <View style={{ marginBottom: px2dp(10),alignItems:'center',width:width }}>
-                            <Text style={{ color: '#21bb58', fontSize: 36, marginTop: 0,textAlign:'center' }}>{this.state.queueInfo.refund_pending.toString()}</Text>
-                            <Text style={[styles.normalText,{textAlign:'center',color:'#ccc'}]}>待兑换积分</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: px2dp(106), backgroundColor: '#fff', borderBottomColor: '#eaeaea', borderBottomWidth: 1 }}>
+                    <View style={{ flexDirection: 'column', height: px2dp(106), justifyContent: 'center', marginLeft: px2dp(18) }}>
+                        <View style={{ flexDirection: 'row', marginBottom: px2dp(16) }}>
+                            <Text style={styles.normalText}>待兑换积分：</Text>
+                            <Text style={{ color: '#21bb58', fontSize: 16, marginTop: 0 }}>{this.state.queueInfo.refund_pending.toString()}</Text>
                         </View>
-                        <View style={{ flexDirection: 'row' ,justifyContent:'center',alignItems:'center',width:width}}>
-                            <Text style={[styles.normalText,{textAlign:'center'}]}>已兑换积分：<Text style={{ color: '#333', fontSize: 12 }}>{this.state.queueInfo.refund.toString()}</Text></Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.normalText}>已兑换积分：</Text>
+                            <Text style={{ color: '#333', fontSize: 12 }}>{this.state.queueInfo.refund.toString()}</Text>
                         </View>
                     </View>
+                    <TouchableWithoutFeedback  >
+                        <Button
+                            style={styles.btn}
+                        >
+                            兑换
+                            </Button>
+                    </TouchableWithoutFeedback>
                 </View>
                 <View style={[styles.numbers, { height: 68 }]}>
                     <TouchableWithoutFeedback>
@@ -576,13 +591,6 @@ export default class ObligationList11 extends Component {
 
     _changeCon(w, h) {
 
-    }
-
-    leftPress(){
-        let {navigator}=this.props;
-        if(navigator){
-            navigator.pop()
-        }
     }
 
     render() {

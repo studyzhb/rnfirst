@@ -111,21 +111,21 @@ export default class AllobList extends Component {
         await request.get(getIndexUrl, obj)
             .then((data) => {
 
-
+                console.log(data)
                 if (data.code == 1 && data.data) {
 
-                    let list = data.data.list || [];
+                    let list = data.data.data || [];
 
                     if (list.length > 0) {
 
                         let items = cachedResults.items.slice()
 
                         if (page !== 0) {
-                            items = items.concat(data.data.list)
+                            items = items.concat(list)
                             cachedResults.nextPage += 1
                         }
                         else {
-                            items = data.data.list.concat(items)
+                            items = list.concat(items)
                         }
 
                         cachedResults.items = items
@@ -252,8 +252,8 @@ export default class AllobList extends Component {
                     <View style={{ paddingLeft: 20, paddingVertical: 12, paddingRight: 20, backgroundColor: '#fff', marginTop: 12 }}>
                         <View style={[styles.flexRow, { justifyContent: 'space-between' }]}>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ color: '#333', fontSize: 14 }}>阿达西债权</Text>
-                                <Text style={styles.baseText}>（万店联盟电子商务有限公司）</Text>
+                                <Text style={{ color: '#333', fontSize: 14 }}>{item.rebate_name}</Text>
+                                <Text style={styles.baseText}></Text>
                             </View>
                             <Text style={{ color: "#21bb58", fontSize: 14 }}>进行中</Text>
                         </View>
@@ -397,5 +397,12 @@ const styles = StyleSheet.create({
     baseText: {
         color: '#999',
         fontSize: 12
+    },
+    loadingMore: {
+        marginVertical: 20
+    },
+    loadingText: {
+        color: '#777',
+        textAlign: 'center'
     }
 })

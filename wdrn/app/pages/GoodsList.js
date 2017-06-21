@@ -67,13 +67,13 @@ export default class GoodsList extends Component {
     confirmPay() {
         let self=this;
        
-        let info = this.state.total<1400?'您的订单不足1400元，将无法生成队列订单，您可以继续购物凑够金额。':'您的购物金额为：'+this.state.total+' ,将拆分为'+Math.floor(this.state.total/1400);
+        let info = this.state.total<this.props.money?'您的订单不足'+this.props.money+'元，将无法生成队列订单，您可以继续购物凑够金额。':'您的购物金额为：'+this.state.total+' ,将拆分为'+Math.floor(this.state.total/this.props.money)+'单进入返利。';
         isIOS
             ? AlertIOS.alert(
                 '提示',
                 info,
                 [
-                    this.state.total<1400?{ text: '去凑单', onPress: () => console.log('Ask me later pressed') }:null,
+                    this.state.total<this.props.money?{ text: '去凑单', onPress: () => console.log('Ask me later pressed') }:null,
                     { text: '去支付', onPress: this.gotoPay.bind(this), style: 'cancel' }
                 ],
                 { cancelable: false }
@@ -82,7 +82,7 @@ export default class GoodsList extends Component {
                 '提示',
                 info,
                 [
-                    this.state.total<1400?{ text: '去凑单', onPress: () => console.log('Ask me later pressed') }:null,
+                    this.state.total<this.props.money?{ text: '去凑单', onPress: () => console.log('Ask me later pressed') }:null,
                     { text: '去支付', onPress: this.gotoPay.bind(this), style: 'cancel' }
                 ],
                 { cancelable: false }
@@ -101,7 +101,7 @@ export default class GoodsList extends Component {
                 total:this.state.total,
                 totalArr:totalArr,
                 queueid:this.props.obid,
-                idback:this.state.isSelected
+                isback:this.state.isSelected
             }
         })
     }
@@ -273,12 +273,14 @@ export default class GoodsList extends Component {
 
 
     leftPress() {
-
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop()
+        }
     }
     rightPress() {
 
     }
-
 
     _renderRow(row) {
         return (
@@ -323,6 +325,8 @@ export default class GoodsList extends Component {
             <View style={styles.container}>
                 <View style={styles.container}>
                     <NavBar
+                        leftIcon='ios-arrow-back-outline'
+                        leftPress={this.leftPress.bind(this)}
                         title="购物"
                         titleStyle={{ color: '#666', fontSize: 18 }}
                         style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea" }}
@@ -366,7 +370,7 @@ export default class GoodsList extends Component {
                 <View style={styles.footerCon}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={{ fontSize: 14, color: '#626262' }}>总计：</Text>
-                        <Text style={{ fontSize: 14, color: '#ff0000' }}>￥{this.state.total}</Text>
+                        <Text style={{ fontSize: 14, color: '#ff0000' }}>￥{this.state.total.toString()}</Text>
                     </View>
                     <Button
                         style={styles.paybtn}

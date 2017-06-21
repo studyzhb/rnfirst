@@ -71,7 +71,10 @@ export default class SafeCenter extends Component {
     }
 
     leftPress() {
-        return;
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop();
+        }
     }
     rightPress() {
 

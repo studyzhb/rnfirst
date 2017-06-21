@@ -36,16 +36,16 @@ export default class SingleInfo extends Component {
     }
 
     componentDidMount() {
-        let url = config.baseUrl + config.api.rebate.his;
+        let url = config.baseUrl + config.api.rebate.list;
         request.get(url)
             .then(data => {
-                
-                if (data.code == 1) {
+                console.log(data)
+                if (data.code == 1&&data.data) {
                     this.setState({
                         currentInfo: data.data
                     })
                 } else {
-
+                    
                 }
 
 

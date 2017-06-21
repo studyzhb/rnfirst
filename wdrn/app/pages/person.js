@@ -82,7 +82,10 @@ export default class Person extends Component {
     }
 
     leftPress() {
-
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop();
+        }
     }
     rightPress() {
 

@@ -19,6 +19,8 @@ import {
     ActivityIndicator
 } from 'react-native';
 
+import * as Progress from 'react-native-progress';
+
 import NavBar from '../component/NavBar';
 import px2dp from '../util/px2dp';
 
@@ -42,8 +44,8 @@ let cachedResults = {
     total: 0
 }
 
-let user={
-    status:10
+let user = {
+    status: 10
 }
 
 export default class Home extends Component {
@@ -68,33 +70,33 @@ export default class Home extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        console.log('componentDidMount')
         this._getIndexInfo();
     }
 
     shouldComponentUpdate() {
-       
-        let url=config.baseUrl+config.api.user.userStatus;
-        let oldvalue=user.status;
-        if(user.status!=2){
-             request.get(url)
-            .then(data=>{
-               
-                if(data.code==1){
-                    user.status=data.data.creditor_status;
-                    if(user.status==oldvalue){
-                        return false;
-                    }else{
-                        this.setState({
-                            isAuthor:user.status
-                        })
-                        return true;
+        console.log('shouldComponentUpdate')
+        let url = config.baseUrl + config.api.user.userStatus;
+        let oldvalue = user.status;
+        if (user.status != 2) {
+            request.get(url)
+                .then(data => {
+                    if (data.code == 1) {
+                        user.status = data.data.creditor_status;
+                        if (user.status == oldvalue) {
+                            return false;
+                        } else {
+                            this.setState({
+                                isAuthor: user.status
+                            })
+                            return true;
+                        }
                     }
-                }
-            })
-            .catch(err=>{
-                console.warn(err);
-            })
+                })
+                .catch(err => {
+                    console.warn(err);
+                })
         }
 
 
@@ -119,11 +121,11 @@ export default class Home extends Component {
 
         request.get(getIndexUrl)
             .then((data) => {
-               
-
+                
                 if (data.code == 1 && data.data) {
                     self.setState({
                         isAuthor: 2,
+                        isRefreshing:false,
                         rebateInfo: data.data.rebate || {},
                         dataSource: self.state.dataSource.cloneWithRows(data.data.creditor_list || [])
                     })
@@ -195,9 +197,9 @@ export default class Home extends Component {
     }
 
     _onRefresh() {
-        if (!this._hasMore() || this.state.isRefreshing) {
-            return
-        }
+        // if (!this._hasMore() || this.state.isRefreshing) {
+        //     return
+        // }
 
         this._fetchData(0)
     }
@@ -223,22 +225,22 @@ export default class Home extends Component {
         let user = await storage.load({
             key: 'loginUser'
         })
-      
+
         //'0未申请1第一次申请中2申请过'
         if (user.creditor_status == 0) {
-            user.status=0
+            user.status = 0
             self.setState({
                 isAuthor: 0
             })
         } else if (user.creditor_status == 1) {
-           
-            user.status=1
+
+            user.status = 1
             self.setState({
                 isAuthor: 1
             })
         } else if (user.creditor_status == 2) {
-           
-            user.status=2
+
+            user.status = 2
             self._fetchData(1);
         }
     }
@@ -285,6 +287,57 @@ export default class Home extends Component {
         }
     }
 
+    _renderHeader() {
+        return (
+            <View>
+                <View style={styles.baseInfo}>
+
+                    <View style={styles.leftShow}>
+                        <Text style={{ fontSize: 10, color: '#999' }}>我的债权金</Text>
+                        <Text >{this.state.rebateInfo ? this.state.rebateInfo.money.toString() : ''}</Text>
+                    </View>
+                    <Progress.Circle size={90} color={'#ee735c'} progress={this.state.rebateInfo ? 1 - this.state.rebateInfo.per / 100 : 0} showsText={true} />
+                    {/*<TouchableOpacity>
+                            <View style={styles.residueNum}>
+                                <Text onStartShouldSetResponder={() => false} style={{ textAlign: 'center' }}>剩余</Text>
+                                <TouchableOpacity>
+                                    <Text onStartShouldSetResponder={() => false} style={{ textAlign: 'center' }}>{this.state.rebateInfo ? this.state.rebateInfo.per : ''}%</Text>
+                                </TouchableOpacity>
+
+                            </View>
+                        </TouchableOpacity>*/}
+                    <View style={styles.rightShow}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ fontSize: 10, color: '#999' }}>已用债权：</Text>
+                            <Text style={{ fontSize: 10, color: '#999' }}>{this.state.rebateInfo ? this.state.rebateInfo.repayment_money.toString() : ''}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ fontSize: 10, color: '#999' }}>待用债权：</Text>
+                            <Text style={{ fontSize: 10, color: '#999' }}>{this.state.rebateInfo ? this.state.rebateInfo.stay_money.toString() : ''}</Text>
+                        </View>
+                    </View>
+                </View>
+                {/*return*/}
+
+                <View style={styles.tabWrapper}>
+                    {
+                        this.tabArr.map((item, i) => {
+
+                            return (
+                                <TouchableWithoutFeedback key={i} onPress={item.onPress}>
+                                    <View style={styles.itemcon}>
+                                        <Image source={item.img} style={{ width: px2dp(42), height: px2dp(42), marginLeft: 24 }} />
+                                        <Text style={{ textAlign: 'center' }}>{item.text}</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            )
+                        })
+                    }
+                </View>
+            </View>
+        )
+    }
+
     _renderRow(row) {
 
         return <Item
@@ -314,51 +367,13 @@ export default class Home extends Component {
                         rightIcon='ios-help-circle-outline'
                         rightPress={this.rightPress.bind(this)}
                     />
-                    <View style={styles.baseInfo}>
 
-                        <View style={styles.leftShow}>
-                            <Text style={{ fontSize: 10, color: '#999' }}>我的债权金</Text>
-                            <Text >{this.state.rebateInfo ? this.state.rebateInfo.money : ''}</Text>
-                        </View>
-                        <TouchableOpacity>
-                            <View style={styles.residueNum}>
-                                <Text style={{ textAlign: 'center' }}>剩余</Text>
-                                <Text style={{ textAlign: 'center' }}>{this.state.rebateInfo ? this.state.rebateInfo.per : ''}%</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={styles.rightShow}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ fontSize: 10, color: '#999' }}>已用债权：</Text>
-                                <Text style={{ fontSize: 10, color: '#999' }}>{this.state.rebateInfo ? this.state.rebateInfo.repayment_money : ''}</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ fontSize: 10, color: '#999' }}>待用债权：</Text>
-                                <Text style={{ fontSize: 10, color: '#999' }}>{this.state.rebateInfo ? this.state.rebateInfo.stay_money : ''}</Text>
-                            </View>
-                        </View>
-                    </View>
-                    {/*return*/}
-
-                    <View style={styles.tabWrapper}>
-                        {
-                            this.tabArr.map((item, i) => {
-
-                                return (
-                                    <TouchableWithoutFeedback key={i} onPress={item.onPress}>
-                                        <View style={styles.itemcon}>
-                                            <Image source={item.img} style={{ width: px2dp(42), height: px2dp(42), marginLeft: 24 }} />
-                                            <Text style={{ textAlign: 'center' }}>{item.text}</Text>
-                                        </View>
-                                    </TouchableWithoutFeedback>
-                                )
-                            })
-                        }
-                    </View>
                     {/*listview 渲染*/}
                     <ListView
                         style={{ paddingBottom: 100 }}
                         dataSource={this.state.dataSource}
                         renderRow={this._renderRow.bind(this)}
+                        renderHeader={this._renderHeader.bind(this)}
                         refreshControl={
                             <RefreshControl
                                 refreshing={this.state.isRefreshing}

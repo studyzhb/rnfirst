@@ -27,7 +27,7 @@ import { ListItem } from 'react-native-elements'
 import LbsModal from '../component/LbsModal'
 const isIOS = Platform.OS === 'ios';
 let { width, height } = Dimensions.get('window');
-// console.log(CountDownText)
+
 export default class OutputMoney extends Component {
     constructor(props) {
         super(props);
@@ -40,45 +40,46 @@ export default class OutputMoney extends Component {
             selectedItem: '',
             banklist: [],
             selectedPosition: 0,
-            modalVisible:false,
+            modalVisible: false,
         }
         this.interval = null;
     }
 
     leftPress() {
-
+        let { navigator } = this.props;
+        if (navigator) {
+            navigator.pop();
+        }
     }
     rightPress() {
 
     }
 
     closeModal(pass) {
-        
-        
+
         this.setState({
-            modalVisible: false,
+            modalVisible: false
         })
-        if(pass){
+        if (pass) {
             this._goPay.bind(this, pass)();
         }
     }
 
     openLbs() {
-        
         this.setState({ modalVisible: true })
     }
 
-    _goPay(pass){
+    _goPay(pass) {
         let createOrderUrl = config.baseUrl + config.api.user.useroutput;
         let body = {
             money: this.state,
             pay_pwd: pass,
-            user_card_id:this.state.selectedItem
+            user_card_id: this.state.selectedItem
         };
-    
+
         request.post(createOrderUrl, body)
             .then(data => {
-                
+                console.log(data);
                 if (data.code == 1) {
                     //支付成功
                     this.props.navigator.popToTop();
@@ -87,12 +88,12 @@ export default class OutputMoney extends Component {
                         ? AlertIOS.alert(data.message)
                         : Alert.alert(data.message)
                 }
-               
+
             })
     }
 
     _submit() {
-       this.openLbs.bind(this)();
+        this.openLbs.bind(this)();
 
     }
 
@@ -114,9 +115,9 @@ export default class OutputMoney extends Component {
 
         request.get(loginUrl)
             .then((data) => {
-                
+
                 if (data.code == 1) {
-                    
+
                     this.setState({
                         banklist: data.data,
                         selectedItem: data.data[0].id
@@ -153,7 +154,7 @@ export default class OutputMoney extends Component {
 
         request.get(signupURL, body)
             .then((data) => {
-                
+
                 if (data.code == 1) {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                     self._showVerifyCode()
@@ -179,10 +180,9 @@ export default class OutputMoney extends Component {
                             titleStyle={{ 'color': '#666' }}
                             leftIcon='ios-close-outline'
                             leftPress={this.leftPress.bind(this)}
-
                             rightPress={this.rightPress.bind(this)}
                         />
-                        
+
                         <View style={{ backgroundColor: '#fff', marginTop: 10 }}>
                             <ListItem
                                 roundAvatar
@@ -253,10 +253,10 @@ export default class OutputMoney extends Component {
 
                     </View>
                     <LbsModal
-                            total={this.state.money}
-                            modalVisible={this.state.modalVisible}
-                            closeModal={this.closeModal.bind(this)}
-                        />
+                        total={this.state.money}
+                        modalVisible={this.state.modalVisible}
+                        closeModal={this.closeModal.bind(this)}
+                    />
                 </View>
 
             )

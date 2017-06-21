@@ -27,16 +27,16 @@ export default class IndexItem extends Component{
 
     render(){
         let row=this.props.row;
-        console.log(row);
+
         return (
             <TouchableHighlight style={styles.container} onPress={this.props.onPress}>
                 <View  >
                     <View style={[styles.item,styles.itemtop]}>
                         <Text style={{color:'#21bb58',fontSize:16}}>{row.title}</Text>
-                        <Text style={{color:'#3a3a3a',fontSize:14}}>当前已购买数：{row.num}</Text>
+                        <Text style={{color:'#3a3a3a',fontSize:14}}>当前已购买数：{row.num.toString()}</Text>
                     </View>
                     <View style={[styles.item,styles.itembottom]}>
-                        <Text style={{color:'#3a3a3a',fontSize:14,marginTop:-10}}>购买后应返积分：{row.back_point}</Text>
+                        <Text style={{color:'#3a3a3a',fontSize:14,marginTop:-10}}>购买后应返积分：{row.back_point.toString()}</Text>
                         <Text style={{color:'#999',fontSize:12,marginTop:-11}}>{row.num-0>0?'已参加':'未参加'}</Text>
                     </View>
                 </View>

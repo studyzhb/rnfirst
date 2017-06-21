@@ -63,7 +63,10 @@ request.post=async (url,body,option)=>{
         method:'POST',
     };
 
-
+    // let options={
+    //     body:JSON.stringify(body),
+    //     method:'POST',
+    // };
 
     _.assign(options,{
         headers:headers

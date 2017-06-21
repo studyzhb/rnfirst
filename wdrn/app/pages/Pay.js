@@ -61,13 +61,13 @@ export default class Pay extends Component {
         let createOrderUrl = config.baseUrl + config.api.rebate.createOrder;
         let body = {
             goods_arr: JSON.stringify(this.props.totalArr),
-            is_back: this.props.isback,
+            is_back: this.props.isback-0-1,
             creditor_id: this.props.queueid
         };
-
+        console.log(body)
         request.post(createOrderUrl, body)
             .then(data => {
-
+                console.log(data)
                 if (data.code == 1) {
                     orderData = data.data;
                     switch(this.state.checked){
@@ -186,11 +186,20 @@ export default class Pay extends Component {
         )
     }
 
+    leftPress() {
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop()
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.container}>
                     <NavBar
+                        leftIcon='ios-arrow-back-outline'
+                        leftPress={this.leftPress.bind(this)}
                         title="确认支付"
                         titleStyle={{ color: '#666', fontSize: 18 }}
                         style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea" }}
@@ -207,7 +216,7 @@ export default class Pay extends Component {
                 <View style={styles.footerCon}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={{ fontSize: 14, color: '#626262' }}>总计：</Text>
-                        <Text style={{ fontSize: 14, color: '#ff0000' }}>￥{this.props.total}</Text>
+                        <Text style={{ fontSize: 14, color: '#ff0000' }}>￥{this.props.total.toString()}</Text>
                     </View>
                     <Button
                         style={styles.paybtn}

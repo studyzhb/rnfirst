@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         flex: 1,
         paddingLeft: 10,
-        height: px2dp(50),
+        height: px2dp(34),
         color: '#3a3a3a',
         alignItems: 'center',
         paddingTop: px2dp(16),
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     },
     btn: {
         width: px2dp(284),
-        height: px2dp(40),
+        height: px2dp(30),
         marginTop: 10,
         padding: 10,
         justifyContent: 'center',
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     },
     countBtn: {
         width: 110,
-        height: 40,
+        height: 30,
         padding: 10,
         marginLeft: 8,
         backgroundColor: '#ee735c',

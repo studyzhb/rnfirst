@@ -13,7 +13,7 @@ export default class Wrapper extends Component {
         this.state = {
             isLogin: FinalNum.LOGINDEFAULT
         }
-        this.onBackAndroid = this.onBackAndroid.bind(this)
+       
     }
 
     componentWillMount() {
@@ -52,15 +52,6 @@ export default class Wrapper extends Component {
                         break;
                 }
             })
-        if (Platform.OS === 'android') {
-            BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid);
-        }
-    }
-    componentWillUnmount() {
-        console.log('componentWillUnmount')
-        if (Platform.OS === 'android') {
-            BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid);
-        }
     }
 
     shouldComponentUpdate() {
@@ -80,28 +71,7 @@ export default class Wrapper extends Component {
 
     // componentShould
 
-    onBackAndroid() {
-        console.log(this)
-        console.log('huitui')
-        const nav = this.props.navigator;
-        const routers = nav.getCurrentRoutes();
-        if (routers.length > 1) {
-            const top = routers[routers.length - 1];
-            if (top.ignoreBack || top.component.ignoreBack) {
-                // 路由或组件上决定这个界面忽略back键
-                return true;
-            }
-            const handleBack = top.handleBack || top.component.handleBack;
-            if (handleBack) {
-                // 路由或组件上决定这个界面自行处理back键
-                return handleBack();
-            }
-            // 默认行为： 退出当前界面。
-            nav.pop();
-            return true;
-        }
-        return false;
-    }
+    
 
     _afterLogin(user) {
         console.log(user);

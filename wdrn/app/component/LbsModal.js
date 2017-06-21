@@ -15,9 +15,13 @@ import {
   ActivityIndicator
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
+
+import {Header} from 'react-native-elements';
+
 // import TabNavigator from 'react-native-tab-navigator'
 import px2dp from '../util/px2dp'
 import NavBar from './NavBar'
+import Password from './paypassword'
 import Button from 'react-native-button'
 let { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == "android"
@@ -32,8 +36,7 @@ export default class LbsModal extends Component {
     }
   }
   closeModal(pass) {
-    console.log(this.state)
-    this.props.closeModal(pass)
+    this.props.closeModal(pass||'')
   }
   getLocation() {
     if (this.state.loading) {
@@ -61,11 +64,12 @@ export default class LbsModal extends Component {
   }
 
   focusNextField=(nextField)=>{
-    console.log(nextField+'131313141');
+
     this.refs[nextField].focus();
   }
 
   render() {
+
     let modalBackgroundStyle = {
       backgroundColor: this.state.transparent ? 'rgba(0, 0, 0, 0.5)' : 'red',
     };
@@ -83,6 +87,7 @@ export default class LbsModal extends Component {
         >
           <View style={[styles.container, modalBackgroundStyle]}>
             <View style={[styles.innerContainer, innerContainerTransparentStyle]}>
+
               <NavBar
                 title="请输入支付密码"
                 leftIcon="ios-close"
@@ -97,7 +102,12 @@ export default class LbsModal extends Component {
                 {/*<Text style={{color:'#353535',fontSize:18,marginTop:10,marginBottom:10}}>支付</Text>*/}
                 <Text style={{color:'#c72d1b',fontSize:36}}>￥{this.props.total}</Text>
               </View>
-              <View style={{ width: 288,overflow:'hidden', alignSelf: 'center', flexDirection: 'row', alignItems: 'center', borderColor: '#666', borderWidth: 1,}}>
+
+              <View>
+                <Password maxLength={6} onEnd={this.closeModal.bind(this)}></Password>
+              </View>
+
+              {/*<View style={{ width: 288,overflow:'hidden', alignSelf: 'center', flexDirection: 'row', alignItems: 'center', borderColor: '#666', borderWidth: 1,}}>
                 <TextInput
                   placeholder=""
                   //是否自动将特定字符切换为大写
@@ -110,11 +120,10 @@ export default class LbsModal extends Component {
                   style={styles.numInput} ref="1"
                   onChangeText={
                     (text)=>{
+                      
                       this.setState({
                         password:text
                       })
-                      console.log(text+'111');
-                      console.log()
                       this.focusNextField('2')
                     }
                   }
@@ -222,7 +231,7 @@ export default class LbsModal extends Component {
                   maxLength = {1}
                 />
 
-              </View>
+              </View>*/}
             </View>
           </View>
 

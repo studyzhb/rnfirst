@@ -161,7 +161,7 @@ export default class OrderInfo extends Component {
                     </View>*/}
                     <View style={[styles.flexRow, styles.sitem]}>
                         <Text style={styles.baseText}>下单时间：</Text>
-                        <Text style={styles.subText}>{new Date(order.pay_date * 1000).toLocaleString()}</Text>
+                        <Text style={styles.subText}>{new Date(order?order.pay_date * 1000:0).toLocaleString()}</Text>
                     </View>
                     {
                         pick_date - 0 > 0
@@ -199,11 +199,20 @@ export default class OrderInfo extends Component {
         )
     }
 
+    leftPress() {
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop()
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.container}>
                     <NavBar
+                        leftIcon='ios-arrow-back-outline'
+                        leftPress={this.leftPress.bind(this)}
                         title="订单详情"
                         titleStyle={{ color: '#666', fontSize: 18 }}
                         style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea", borderBottomWidth: 6 }}

@@ -109,7 +109,10 @@ export default class Banklist extends Component {
         }
     }
     leftPress() {
-
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop();
+        }
     }
     rightPress() {
         this.props.navigator.push({
@@ -170,10 +173,51 @@ export default class Banklist extends Component {
         })
     }
 
+    deleteBank(id){
+        let info = '点击确定删除银行卡';
+            isIOS
+                ? AlertIOS.alert(
+                    '提示',
+                    info,
+                    [
+                        { text: '再等等', onPress: () => console.log('Ask me later pressed') },
+                        { text: '确定删除', onPress: this.confirmDelete.bind(this, id), style: 'cancel' }
+                    ],
+                    { cancelable: false }
+                )
+                : Alert.alert(
+                    '提示',
+                    info,
+                    [
+                        { text: '再等等', onPress: () => console.log('Ask me later pressed') },
+                        { text: '确定删除', onPress: this.confirmDelete.bind(this, id), style: 'cancel' }
+                    ],
+                    { cancelable: false }
+                )
+        
+        
+    }
+
+    confirmDelete(id){
+        let url=config.baseUrl+config.api.user.deleteBank;
+        request.post(url,{id:id})
+            .then(data=>{
+                console.log(data)
+                if(data.code==1){
+                    this._onRefresh();
+                }else{
+                    isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
+                }
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+    }
+
     _renderBanklist() {
         return this.state.banklist.length>0?this.state.banklist.map((item, key) => {
             return (
-                <TouchableHighlight key={key}>
+                <TouchableOpacity key={key} onLongPress={this.deleteBank.bind(this,item.id)}>
                 <View style={{ marginTop: 12, height: 104, width: 360, paddingLeft: 15, paddingRight: 19, borderRadius: 4, paddingTop: 12, backgroundColor: '#c64f55', alignSelf: 'center' }}>
                     <View style={{ flexDirection: 'row' }}>
                         <Image source={require('../images/index01.png')} style={{ width: 40, height: 40, marginRight: 8 }} />
@@ -190,7 +234,7 @@ export default class Banklist extends Component {
                     </View>
 
                 </View>
-                </TouchableHighlight>
+                </TouchableOpacity>
             )
         }):null
     }
