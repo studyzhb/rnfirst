@@ -52,7 +52,7 @@ export default class AllobList extends Component {
             isRefreshing: false,
             isLoadingTail: false,
             dataSource: ds.cloneWithRows([]),
-            isAuthor:0
+            isAuthor: 0
         }
     }
 
@@ -224,12 +224,12 @@ export default class AllobList extends Component {
         this._fetchData(1);
     }
 
-    gotoAuthor(){
-        let {navigator}=this.props;
-        if(navigator){
+    gotoAuthor() {
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.push({
-                name:'author',
-                component:Author
+                name: 'author',
+                component: Author
             })
         }
     }
@@ -237,14 +237,16 @@ export default class AllobList extends Component {
     _renderRow(item) {
 
         let info = '';
-        if (item.pay_status == 0) {
-            info = '未付款';
-        } else if (item.pay_status == 1) {
-            info = '付款中';
-        } else if (item.pay_status == 2) {
-            info = '交易完成';
-        } else if (item.pay_status == 3) {
-            info = '付款失败';
+        if (item.status == 0) {
+            info = '未使用';
+        } else if (item.status == 1) {
+            info = '申请中';
+        } else if (item.status == 2) {
+            info = '队列中';
+        } else if (item.status == 3) {
+            info = '返利完成';
+        } else if (item.status == 4) {
+            info = "申请拒绝"
         }
         return (
             <TouchableWithoutFeedback key={item.id} style={{ marginBottom: 10 }}>
@@ -255,7 +257,7 @@ export default class AllobList extends Component {
                                 <Text style={{ color: '#333', fontSize: 14 }}>{item.rebate_name}</Text>
                                 <Text style={styles.baseText}></Text>
                             </View>
-                            <Text style={{ color: "#21bb58", fontSize: 14 }}>进行中</Text>
+                            <Text style={{ color: "#21bb58", fontSize: 14 }}>{info}</Text>
                         </View>
 
                         <View style={styles.flexRow}>
@@ -265,16 +267,21 @@ export default class AllobList extends Component {
                         </View>
                         <View style={styles.flexRow}>
                             <Text style={styles.baseText}>债权金额：</Text>
-                            <Text style={{ color: "#21bb58", fontSize: 14 }}>￥100000.00</Text>
+                            <Text style={{ color: "#21bb58", fontSize: 14 }}>￥{item.money}</Text>
                         </View>
                         <View style={{ marginTop: 7 }}>
-                            <Text style={styles.baseText}>添加时间：2017-03-24</Text>
-                            <Text style={[styles.baseText, { marginTop: 7 }]}>结清时间：2017-03-31</Text>
+                            <Text style={styles.baseText}>添加时间：{item.created_at}</Text>
+                            {
+                                item.status==3
+                                ?<Text style={[styles.baseText, { marginTop: 7 }]}>结清时间：{item.updated_at}</Text>
+                                :null
+                            }
+                            
                         </View>
 
-                        <View style={{ position: 'absolute', right: 15, top: 76 }}>
+                        {/*<View style={{ position: 'absolute', right: 15, top: 76 }}>
                             <Icon name="ios-arrow-forward-outline" color="#666" size={14} />
-                        </View>
+                        </View>*/}
                     </View>
 
                 </View>
