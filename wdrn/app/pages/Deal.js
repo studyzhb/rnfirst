@@ -72,8 +72,8 @@ export default class Deal extends Component {
             dataSource: ds.cloneWithRows([]),
             isLogin: false,
             config: [],
-            date: new Date(),
-            timeZoneOffsetInHours: (-1) * (new Date()).getTimezoneOffset() / 60,
+            date: this.props.date,
+            timeZoneOffsetInHours: this.props.timeZoneOffsetInHours,
             presetDate: new Date(2016, 3, 5),
             allDate: new Date(2020, 4, 5),
             simpleText: '选择日期,默认今天',
@@ -90,6 +90,11 @@ export default class Deal extends Component {
         ]
     }
 
+    static defaultProps ={
+      date: new Date(),
+      timeZoneOffsetInHours: (-1) * (new Date()).getTimezoneOffset() / 60
+  }
+
     leftPress() {
         let { navigator } = this.props;
         if (navigator) {
@@ -97,6 +102,7 @@ export default class Deal extends Component {
         }
     }
     rightPress() {
+        console.log(this.state.date)
         isIOS
             ? this.setState({
                 showDatePicker: !this.state.showDatePicker
@@ -423,8 +429,9 @@ export default class Deal extends Component {
                         this.state.showDatePicker
                             ? isIOS
                                 ? <DatePickerIOS
-                                    data={this.state.date}
-                                    mode="datetime"
+                                    style={{backgroundColor:'#fff'}}
+                                    date={this.state.date}
+                                    mode="date"
                                     timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
                                     onDateChange={this.onDateChange.bind(this)}
                                     minuteInterval={10}

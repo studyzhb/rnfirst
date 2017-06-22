@@ -294,10 +294,10 @@ export default class OrderList extends Component {
                         <Image source={{ uri: 'item.img' }} style={{ width: 50, height: 50 }} />
                         <View style={{ marginLeft: 20, justifyContent: 'space-between', flex: 1 }}>
                             <View style={[{ flexDirection: 'row', height: 18, justifyContent: 'space-between' }]}>
-                                <Text style={{ fontSize: 12, width: 158, color: '#3a3a3a' }}>订单号：{item.order_sn}</Text>
-                                <Text style={{ fontSize: 12, width: 158, marginLeft: 9, textAlign: "center", color: '#3a3a3a' }}>{info}</Text>
+                                <Text style={{ fontSize: 12,  color: '#3a3a3a' }}>订单号：{item.order_sn}</Text>
+                                <Text style={{ fontSize: 12,  marginLeft: 9, textAlign: "center", color: '#3a3a3a' }}>{info}</Text>
                             </View>
-                            <View style={[{ flexDirection: 'row', height: 26, marginTop: 17, justifyContent: 'space-between' }]}>
+                            <View style={[{ flexDirection: 'row', height: 26, marginTop:0, justifyContent: 'space-between' }]}>
                                 <Text style={{ fontSize: 12, width: 158, color: '#3a3a3a' }}>{item.created_at}</Text>
                                 <View style={[{ flexDirection: 'row', height: 18, alignItems: 'center' }]}>
                                     <Icon name='logo-yen' size={12} />
@@ -312,7 +312,7 @@ export default class OrderList extends Component {
                                 <Text style={{ fontSize: 12, color: '#999' }}>该订单拆分队列订单（个）：{item.queque_num}</Text>
                                 <Button
                                     onPress={this.gotoDetail.bind(this, item.queque_list)}
-                                    containerStyle={{ backgroundColor: 'white', width: 56, height: 20, overflow: 'hidden' }}
+                                    containerStyle={{ backgroundColor: 'white', width: 60, height: 20, overflow: 'hidden' }}
                                     style={{ color: '#f6a623', fontSize: 14 }}
                                 >
                                     点击查看

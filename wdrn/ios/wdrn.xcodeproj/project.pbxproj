@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -45,6 +46,7 @@
 		96AC6089955D4CA98078D71D /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1840BDA43E465193AD043F /* libRNImagePicker.a */; };
 		97E83BF0032F4F459E824B78 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 286D85DE07AD47908E8BC246 /* Foundation.ttf */; };
 		9CB1A3D6CA1343C387C64714 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F3BA8CDEE93A45ADBFF1E0B0 /* Entypo.ttf */; };
+		A1052E631EFC1963000B7016 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1052E621EFC1934000B7016 /* libART.a */; };
 		A1CC75A81EF975D100552505 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1CC75A71EF975D100552505 /* CoreMotion.framework */; };
 		A1CC75AA1EF975E400552505 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1CC75A91EF975E400552505 /* CoreTelephony.framework */; };
 		A1CC75AC1EF9761300552505 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A1CC75AB1EF9761300552505 /* libz.tbd */; };
@@ -244,6 +246,13 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		A1052E611EFC1934000B7016 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1052E5D1EFC1934000B7016 /* ART.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0CF68AC11AF0540F00FF9E5C;
+			remoteInfo = ART;
+		};
 		A1CC755B1EF9748900552505 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E7B3B9B64DAE4962BD6F323B /* AlipayModule.xcodeproj */;
@@ -303,6 +312,7 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		9E56EC6F9C3D4EEDB3F83B0B /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		A1052E5D1EFC1934000B7016 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		A1CC75A71EF975D100552505 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		A1CC75A91EF975E400552505 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		A1CC75AB1EF9761300552505 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -327,6 +337,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1052E631EFC1963000B7016 /* libART.a in Frameworks */,
 				A1CC75AE1EF9762000552505 /* libc++.tbd in Frameworks */,
 				A1CC75AC1EF9761300552505 /* libz.tbd in Frameworks */,
 				A1CC75AA1EF975E400552505 /* CoreTelephony.framework in Frameworks */,
@@ -517,6 +528,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				A1052E5D1EFC1934000B7016 /* ART.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -565,6 +577,14 @@
 				00E356EE1AD99517003FC87E /* wdrnTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* wdrn-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* wdrn-tvOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A1052E5E1EFC1934000B7016 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1052E621EFC1934000B7016 /* libART.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -718,6 +738,10 @@
 				{
 					ProductGroup = A1CC75581EF9748900552505 /* Products */;
 					ProjectRef = E7B3B9B64DAE4962BD6F323B /* AlipayModule.xcodeproj */;
+				},
+				{
+					ProductGroup = A1052E5E1EFC1934000B7016 /* Products */;
+					ProjectRef = A1052E5D1EFC1934000B7016 /* ART.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
@@ -958,6 +982,13 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		A1052E621EFC1934000B7016 /* libART.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libART.a;
+			remoteRef = A1052E611EFC1934000B7016 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		A1CC755C1EF9748900552505 /* libAlipayModule.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1193,6 +1224,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 				);
 				INFOPLIST_FILE = wdrn/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1216,6 +1248,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 				);
 				INFOPLIST_FILE = wdrn/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
