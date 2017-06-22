@@ -287,17 +287,17 @@ export default class Order extends Component {
                             <View style={{ height: px2dp(150), justifyContent: 'space-between' }} onStartShouldSetResponder={() => false}>
                                 <View style={{ flex: 1, justifyContent: 'flex-start' }}>
                                     <TouchableWithoutFeedback>
-                                        <View style={{ paddingVertical: 0, height: 90 }}>
+                                        <View style={{ paddingVertical: 0, height: 90,backgroundColor:rgba(0,0,0,0) }}>
                                             <Text style={{ color: "#fff", fontSize: 14, flexWrap: 'nowrap', textAlign: 'center' }}>我的钱包（元）</Text>
                                             <Text style={{ color: "#fff", textAlign: 'center', fontSize: 36, paddingLeft: 5, flexWrap: 'nowrap', overflow: 'hidden' }}>{this.state.userData ? this.state.userData.balance : 0}</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                 </View>
-                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding: 10, marginTop: 10 }}>
-                                    <TouchableOpacity style={{ paddingVertical: 0 }} onPress={this.alltoBalance.bind(this, 1)}>
+                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding: 10, marginTop: 10 ,backgroundColor:rgba(0,0,0,0)}}>
+                                    <TouchableOpacity style={{ paddingVertical: 0,backgroundColor:rgba(0,0,0,0) }} onPress={this.alltoBalance.bind(this, 1)}>
                                         <Text style={{ color: "#fff", fontSize: px2dp(12) }}>我的债权金（元）：{this.state.userData ? this.state.userData.creditor : 0}</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={{ paddingVertical: 0 }} onPress={this.alltoBalance.bind(this, 2)}>
+                                    <TouchableOpacity style={{ paddingVertical: 0 ,backgroundColor:rgba(0,0,0,0)}} onPress={this.alltoBalance.bind(this, 2)}>
                                         <Text style={{ color: "#fff", fontSize: px2dp(12) }}>我的分润金（元）：{this.state.userData ? this.state.userData.share_gold : 0}</Text>
                                     </TouchableOpacity>
                                 </View>
