@@ -21,6 +21,8 @@ import config from '../util/config';
 import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
 
+import { FormLabel, FormInput } from 'react-native-elements';
+
 const isIOS = Platform.OS === 'ios';
 let { width, height } = Dimensions.get('window');
 export default class AddBank extends Component {
@@ -42,8 +44,8 @@ export default class AddBank extends Component {
                     this.setState({
                         banklist: data.data
                     })
-                }else{
-                    isIOS?AlertIOS.alert(data.message):Alert(data.message);
+                } else {
+                    isIOS ? AlertIOS.alert(data.message) : Alert(data.message);
                 }
             })
             .catch(err => {
@@ -52,7 +54,7 @@ export default class AddBank extends Component {
     }
 
     _submit() {
-        let { navigator,updateBank } = this.props;
+        let { navigator, updateBank } = this.props;
         let self = this;
 
         let card_num = this.state.card_num;
@@ -79,7 +81,7 @@ export default class AddBank extends Component {
             .then((data) => {
 
                 if (data.code == 1) {
-                    if(updateBank){
+                    if (updateBank) {
                         updateBank()
                     }
                     if (navigator) {
@@ -159,39 +161,49 @@ export default class AddBank extends Component {
 
                 </View>*/}
                 <View style={styles.inputWrapper}>
-                    <Text style={styles.labelinput}>卡号</Text>
-                    <TextInput
-                        style={styles.inputField}
-                        placeholder="请输入"
+                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>卡号</FormLabel>
+                    <FormInput
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
+                        placeholder="请输入手机号"
                         //关闭拼写自动修正
                         autoCorrect={false}
+                        containerStyle={{ marginLeft: 0 }}
+                        inputStyle={{ width: width - 80, paddingLeft: 10 }}
                         //去除android下的底部边框问题
-                        underlineColorAndroid="transparent"
-                        keyboardType='number-pad' //弹出软键盘类型
-                        onChangeText={(text) => {
-                            this.setState({
-                                card_num: text
-                            })
-                        }}
-                    />
-
+                        //underlineColorAndroid="transparent"
+                        keyboardType='numeric' //弹出软键盘类型
+                        onChangeText={(text) => this.setState({ card_num: text })} />
                 </View>
                 <View style={styles.inputWrapper}>
                     <Text style={styles.labelinput}>银行</Text>
-                    <Picker
-                        style={styles.inputField}
-                        selectedValue={this.state.card_tip}
-                        onValueChange={(lang) => this.setState({ card_tip: lang })}>
-                        {
-                            this.state.banklist.map((item,key)=>{
-                                return (
-                                    <Picker.Item label={item.tip} value={item.tip} key={key} />
-                                )
-                            })
-                        }
-                    </Picker>
+                    {
+                        isIOS
+                            ? <PickerIOS
+                                selectedValue={this.state.carMake}
+                                onValueChange={(lang) => this.setState({ card_tip: lang  })}>
+                                {this.state.banklist.map((item,key) => (
+                                    <PickerItemIOS
+                                        key={key}
+                                        value={item.tip}
+                                        label={item.tip}
+                                    />
+                                ))}
+                            </PickerIOS>
+                            : <Picker
+                                style={styles.inputField}
+                                selectedValue={this.state.card_tip}
+                                onValueChange={(lang) => this.setState({ card_tip: lang })}>
+                                {
+                                    this.state.banklist.map((item, key) => {
+                                        return (
+                                            <Picker.Item label={item.tip} value={item.tip} key={key} />
+                                        )
+                                    })
+                                }
+                            </Picker>
+                    }
+
                     {/*<TextInput 
                         style={styles.inputField}
                         placeholder="请输入"
@@ -245,13 +257,13 @@ const styles = StyleSheet.create({
     },
     inputWrapper: {
         // backgroundColor:'#eaeaea',
+        backgroundColor: '#fff',
         height: px2dp(50),
         // width:width,
-        borderBottomWidth: 1,
-        borderBottomColor: "#eaeaea",
+        // borderBottomWidth: 1,
+        // borderBottomColor: "#eaeaea",
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
     },
     labelinput: {
         fontSize: 16,

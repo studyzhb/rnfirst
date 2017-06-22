@@ -145,7 +145,7 @@ export default class Banklist extends Component {
 
         request.get(loginUrl)
             .then((data) => {
-    
+                console.log(data)
                 if (data.code == 1) {
                     this.setState({
                         banklist: data.data,

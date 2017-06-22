@@ -272,11 +272,11 @@ export default class AllobList extends Component {
                         <View style={{ marginTop: 7 }}>
                             <Text style={styles.baseText}>添加时间：{item.created_at}</Text>
                             {
-                                item.status==3
-                                ?<Text style={[styles.baseText, { marginTop: 7 }]}>结清时间：{item.updated_at}</Text>
-                                :null
+                                item.status == 3
+                                    ? <Text style={[styles.baseText, { marginTop: 7 }]}>结清时间：{item.updated_at}</Text>
+                                    : null
                             }
-                            
+
                         </View>
 
                         {/*<View style={{ position: 'absolute', right: 15, top: 76 }}>
@@ -337,6 +337,12 @@ export default class AllobList extends Component {
             </View>
         )
     }
+    leftPress() {
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop();
+        }
+    }
 
     render() {
         return (
@@ -344,6 +350,8 @@ export default class AllobList extends Component {
                 <View style={styles.container}>
                     <NavBar
                         title='我的债权'
+                        leftIcon='ios-arrow-back-outline'
+                        leftPress={this.leftPress.bind(this)}
                         titleStyle={{ color: '#666', fontSize: 18 }}
                         style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea" }}
                     />

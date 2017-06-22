@@ -224,13 +224,21 @@ export default class Popularize extends Component {
         )
 
     }
-
+    leftPress() {
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop();
+        }
+    }
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.container}>
                     <NavBar
                         title='我的推广'
+                        
+                        leftIcon='ios-arrow-back-outline'
+                        leftPress={this.leftPress.bind(this)}
                         titleStyle={{ color: '#666', fontSize: 18 }}
                         style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea" }}
                     />

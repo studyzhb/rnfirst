@@ -40,21 +40,26 @@ export default class SingleInfo extends Component {
         request.get(url)
             .then(data => {
                 console.log(data)
-                if (data.code == 1&&data.data) {
+                if (data.code == 1 && data.data) {
                     this.setState({
                         currentInfo: data.data
                     })
                 } else {
-                    
+
                 }
 
 
             })
-            .catch(err=>{
+            .catch(err => {
                 console.warn(err)
             })
     }
-
+    leftPress() {
+        let { navigator } = this.props;
+        if (navigator) {
+            navigator.pop();
+        }
+    }
 
     render() {
         return (
@@ -62,6 +67,8 @@ export default class SingleInfo extends Component {
                 <View style={styles.container}>
                     <NavBar
                         title='债权资料'
+                        leftIcon='ios-arrow-back-outline'
+                        leftPress={this.leftPress.bind(this)}
                         titleStyle={{ color: '#666', fontSize: 18 }}
                         style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea" }}
                     />
