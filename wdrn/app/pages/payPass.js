@@ -17,7 +17,7 @@ import request from '../util/request';
 import config from '../util/config';
 import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
-
+import {FormInput} from 'react-native-elements';
 import CountDownText from '../util/CountDownText';
 
 const isIOS=Platform.OS==='ios';
@@ -161,90 +161,83 @@ export default class PayPass extends Component{
                     
                 </View>
                 <View style={styles.inputWrapper}>
-                    <Text>+86</Text>
-                    <TextInput 
-                        style={styles.inputField}
+                    <FormInput
                         placeholder="请输入手机号"
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
                         autoCorrect={false}
                         //去除android下的底部边框问题
-                        underlineColorAndroid="transparent"
-                        keyboardType='number-pad' //弹出软键盘类型
-                        onChangeText={(text)=>{
+                        //underlineColorAndroid="transparent"
+                        keyboardType='numeric' //弹出软键盘类型
+                        onChangeText={(text) => {
                             this.setState({
-                                phoneNumber:text
+                                phoneNumber: text
                             })
                         }}
                     />
-
                 </View>
                 <View style={styles.inputWrapper}>
                     
-                    <TextInput 
-                        style={styles.inputField}
+                    <FormInput
                         placeholder="请输入收到的验证码"
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
                         autoCorrect={false}
                         //去除android下的底部边框问题
-                        underlineColorAndroid="transparent"
-                        keyboardType='number-pad' //弹出软键盘类型
-                        onChangeText={(text)=>{
+                        //underlineColorAndroid="transparent"
+                        keyboardType='numeric' //弹出软键盘类型
+                        onChangeText={(text) => {
                             this.setState({
-                                verifyCode:text
+                                verifyCode: text
                             })
                         }}
                     />
                     {
                         !this.state.codeSent
-                        ?<Button onPress={this._sendVerifyCode.bind(this)} style={[styles.countBtn,{backgroundColor:'#fff',color:'#2ac945',fontSize:14,height:px2dp(50),paddingTop:px2dp(18)}]}>
-                        获取验证码
+                            ? <Button onPress={this._sendVerifyCode.bind(this)} containerStyle={[styles.fixedCode,styles.countBtn]} style={[{ color: '#2ac945', fontSize: 14}]}>
+                                获取验证码
                         </Button>
-                        :<Button style={[styles.countBtn,{backgroundColor:'#fff',color:'#2ac945',fontSize:14,height:px2dp(50),paddingTop:px2dp(18)}]}>
-                            ({this.state.count}秒)后再试
+                            : <Button containerStyle={[styles.fixedCode,styles.countBtn]} style={[{ color: '#2ac945', fontSize: 14}]}>
+                                ({this.state.count}秒)后再试
                         </Button>
-                        
+
                     }
                     
                 </View>
                 <View style={styles.inputWrapper}>
                     
-                    <TextInput 
-                        style={styles.inputField}
-                        placeholder="请设置密码"
+                    <FormInput
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
                         autoCorrect={false}
                         //去除android下的底部边框问题
-                        underlineColorAndroid="transparent"
-                        keyboardType='number-pad' //弹出软键盘类型
-                        onChangeText={(text)=>{
+                        //underlineColorAndroid="transparent"
+                        keyboardType='numeric' //弹出软键盘类型
+                        placeholder="请设置密码"
+                        onChangeText={(text) => {
                             this.setState({
-                                password:text
+                                password: text
                             })
                         }}
                     />
-                    
                 </View>
                 <View style={styles.inputWrapper}>
                     
-                    <TextInput 
-                        style={styles.inputField}
-                        placeholder="重复密码"
+                    <FormInput
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
                         autoCorrect={false}
                         //去除android下的底部边框问题
-                        underlineColorAndroid="transparent"
-                        keyboardType='number-pad' //弹出软键盘类型
-                        onChangeText={(text)=>{
+                        //underlineColorAndroid="transparent"
+                        keyboardType='numeric' //弹出软键盘类型
+                        placeholder="请设置密码"
+                        onChangeText={(text) => {
                             this.setState({
-                                password1:text
+                                password1: text
                             })
                         }}
                     />
@@ -278,8 +271,6 @@ const styles=StyleSheet.create({
     inputWrapper:{
         // backgroundColor:'#eaeaea',
         height:px2dp(50),
-        borderBottomWidth:1,
-        borderBottomColor:"#eaeaea",
         paddingLeft:10,
         // width:width,
         flexDirection:'row',
@@ -316,7 +307,7 @@ const styles=StyleSheet.create({
         alignItems:'center',
         alignSelf:'center'
     },
-    btn:{
+    btnbak:{
         width:px2dp(284),
         height:px2dp(40),
         marginTop:10,
@@ -329,17 +320,31 @@ const styles=StyleSheet.create({
         borderRadius:4,
         color:'#fff'
     },
-    countBtn:{
-        width:110,
-        height:40,
+    btn:{
+        width:px2dp(284),
+        height:px2dp(40),
+        marginTop:10,
         padding:10,
-        marginLeft:8,
-        backgroundColor:'#ee735c',
-        borderColor:'#ee735c',
-        color:'#fff',
-        textAlign:'left',
-        fontWeight:'600',
-        fontSize:15,
-        borderRadius:2
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'#2ac945',
+        // borderColor:'#ee735c',
+        // borderWidth:1,
+        borderRadius:4,
+        color:'#fff'
     },
+    countBtn: {
+        width: 110,
+        height: 30,
+        padding: 10,
+        justifyContent:'center',
+        // marginLeft: 8,
+        backgroundColor: '#fff',
+        borderRadius: 2
+    },
+    fixedCode: {
+        position: 'absolute',
+        right: 0,
+        top: 0
+    }
 })

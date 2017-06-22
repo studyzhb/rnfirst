@@ -79,7 +79,8 @@ request.post=async (url,body,option)=>{
     console.log(options)
     console.log(url)
     return fetch(url,options)
-            .then((response)=>response.json())
+            .then((response)=>{
+                return response.json()})
             .catch(err=>{
                 console.warn(err)
             })

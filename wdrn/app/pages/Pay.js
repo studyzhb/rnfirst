@@ -84,10 +84,7 @@ export default class Pay extends Component {
                         })()
                         break;
                     }
-                    
-                    
-                   
-                    
+                             
                 } else {
                     isIOS
                         ? AlertIOS.alert(data.message)
@@ -127,7 +124,7 @@ export default class Pay extends Component {
         this.setState({
             modalVisible: false,
         })
-        if(pass){
+        if(pass!==undefined){
             this._goPay.bind(this, orderData, pass)();
         }
         

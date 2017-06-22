@@ -26,7 +26,7 @@ export default class rootApp extends Component {
 	
 	render() {
 		return (
-			<View style={{ backgroundColor: Platform.OS == 'ios' ? '#000' : '#0398ff', flex: 1 }}>
+			<View style={{ backgroundColor: Platform.OS == 'ios' ? '#000' : '#000', flex: 1 }}>
 				<Navigation />
 			</View>
 		)

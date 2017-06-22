@@ -66,7 +66,12 @@ export default class GoodsList extends Component {
 
     confirmPay() {
         let self=this;
-       
+       if(this.state.total<=0){
+        isIOS
+        ?AlertIOS.alert('请先选中商品')
+        :Alert.alert('请先选中商品')
+        return;
+       }
         let info = this.state.total<this.props.money?'您的订单不足'+this.props.money+'元，将无法生成队列订单，您可以继续购物凑够金额。':'您的购物金额为：'+this.state.total+' ,将拆分为'+Math.floor(this.state.total/this.props.money)+'单进入返利。';
         isIOS
             ? AlertIOS.alert(

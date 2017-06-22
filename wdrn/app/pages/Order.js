@@ -99,7 +99,25 @@ export default class Order extends Component {
     }
 
     alltoBalance(type) {
-
+        
+        switch (type) {
+            case 1:
+                if(this.state.userData && !(this.state.userData.creditor-0)){
+                    isIOS
+                    ?AlertIOS.alert('对不起，没有需要操作的金额')
+                    :Alert.alert('对不起，没有需要操作的金额')
+                    return
+                }
+                break;
+            case 2:
+                if(this.state.userData && !(this.state.userData.share_gold-0)){
+                    isIOS
+                    ?AlertIOS.alert('对不起，没有需要操作的金额')
+                    :Alert.alert('对不起，没有需要操作的金额')
+                    return
+                }
+                break;
+        }
         let info = '点击确定您的分润金或消费返利金额将被转入余额';
         isIOS
             ? AlertIOS.alert(
@@ -266,7 +284,7 @@ export default class Order extends Component {
                             <View style={styles.topbar} onStartShouldSetResponder={() => false}>
 
                             </View>
-                            <View style={{ height: px2dp(150),justifyContent:'space-between'}} onStartShouldSetResponder={() => false}>
+                            <View style={{ height: px2dp(150), justifyContent: 'space-between' }} onStartShouldSetResponder={() => false}>
                                 <View style={{ flex: 1, justifyContent: 'flex-start' }}>
                                     <TouchableWithoutFeedback>
                                         <View style={{ paddingVertical: 0, height: 90 }}>
@@ -275,11 +293,11 @@ export default class Order extends Component {
                                         </View>
                                     </TouchableWithoutFeedback>
                                 </View>
-                                <View style={{ flex: 1,flexDirection:'row', justifyContent: 'space-between',padding:10,marginTop:10 }}>
-                                    <TouchableOpacity style={{  paddingVertical: 0 }} onPress={this.alltoBalance.bind(this, 1)}>
+                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding: 10, marginTop: 10 }}>
+                                    <TouchableOpacity style={{ paddingVertical: 0 }} onPress={this.alltoBalance.bind(this, 1)}>
                                         <Text style={{ color: "#fff", fontSize: px2dp(12) }}>我的债权金（元）：{this.state.userData ? this.state.userData.creditor : 0}</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={{  paddingVertical: 0 }} onPress={this.alltoBalance.bind(this, 2)}>
+                                    <TouchableOpacity style={{ paddingVertical: 0 }} onPress={this.alltoBalance.bind(this, 2)}>
                                         <Text style={{ color: "#fff", fontSize: px2dp(12) }}>我的分润金（元）：{this.state.userData ? this.state.userData.share_gold : 0}</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -288,7 +306,7 @@ export default class Order extends Component {
                     </TouchableOpacity>
                     <View style={[styles.numbers, { height: 68 }]}>
                         <TouchableOpacity onPress={this.outputBalance.bind(this)} style={[styles.numItem]}>
-                            <View style={[styles.numItem,{ flexDirection: 'row' }]}>
+                            <View style={[styles.numItem, { flexDirection: 'row' }]}>
                                 <View style={{ marginLeft: 36 }}>
                                     <Image source={require('../images/m1.png')} resizeMode='contain' style={{ width: 34, height: 34 }} />
                                     {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
@@ -299,7 +317,7 @@ export default class Order extends Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableWithoutFeedback style={[styles.numItem]}>
-                            <View style={[styles.numItem, { flexDirection: 'row',borderLeftWidth: 1, borderLeftColor: "#f5f5f5" }]}>
+                            <View style={[styles.numItem, { flexDirection: 'row', borderLeftWidth: 1, borderLeftColor: "#f5f5f5" }]}>
 
                                 <View style={{ marginLeft: 36 }}>
                                     <Image source={require('../images/m2.png')} resizeMode='contain' style={{ width: 34, height: 34 }} />

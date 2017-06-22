@@ -17,6 +17,7 @@ import request from '../util/request';
 import config from '../util/config';
 import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
+import { FormInput } from 'react-native-elements';
 
 import CountDownText from '../util/CountDownText';
 
@@ -44,7 +45,7 @@ export default class Register extends Component {
     }
 
     leftPress() {
-       
+
         let { navigator } = this.props;
         if (navigator) {
             navigator.pop()
@@ -77,7 +78,7 @@ export default class Register extends Component {
 
         request.post(verifyURL, body)
             .then((data) => {
-                
+
                 if (data.code == 1) {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                     self.props.afterLogin(data.data)
@@ -136,7 +137,7 @@ export default class Register extends Component {
 
         request.get(signupURL, body)
             .then((data) => {
-               
+
                 if (data.code == 1) {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                     self._showVerifyCode()
@@ -159,15 +160,14 @@ export default class Register extends Component {
                     titleStyle={{ 'color': '#666' }}
                     leftIcon='ios-close-outline'
                     leftPress={this.leftPress.bind(this)}
-
                     rightPress={this.rightPress.bind(this)}
                 />
                 <View style={styles.logo}>
 
                 </View>
                 <View style={styles.inputWrapper}>
-                    <Text>+86</Text>
-                    <TextInput
+                    {/*<Text>+86</Text>*/}
+                    {/*<TextInput
                         style={styles.inputField}
                         placeholder="请输入手机号"
                         //是否自动将特定字符切换为大写
@@ -177,17 +177,27 @@ export default class Register extends Component {
                         //去除android下的底部边框问题
                         underlineColorAndroid="transparent"
                         keyboardType='number-pad' //弹出软键盘类型
+                        
+                    />*/}
+                    <FormInput
+                        //是否自动将特定字符切换为大写
+                        autoCapitalize={'none'}
+                        //关闭拼写自动修正
+                        autoCorrect={false}
+                        //去除android下的底部边框问题
+                        //underlineColorAndroid="transparent"
+                        keyboardType='numeric' //弹出软键盘类型
+                        placeholder="请输入手机号"
                         onChangeText={(text) => {
                             this.setState({
                                 phoneNumber: text
                             })
                         }}
                     />
-
                 </View>
                 <View style={styles.inputWrapper}>
 
-                    <TextInput
+                    {/*<TextInput
                         style={styles.inputField}
                         placeholder="请输入收到的验证码"
                         //是否自动将特定字符切换为大写
@@ -197,19 +207,29 @@ export default class Register extends Component {
                         //去除android下的底部边框问题
                         underlineColorAndroid="transparent"
                         keyboardType='number-pad' //弹出软键盘类型
+                        
+                    />*/}
+                    <FormInput
+                        //是否自动将特定字符切换为大写
+                        autoCapitalize={'none'}
+                        //关闭拼写自动修正
+                        autoCorrect={false}
+                        //去除android下的底部边框问题
+                        //underlineColorAndroid="transparent"
+                        keyboardType='number-pad' //弹出软键盘类型
+                        placeholder="请输入收到的验证码"
                         onChangeText={(text) => {
                             this.setState({
                                 verifyCode: text
                             })
                         }}
                     />
-
                     {
                         !this.state.codeSent
-                            ? <Button onPress={this._sendVerifyCode.bind(this)} style={[styles.countBtn, { backgroundColor: '#fff', color: '#2ac945', fontSize: 14, height: px2dp(50), paddingTop: px2dp(18) }]}>
+                            ? <Button onPress={this._sendVerifyCode.bind(this)} containerStyle={[styles.fixedCode, styles.countBtn]} style={[{ color: '#2ac945', fontSize: 14 }]}>
                                 获取验证码
                         </Button>
-                            : <Button style={[styles.countBtn, { backgroundColor: '#fff', color: '#2ac945', fontSize: 14, height: px2dp(50), paddingTop: px2dp(18) }]}>
+                            : <Button containerStyle={[styles.fixedCode, styles.countBtn]} style={[{ color: '#2ac945', fontSize: 14 }]}>
                                 ({this.state.count}秒)后再试
                         </Button>
 
@@ -228,7 +248,7 @@ export default class Register extends Component {
                 </View>
                 <View style={styles.inputWrapper}>
 
-                    <TextInput
+                    {/*<TextInput
                         style={styles.inputField}
                         placeholder="请设置密码"
                         //是否自动将特定字符切换为大写
@@ -243,8 +263,22 @@ export default class Register extends Component {
                                 password: text
                             })
                         }}
+                    />*/}
+                    <FormInput
+                        //是否自动将特定字符切换为大写
+                        autoCapitalize={'none'}
+                        //关闭拼写自动修正
+                        autoCorrect={false}
+                        //去除android下的底部边框问题
+                        //underlineColorAndroid="transparent"
+                        keyboardType='number-pad' //弹出软键盘类型
+                        placeholder="请设置密码"
+                        onChangeText={(text) => {
+                            this.setState({
+                                password: text
+                            })
+                        }}
                     />
-
                 </View>
                 <View style={{ width: width, flexDirection: 'row', justifyContent: 'center' }}>
                     <Button
@@ -274,8 +308,8 @@ const styles = StyleSheet.create({
     inputWrapper: {
         // backgroundColor:'#eaeaea',
         height: px2dp(50),
-        borderBottomWidth: 1,
-        borderBottomColor: "#eaeaea",
+        // borderBottomWidth: 1,
+        // borderBottomColor: "#eaeaea",
         paddingLeft: 10,
         // width:width,
         flexDirection: 'row',
@@ -314,12 +348,12 @@ const styles = StyleSheet.create({
     },
     btn: {
         width: px2dp(284),
-        height: px2dp(30),
+        height: px2dp(40),
         marginTop: 10,
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#d8d8d8',
+        backgroundColor: '#2ac945',
         // borderColor:'#ee735c',
         // borderWidth:1,
         borderRadius: 4,
@@ -329,13 +363,14 @@ const styles = StyleSheet.create({
         width: 110,
         height: 30,
         padding: 10,
-        marginLeft: 8,
-        backgroundColor: '#ee735c',
-        borderColor: '#ee735c',
-        color: '#fff',
-        textAlign: 'left',
-        fontWeight: '600',
-        fontSize: 15,
+        justifyContent: 'center',
+        // marginLeft: 8,
+        backgroundColor: '#fff',
         borderRadius: 2
     },
+    fixedCode: {
+        position: 'absolute',
+        right: 0,
+        top: 0
+    }
 })

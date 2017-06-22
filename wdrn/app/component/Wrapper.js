@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import { View, Platform, BackAndroid } from 'react-native'
 import TabView from './TabView'
-import Login from '../pages/validateLogin';
+import Login from '../pages/testForm';
 
 import FinalNum from '../util/FinalNum'
 
@@ -17,7 +17,7 @@ export default class Wrapper extends Component {
     }
 
     componentWillMount() {
-        console.log('componentWillMount')
+       
         storage.load({
             key: 'token'
         })
@@ -102,6 +102,7 @@ export default class Wrapper extends Component {
         } else if (this.state.isLogin == FinalNum.LOGINDEFAULT) {
             return (
                 <View style={{ flex: 1, backgroundColor: '#fff' }}>
+
                 </View>
             )
         }

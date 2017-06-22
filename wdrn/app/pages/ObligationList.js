@@ -59,9 +59,9 @@ export default class ObligationList11 extends Component {
     }
 
     componentDidMount() {
-        setTimeout(()=>{
+        setTimeout(() => {
             this._fetchData(1);
-        },1000);
+        }, 1000);
     }
     shouldComponentUpdate() {
         // this._fetchData()
@@ -164,7 +164,7 @@ export default class ObligationList11 extends Component {
 
         await request.get(getQueueUrl, obj)
             .then(data => {
-                
+
                 if (data.code == 1 && data.data) {
 
                     let list = data.data.list_queque.queque || [];
@@ -285,7 +285,7 @@ export default class ObligationList11 extends Component {
             component: GoodsList,
             params: {
                 obid: this.props.id,
-                money:this.state.queueInfo.list_info ? this.state.queueInfo.list_info.money:1400
+                money: this.state.queueInfo.list_info ? this.state.queueInfo.list_info.money : 1400
             }
         })
     }
@@ -438,19 +438,24 @@ export default class ObligationList11 extends Component {
 
 
                     </View>
+                    <View style={[{ flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 10, flex: 1, alignItems: 'center' }]}>
+                        {/*<Icon name='logo-yen' size={12} />*/}
+                        <Image source={require('../images/statusmoney.png')} resizeMode='contain' style={{ width: 14, height: 14, alignSelf: 'center' }} />
+                        <Text style={{ color: "#999", fontSize: 12, marginLeft: 9 }}>返还状态：{item.queque_status == 0 ? '等待中' : '已完成'}</Text>
+                    </View>
+                    {/*<View style={[{ height: 58, flexDirection: "column" }]}>
 
-                    <View style={[styles.numbers, { paddingVertical: 20, height: 58 }]}>
-
-                        <View style={[styles.numItem, { flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 10, marginTop: -10, height: 18 }]}>
+                        <View style={[{ flexDirection: 'row', justifyContent: 'flex-start', paddingLeft: 10, flex: 1, alignItems: 'center' }]}>
                             <Icon name='logo-yen' size={12} />
-                            <Text style={{ color: "#999", fontSize: 12, marginLeft: 9, fontWeight: "bold" }}>返还状态：{item.queque_status == 0 ? '等待中' : '已完成'}</Text>
+                            <Image source={require('../images/statusmoney.png')} resizeMode='contain' style={{ width: 14, height: 14, alignSelf: 'center' }} />
+                            <Text style={{ color: "#999", fontSize: 12, marginLeft: 9 }}>返还状态：{item.queque_status == 0 ? '等待中' : '已完成'}</Text>
                         </View>
-                        {/*<View style={[styles.numItem, { flexDirection: 'row', marginTop: -10, borderLeftWidth: 1, height: 18, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
+                        <View style={[styles.numItem, { flexDirection: 'row', marginTop: -10, borderLeftWidth: 1, height: 18, borderLeftColor: "#f5f5f5", borderRightWidth: 1, borderRightColor: "#f5f5f5" }]}>
                             <Icon name='ios-people-outline' size={12} />
                             <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>队列编号</Text>
-                        </View>*/}
+                        </View>
 
-                    </View>
+                    </View>*/}
 
                 </View>
             </TouchableWithoutFeedback>
@@ -471,21 +476,21 @@ export default class ObligationList11 extends Component {
             <View >
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: px2dp(110), backgroundColor: '#fff', borderBottomColor: '#eaeaea', borderBottomWidth: 1 }}>
                     <View style={{ flexDirection: 'column', height: px2dp(110), justifyContent: 'center', marginLeft: px2dp(18) }}>
-                        <View style={{ marginBottom: px2dp(10),alignItems:'center',width:width }}>
-                            <Text style={{ color: '#21bb58', fontSize: 36, marginTop: 0,textAlign:'center' }}>{this.state.queueInfo.refund_pending.toString()}</Text>
-                            <Text style={[styles.normalText,{textAlign:'center',color:'#ccc'}]}>待兑换积分</Text>
+                        <View style={{ marginBottom: px2dp(10), alignItems: 'center', width: width }}>
+                            <Text style={{ color: '#21bb58', fontSize: 36, marginTop: 0, textAlign: 'center' }}>{this.state.queueInfo.refund_no.toString()}</Text>
+                            <Text style={[styles.normalText, { textAlign: 'center', color: '#ccc' }]}>待返积分</Text>
                         </View>
-                        <View style={{ flexDirection: 'row' ,justifyContent:'center',alignItems:'center',width:width}}>
-                            <Text style={[styles.normalText,{textAlign:'center'}]}>已兑换积分：<Text style={{ color: '#333', fontSize: 12 }}>{this.state.queueInfo.refund.toString()}</Text></Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: width }}>
+                            <Text style={[styles.normalText, { textAlign: 'center' }]}>已返积分：<Text style={{ color: '#333', fontSize: 12 }}>{((this.state.queueInfo.refund-0) + (this.state.queueInfo.refund_pending-0) + this.state.queueInfo.refund_ing-0).toString()}</Text></Text>
                         </View>
                     </View>
                 </View>
-                <View style={[styles.numbers, { height: 68 }]}>
+                {/*<View style={[styles.numbers, { height: 68 }]}>
                     <TouchableWithoutFeedback>
                         <View style={[styles.numItem, { flexDirection: 'row' }]}>
                             <View style={{ marginLeft: 0 }}>
                                 <Image source={require('../images/base01.png')} resizeMode='contain' style={{ width: 34, height: 34, }} />
-                                {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
+                                <Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />
                             </View>
 
                             <View style={{ marginLeft: 20 }}>
@@ -499,7 +504,7 @@ export default class ObligationList11 extends Component {
 
                             <View style={{ marginLeft: 0 }}>
                                 <Image source={require('../images/base02.png')} resizeMode='contain' style={{ width: 34, height: 34, }} />
-                                {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
+                                <Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />
                             </View>
                             <View style={{ marginLeft: 20 }}>
                                 <Text style={{ color: "#333", fontSize: 12, textAlign: "center", paddingTop: 5 }}>{"未返积分"}</Text>
@@ -507,7 +512,7 @@ export default class ObligationList11 extends Component {
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
-                </View>
+                </View>*/}
                 <View style={{ marginTop: 12, paddingBottom: 0, backgroundColor: '#f3f3f3' }}>
                     <View style={styles.numbers}>
                         <TouchableWithoutFeedback onPress={this.gotoOrderPage.bind(this)}>
@@ -525,7 +530,7 @@ export default class ObligationList11 extends Component {
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
-                    <View style={{ flexDirection: 'row', height: 26, alignItems: 'center' }}>
+                    {/*<View style={{ flexDirection: 'row', height: 26, alignItems: 'center' }}>
                         <Image source={require('../images/title_1.png')} resizeMode='contain' style={{ width: 20, height: 20, marginLeft: 10, marginRight: 10 }} />
                         <Text style={{ fontSize: 14, color: '#3a3a3a' }}>信息</Text>
                     </View>
@@ -559,14 +564,18 @@ export default class ObligationList11 extends Component {
                             </View>
                         </TouchableWithoutFeedback>
 
+                    </View>*/}
+
+                    <View style={{ flexDirection: 'row', height: 36, alignItems: 'center', justifyContent: 'space-between',backgroundColor:'#fff',marginTop:10,marginBottom:5 }}>
+                        <View style={{ flexDirection: 'row', height: 36, alignItems: 'center' }}>
+                            <Image source={require('../images/title_2.png')} resizeMode='contain' style={{ width: 20, height: 20, marginLeft: 10, marginRight: 10 }} />
+                            <Text style={{ fontSize: 14, color: '#3a3a3a' }}>返利记录</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', height: 36, alignItems: 'center', paddingRight: 10 }}>
+                            <Text style={{ color: "#888", fontSize: 12, textAlign: "center", fontWeight: "normal" }}>返还：{this.state.queueInfo.finsh_num ? this.state.queueInfo.finsh_num.toString() : '0'} </Text>
+                            <Text style={{ color: "#888", fontSize: 12, textAlign: "center", fontWeight: "normal" }}> 已购：{this.state.queueInfo.buy_num ? this.state.queueInfo.buy_num.toString() : '0'}</Text>
+                        </View>
                     </View>
-
-                    <View style={{ flexDirection: 'row', height: 26, alignItems: 'center' }}>
-                        <Image source={require('../images/title_2.png')} resizeMode='contain' style={{ width: 20, height: 20, marginLeft: 10, marginRight: 10 }} />
-                        <Text style={{ fontSize: 14, color: '#3a3a3a' }}>返利记录</Text>
-                    </View>
-
-
 
                 </View>
             </View>
@@ -578,9 +587,9 @@ export default class ObligationList11 extends Component {
 
     }
 
-    leftPress(){
-        let {navigator}=this.props;
-        if(navigator){
+    leftPress() {
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.pop()
         }
     }
@@ -681,7 +690,7 @@ const styles = StyleSheet.create({
     recordWrapper: {
         height: px2dp(166),
         backgroundColor: '#fff',
-        marginBottom: 10,
+        marginBottom: 5,
         // paddingHorizontal:20
     },
     nowbuybtn: {

@@ -63,8 +63,8 @@ export default class TabView extends Component{
                             title={item[0]}
                             selected={this.state.currentTab===item[2]}
                             selectedTitleStyle={{color:'#3496f0'}}
-                            renderIcon={()=><Icon name={item[1]} size={px2dp(22)} color="#666" />}
-                            renderSelectedIcon={()=><Icon name={item[1].replace(/\-outline$/,'')} size={px2dp(22)} color="#3496f0" />}
+                            renderIcon={()=><Icon name={item[1]} size={px2dp(18)} color="#666" />}
+                            renderSelectedIcon={()=><Icon name={item[1].replace(/\-outline$/,'')} size={px2dp(18)} color="#3496f0" />}
                             onPress={()=>this.setState({currentTab:item[2]})}
                         >
                             {item[3]}
@@ -80,7 +80,7 @@ export default class TabView extends Component{
 
 const styles=StyleSheet.create({
     tabbar:{
-        height:px2dp(46),
+        height:px2dp(48),
         alignItems:'center',
         justifyContent:'center',
         backgroundColor:'#fff'

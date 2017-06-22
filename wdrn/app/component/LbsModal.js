@@ -35,8 +35,13 @@ export default class LbsModal extends Component {
       password:''
     }
   }
-  closeModal(pass) {
-    this.props.closeModal(pass||'')
+  closeModal(event,pass) {
+    if(typeof event==='object'){
+      event.persist();
+      this.props.closeModal(undefined)
+    }else{
+      this.props.closeModal(event)
+    }
   }
   getLocation() {
     if (this.state.loading) {
@@ -95,6 +100,10 @@ export default class LbsModal extends Component {
                 style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea",alignSelf:'stretch' }}
                 leftPress={this.closeModal.bind(this)}
               />
+              {/*<View style={{flexDirection:'row',backgroundColor: '#fff', borderBottomColor: "#eaeaea",}}>
+                <Icon name={"ios-close"}  size={16} onPress={this.closeModal.bind(this)}/>
+                <Text>请输入支付密码</Text>
+              </View>*/}
               {/*<View style={styles.searchView}>
           <TextInput ref="search" style={styles.textInput} underlineColorAndroid="transparent" placeholder="请输入地址" placeholderTextColor="#666"/>
         </View>*/}

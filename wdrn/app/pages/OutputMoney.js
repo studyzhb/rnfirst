@@ -25,6 +25,9 @@ import CountDownText from '../util/CountDownText';
 
 import { ListItem } from 'react-native-elements'
 import LbsModal from '../component/LbsModal'
+
+import SelectedBank from './SelectedBanklist'
+
 const isIOS = Platform.OS === 'ios';
 let { width, height } = Dimensions.get('window');
 
@@ -56,23 +59,24 @@ export default class OutputMoney extends Component {
     }
 
     closeModal(pass) {
-
         this.setState({
             modalVisible: false
         })
-        if (pass) {
+        if (pass!==undefined) {
             this._goPay.bind(this, pass)();
         }
     }
 
     openLbs() {
-        this.setState({ modalVisible: true })
+        if (this.state.money - 0 > 0) {
+            this.setState({ modalVisible: true })
+        }
     }
 
     _goPay(pass) {
         let createOrderUrl = config.baseUrl + config.api.user.useroutput;
         let body = {
-            money: this.state,
+            money: this.state.money,
             pay_pwd: pass,
             user_card_id: this.state.selectedItem
         };
@@ -111,29 +115,47 @@ export default class OutputMoney extends Component {
 
 
     componentDidMount() {
-        let loginUrl = config.baseUrl + config.api.user.userBanklist;
+        setTimeout(() => {
+            let loginUrl = config.baseUrl + config.api.user.userBanklist;
 
-        request.get(loginUrl)
-            .then((data) => {
+            request.get(loginUrl)
+                .then((data) => {
 
-                if (data.code == 1) {
+                    if (data.code == 1) {
 
-                    this.setState({
-                        banklist: data.data,
-                        selectedItem: data.data[0].id
-                    })
-                } else {
-                    isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
-                }
-            })
-            .catch((err) => {
-                console.warn(err)
-                // console.log(JSON.stringify(err));
-            })
+                        this.setState({
+                            banklist: data.data,
+                            selectedItem: data.data[0].id
+                        })
+                    } else {
+                        isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
+                    }
+                })
+                .catch((err) => {
+                    console.warn(err)
+                    // console.log(JSON.stringify(err));
+                })
+        }, 500);
+
     }
 
     changeBankSelected() {
-
+        let { navigator } = this.props;
+        let self = this;
+        if (navigator) {
+            navigator.push({
+                name: "selectedBanklist",
+                component: SelectedBank,
+                params: {
+                    updateSelectedBank: (key) => {
+                        console.log(key);
+                        self.setState({
+                            selectedPosition: key
+                        })
+                    }
+                }
+            })
+        }
     }
 
 
@@ -191,7 +213,7 @@ export default class OutputMoney extends Component {
                                 subtitle={this.state.banklist.length > 0 ? this.state.banklist[this.state.selectedPosition].card_num : ''}
                                 avatar={{ uri: this.state.banklist[this.state.selectedPosition].card.logo }}
                             />
-                            <View style={{ flex: 1, position: 'absolute', left: 0, top: 0, width: width }}>
+                            {/*<View style={{ flex: 1, position: 'absolute', left: 0, top: 0, width: width }}>
                                 <Picker
                                     selectedValue={this.state.selectedItem}
                                     style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0)', color: 'rgba(0,0,0,0)' }}
@@ -202,22 +224,7 @@ export default class OutputMoney extends Component {
                                         }) : null
                                     }
                                 </Picker>
-                                {/*{
-                                    <Picker
-                                        selectedValue={this.state.selectedItem}
-                                        style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0)', color: 'rgba(0,0,0,0)' }}
-                                        onValueChange={(lang, itemPosition) => this.setState({ selectedItem: lang, selectedPosition: itemPosition })}>
-
-                                        {
-                                            this.state.banklist.length > 0 ? this.state.banklist.map((item, key) => {
-                                                <Picker.Item key={key} label={item.card_tip} value={item.id} />
-                                            }) : null
-                                        }
-                                    </Picker>
-
-                                }*/}
-
-                            </View>
+                            </View>*/}
                         </View>
 
                         <View style={styles.inputWrapper}>
@@ -234,17 +241,25 @@ export default class OutputMoney extends Component {
                                 underlineColorAndroid="transparent"
                                 keyboardType='numeric' //弹出软键盘类型
                                 onChangeText={(text) => {
+                                    if (text-0>0) {
+                                        this.setState({
+                                            money: text,
+                                            clicked:true
+                                        })
+                                    }else{
+                                        this.setState({
+                                            money: text,
+                                            clicked:false
+                                        })
+                                    }
 
-                                    this.setState({
-                                        money: text
-                                    })
                                 }}
                             />
 
                         </View>
                         <View style={{ width: width, flexDirection: 'row', justifyContent: 'center' }}>
                             <Button
-                                style={styles.btn}
+                                style={[styles.btn, this.state.clicked ? { backgroundColor: '#2ac945', } : null]}
                                 onPress={this._submit.bind(this)}
                             >
                                 下一步

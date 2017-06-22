@@ -30,14 +30,15 @@ export default class IndexItem extends Component{
 
         return (
             <TouchableHighlight style={styles.container} onPress={this.props.onPress}>
-                <View  >
-                    <View style={[styles.item,styles.itemtop]}>
+                <View style={[styles.item]} >
+                    <View style={[styles.itemtop]}>
                         <Text style={{color:'#21bb58',fontSize:16}}>{row.title}</Text>
-                        <Text style={{color:'#3a3a3a',fontSize:14}}>当前已购买数：{row.num.toString()}</Text>
+                        <Text style={{color:'#999',fontSize:14}}>购买后应返积分：{row.back_point.toString()}</Text>
+                        {/*<Text style={{color:'#3a3a3a',fontSize:14}}>当前已购买数：{row.num.toString()}</Text>*/}
                     </View>
-                    <View style={[styles.item,styles.itembottom]}>
-                        <Text style={{color:'#3a3a3a',fontSize:14,marginTop:-10}}>购买后应返积分：{row.back_point.toString()}</Text>
-                        <Text style={{color:'#999',fontSize:12,marginTop:-11}}>{row.num-0>0?'已参加':'未参加'}</Text>
+                    <View style={[styles.itembottom]}>
+                        
+                        <Text style={{color:'#333',fontSize:12}}>{row.num-0>0?'已参加':'未参加'}</Text>
                     </View>
                 </View>
             </TouchableHighlight>
@@ -50,22 +51,21 @@ const styles=StyleSheet.create({
         height:px2dp(76),
         marginTop:px2dp(12),
         paddingLeft:px2dp(20),
-        paddingTop:px2dp(10),
         paddingRight:px2dp(14),
         backgroundColor:'#fff'
     },
     item:{
-        
-        flexDirection:'row',
+        flex:1,
         justifyContent:'space-between',
         alignItems:'center',
-        
+        flexDirection:'row'
     },
     itembottom:{
-        height:px2dp(44),
+        justifyContent:'center',
         alignItems:'center'
     },
     itemtop:{
-        height:px2dp(22)
+        // padding:10,
+        justifyContent:'center'
     }
 })

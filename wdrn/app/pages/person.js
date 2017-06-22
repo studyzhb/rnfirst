@@ -34,7 +34,7 @@ let photoOptions = {
     cancelButtonTitle: '取消',
     takePhotoButtonTitle: '拍照',
     chooseFromLibraryButtonTitle: '选择相册',
-    quality: 0.75,
+    quality: 0.3,
     allowsEditing: true,
     noData: false,
     storageOptions: {
@@ -67,7 +67,6 @@ export default class Person extends Component {
             sex: this.state.sex,
             nickname: this.state.nickname||userObj.nickname
         };
-
 
         request.post(url, body)
             .then(data => {
