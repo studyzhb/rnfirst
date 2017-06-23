@@ -65,15 +65,15 @@ export default class OrderDetail extends Component {
                 <View style={styles.items} key={key}>
                     <View style={{ flex: 1 }}>
                         <View style={[{ flexDirection: 'row', height: 18, marginBottom: 12, justifyContent: 'space-between' }]}>
-                            <Text style={{ fontSize: 12, width: 158, color: '#3a3a3a' }}>订单号：{item.queque_sn}</Text>
-                            <View style={[{ flexDirection: 'row', height: 18, flex: 1 }]}>
+                            <Text style={{ fontSize: 12, color: '#3a3a3a' }}>订单号：{item.queque_sn}</Text>
+                            <View style={[{ flexDirection: 'row', height: 18}]}>
                                 <Text style={{ fontSize: 12, color: '#3a3a3a' }}>拆分金额：</Text>
                                 <Text style={{ color: "#21bb58", fontSize: 12 }}>￥{item.money}</Text>
                             </View>
                         </View>
                         <View style={[{ flexDirection: 'row', height: 18 }]}>
                             <Text style={{ fontSize: 12, color: '#3a3a3a' }}>拆分时间：{item.created_at}</Text>
-                            <Text style={{ fontSize: 12, width: 158, textAlign: "left", color: '#3a3a3a' }}></Text>
+                            <Text style={{ fontSize: 12, textAlign: "left", color: '#3a3a3a' }}></Text>
                         </View>
                     </View>
                 </View>

@@ -134,12 +134,21 @@ export default class Popularize extends Component {
                         }
                     } else {
 
-                        // cachedResults.items = []
-                        // cachedResults.total = data.data.total
-                        // that.setState({
-                        //     isRefreshing: false,
-                        //     dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
-                        // })
+                        cachedResults = {
+                            nextPage: 1,
+                            items: [],
+                            total: 0
+                        }
+
+                        this.setState({
+                            dataSource: that.state.dataSource.cloneWithRows([]),
+                            isRefreshing: false
+                        })
+                        cachedResults.total = data.data.total
+
+                        if (page > 1) {
+                            this._fetchData(1);
+                        }
                     }
 
                 } else {
@@ -181,7 +190,7 @@ export default class Popularize extends Component {
     }
 
     _onRefresh() {
-       
+
         if (!this._hasMore() || this.state.isRefreshing) {
             return
         }
@@ -225,8 +234,8 @@ export default class Popularize extends Component {
 
     }
     leftPress() {
-        let {navigator}=this.props;
-        if(navigator){
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.pop();
         }
     }
@@ -236,7 +245,7 @@ export default class Popularize extends Component {
                 <View style={styles.container}>
                     <NavBar
                         title='我的推广'
-                        
+
                         leftIcon='ios-arrow-back-outline'
                         leftPress={this.leftPress.bind(this)}
                         titleStyle={{ color: '#666', fontSize: 18 }}

@@ -442,6 +442,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#21bb58',
         padding: 10,
         width: 80,
-        height: 45
+        height: 46
     }
 })

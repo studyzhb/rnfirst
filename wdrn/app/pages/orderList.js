@@ -300,7 +300,7 @@ export default class OrderList extends Component {
                             <View style={[{ flexDirection: 'row', height: 26, marginTop:0, justifyContent: 'space-between' }]}>
                                 <Text style={{ fontSize: 12, width: 158, color: '#3a3a3a' }}>{item.created_at}</Text>
                                 <View style={[{ flexDirection: 'row', height: 18, alignItems: 'center' }]}>
-                                    <Icon name='logo-yen' size={12} />
+                                    {/*<Icon name='logo-yen' size={12} />*/}
                                     <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>{item.order_amount}</Text>
                                 </View>
                             </View>

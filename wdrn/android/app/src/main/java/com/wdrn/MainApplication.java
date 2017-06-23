@@ -31,7 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new AlipayPackage(),
             new ImagePickerPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new OnBackPackage()
       );
     }
   };

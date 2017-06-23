@@ -97,7 +97,7 @@ export default class LbsModal extends Component {
                 title="请输入支付密码"
                 leftIcon="ios-close"
                 titleStyle={{ color: '#666', fontSize: 18 }}
-                style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea",alignSelf:'stretch' }}
+                style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea",alignSelf:'stretch',marginTop:-10 }}
                 leftPress={this.closeModal.bind(this)}
               />
               {/*<View style={{flexDirection:'row',backgroundColor: '#fff', borderBottomColor: "#eaeaea",}}>
@@ -332,5 +332,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: "#fff",
     paddingVertical: 8
+  },
+  innerContainerTransparentStyle:{
+
   }
 })

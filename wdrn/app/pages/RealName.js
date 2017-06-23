@@ -19,6 +19,8 @@ import config from '../util/config';
 import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
 
+import { FormLabel, FormInput } from 'react-native-elements'
+
 import staticNum from '../util/FinalNum'
 
 const isIOS = Platform.OS === 'ios';
@@ -102,7 +104,8 @@ export default class RealName extends Component {
                     rightPress={this.rightPress.bind(this)}
                 />
                 <View style={styles.inputWrapper}>
-                    <Text style={styles.labelinput}>身份证号</Text>
+                    <FormLabel>身份证号</FormLabel>
+                    {/*<Text style={styles.labelinput}>身份证号</Text>*/}
                     <TextInput
                         style={styles.inputField}
                         placeholder="请输入身份证号"
@@ -122,7 +125,8 @@ export default class RealName extends Component {
 
                 </View>
                 <View style={styles.inputWrapper}>
-                    <Text style={styles.labelinput}>真实姓名</Text>
+                    <FormLabel>真实姓名</FormLabel>
+                    {/*<Text style={styles.labelinput}>真实姓名</Text>*/}
                     <TextInput
                         style={styles.inputField}
                         placeholder="请输入真实姓名"

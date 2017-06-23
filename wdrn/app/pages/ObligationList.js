@@ -639,7 +639,7 @@ export default class ObligationList11 extends Component {
                 </View>
                 <Button
                     onPress={this.gotoshopping.bind(this)}
-                    containerStyle={{ padding: 10, height: 45, overflow: 'hidden', backgroundColor: '#21bb58' }}
+                    containerStyle={{ padding: 10, height: 45,alignItems:'center',justifyContent:'center', overflow: 'hidden', backgroundColor: '#21bb58' }}
                     style={styles.nowbuybtn}>
                     立即参加
                 </Button>

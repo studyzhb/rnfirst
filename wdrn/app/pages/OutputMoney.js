@@ -44,6 +44,7 @@ export default class OutputMoney extends Component {
             banklist: [],
             selectedPosition: 0,
             modalVisible: false,
+            showPage: false
         }
         this.interval = null;
     }
@@ -62,7 +63,7 @@ export default class OutputMoney extends Component {
         this.setState({
             modalVisible: false
         })
-        if (pass!==undefined) {
+        if (pass !== undefined) {
             this._goPay.bind(this, pass)();
         }
     }
@@ -85,6 +86,9 @@ export default class OutputMoney extends Component {
             .then(data => {
                 console.log(data);
                 if (data.code == 1) {
+                    isIOS
+                        ? AlertIOS.alert(data.message)
+                        : Alert.alert(data.message)
                     //支付成功
                     this.props.navigator.popToTop();
                 } else {
@@ -120,13 +124,20 @@ export default class OutputMoney extends Component {
 
             request.get(loginUrl)
                 .then((data) => {
-
+                    console.log(data)
                     if (data.code == 1) {
+                        if (data.data.length > 0) {
+                            this.setState({
+                                showPage: true,
+                                banklist: data.data,
+                                selectedItem: data.data[0].id
+                            })
+                        } else {
+                            this.setState({
+                                showPage: true
+                            })
+                        }
 
-                        this.setState({
-                            banklist: data.data,
-                            selectedItem: data.data[0].id
-                        })
                     } else {
                         isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                     }
@@ -147,8 +158,8 @@ export default class OutputMoney extends Component {
                 name: "selectedBanklist",
                 component: SelectedBank,
                 params: {
+                    isrealname:this.props.isrealname,
                     updateSelectedBank: (key) => {
-                        console.log(key);
                         self.setState({
                             selectedPosition: key
                         })
@@ -192,7 +203,7 @@ export default class OutputMoney extends Component {
 
     render() {
 
-        if (this.state.banklist.length > 0) {
+        if (this.state.showPage) {
             return (
                 <View style={styles.container}>
                     <View style={styles.container} >
@@ -209,9 +220,9 @@ export default class OutputMoney extends Component {
                             <ListItem
                                 roundAvatar
                                 onPress={this.changeBankSelected.bind(this)}
-                                title={this.state.banklist.length > 0 ? this.state.banklist[this.state.selectedPosition].card_tip : ''}
-                                subtitle={this.state.banklist.length > 0 ? this.state.banklist[this.state.selectedPosition].card_num : ''}
-                                avatar={{ uri: this.state.banklist[this.state.selectedPosition].card.logo }}
+                                title={this.state.banklist.length > 0 ? this.state.banklist[this.state.selectedPosition].card_tip : '点我添加银行卡'}
+                                subtitle={this.state.banklist.length > 0 ? this.state.banklist[this.state.selectedPosition].card_num : '点我添加银行卡'}
+                                avatar={this.state.banklist.length > 0 ? { uri: this.state.banklist[this.state.selectedPosition].card.logo } : require('../images/jh.png')}
                             />
                             {/*<View style={{ flex: 1, position: 'absolute', left: 0, top: 0, width: width }}>
                                 <Picker
@@ -241,15 +252,15 @@ export default class OutputMoney extends Component {
                                 underlineColorAndroid="transparent"
                                 keyboardType='numeric' //弹出软键盘类型
                                 onChangeText={(text) => {
-                                    if (text-0>0) {
+                                    if (text - 0 > 0) {
                                         this.setState({
                                             money: text,
-                                            clicked:true
+                                            clicked: true
                                         })
-                                    }else{
+                                    } else {
                                         this.setState({
                                             money: text,
-                                            clicked:false
+                                            clicked: false
                                         })
                                     }
 
@@ -263,7 +274,7 @@ export default class OutputMoney extends Component {
                                 onPress={this._submit.bind(this)}
                             >
                                 下一步
-                    </Button>
+                            </Button>
                         </View>
 
                     </View>

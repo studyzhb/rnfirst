@@ -30,6 +30,7 @@ import AllObligationList from './AllobList';
 import SingleInfo from './SingleInfo';
 import Popularize from './Popularize';
 import MyExpense from './myExpenseList';
+import ShareCode from './sharecode';
 import Notice from './notice';
 
 import request from '../util/request';
@@ -53,7 +54,7 @@ export default class Home extends Component {
         super(props);
         this.tabArr = [
             { img: require('../images/index01.png'), text: '我的推广', onPress: this.goPage.bind(this, 'popularize') },
-            { img: require('../images/index02.png'), text: '我的二维码', onPress: this.goPage.bind(this, 'popularize') },
+            { img: require('../images/index02.png'), text: '我的二维码', onPress: this.goPage.bind(this, 'share') },
             { img: require('../images/index03.png'), text: '历史返利', onPress: this.goPage.bind(this, 'oblist') },
             { img: require('../images/index04.png'), text: '债权资料', onPress: this.goPage.bind(this, 'SingleInfo') }
         ]
@@ -257,6 +258,7 @@ export default class Home extends Component {
         let pages = {
             "oblist": AllObligationList,
             "popularize": Popularize,
+            'share':ShareCode,
             'myExpense': MyExpense,
             'SingleInfo': SingleInfo
         }

@@ -40,7 +40,8 @@ export default class SelectedBank extends Component {
         this.state = {
             isRefreshing: false,
             isLogin: false,
-            banklist: []
+            banklist: [],
+            isrealname:''
         }
 
         this.config = [

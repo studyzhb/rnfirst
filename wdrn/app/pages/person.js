@@ -21,7 +21,7 @@ import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import { CheckBox } from 'react-native-elements';
+import { CheckBox, Avatar } from 'react-native-elements';
 
 import ImagePicker from 'react-native-image-picker';
 
@@ -43,7 +43,7 @@ let photoOptions = {
     }
 }
 
-let userObj=null;
+let userObj = null;
 
 export default class Person extends Component {
     constructor(props) {
@@ -60,12 +60,10 @@ export default class Person extends Component {
         let url = config.baseUrl + config.api.user.updateUserInfo;
         let { navigator } = this.props;
 
-
-
         let body = {
-            age: this.state.age||userObj.age,
+            age: this.state.age || userObj.age,
             sex: this.state.sex,
-            nickname: this.state.nickname||userObj.nickname
+            nickname: this.state.nickname || userObj.nickname
         };
 
         request.post(url, body)
@@ -81,8 +79,8 @@ export default class Person extends Component {
     }
 
     leftPress() {
-        let {navigator}=this.props;
-        if(navigator){
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.pop();
         }
     }
@@ -94,7 +92,7 @@ export default class Person extends Component {
     componentDidMount() {
 
         let { user } = this.props;
-        userObj=user;
+        userObj = user;
         this.setState({
             age: user.age,
             avatar: user.avatar,
@@ -114,7 +112,7 @@ export default class Person extends Component {
         let formData = new FormData();
         if (!!ImagePicker) {
             ImagePicker.showImagePicker ? ImagePicker.showImagePicker(photoOptions, (response) => {
-                
+
 
                 /**
                  * response {
@@ -153,22 +151,22 @@ export default class Person extends Component {
                     //     body:formData
                     // }
                     let url = config.baseUrl + config.api.user.uploadImage;
-                    
+
                     request.post(url, {
-                        avatar:file,
-                        type:'avatar'
-                    },)
+                        avatar: file,
+                        type: 'avatar'
+                    }, )
                         .then(data => {
-                            
+
                             if (data.code == 1) {
                                 this.setState({
                                     avatar: data.data.url
                                 })
-                            }else{
-                                isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
+                            } else {
+                                isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                             }
                         })
-                        .catch(err=>{
+                        .catch(err => {
                             console.log(err)
                         })
                 }
@@ -194,9 +192,21 @@ export default class Person extends Component {
                     leftPress={this.leftPress.bind(this)}
                     rightPress={this.rightPress.bind(this)}
                 />
-                <TouchableOpacity style={styles.logo} onPress={this.imageupload.bind(this)}>
+                <View style={styles.logo}> 
+                    <Avatar
+                        large
+                        rounded
+                        onPress={this.imageupload.bind(this)}
+                        
+                        source={this.state.avatar ? { uri: this.state.avatar } : require('../images/avatar.jpg')}
+                        overlayContainerStyle={{ width: px2dp(124), height: px2dp(124),justifyContent:'center',alignItems:'center',backgroundColor:'#fff'}}
+                        containerStyle={{ width: px2dp(124), height: px2dp(124),justifyContent:'center',alignItems:'center',backgroundColor:'#fff'}}
+                    />
+                </View>
+
+                {/*<TouchableOpacity style={styles.logo} onPress={this.imageupload.bind(this)}>
                     <Image source={this.state.avatar ? { uri: this.state.avatar } : require('../images/avatar.jpg')} style={{ width: px2dp(124), height: px2dp(124), overflow: 'hidden', borderRadius: 62, borderColor: '#000', borderWidth: 1 }} />
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
                 <View style={styles.inputWrapper}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Icon name='ios-contact-outline' size={18} />
@@ -214,15 +224,15 @@ export default class Person extends Component {
                         keyboardType='number-pad' //弹出软键盘类型
                         onChangeText={(text) => {
                             this.setState({
-                                    nickname: text
-                                })
+                                nickname: text
+                            })
                         }}
                     />
 
                 </View>
                 <View style={styles.inputWrapper}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Icon name='ios-contact-outline' size={18} />
+                        <Icon name='ios-female-outline' size={18} />
                         <Text style={styles.labelinput}>性别</Text>
                     </View>
 
@@ -255,7 +265,7 @@ export default class Person extends Component {
                     </View>
                     <TextInput
                         style={styles.inputField}
-                        value={this.state.age+''}
+                        value={this.state.age + ''}
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
@@ -265,15 +275,16 @@ export default class Person extends Component {
                         keyboardType='number-pad' //弹出软键盘类型
                         onChangeText={(text) => {
                             this.setState({
-                                    age: text
-                                })
+                                age: text
+                            })
                         }}
                     />
 
                 </View>
                 <View style={{ width: width, flexDirection: 'row', justifyContent: 'center' }}>
                     <Button
-                        style={styles.btn}
+                        containerStyle={styles.btn}
+                        style={{color:'#fff'}}
                         onPress={this._submit.bind(this)}
                     >
                         点击保存
@@ -304,12 +315,12 @@ const styles = StyleSheet.create({
         // backgroundColor:'#eaeaea',
         height: px2dp(44),
         width: px2dp(304),
-        borderBottomWidth: 1,
-        borderBottomColor: "#eaeaea",
+        // borderBottomWidth: 1,
+        // borderBottomColor: "#eaeaea",
         flexDirection: 'row',
         alignItems: 'center',
         alignSelf: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'flex-start'
     },
     labelinput: {
         fontSize: 12,
@@ -321,13 +332,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     inputField: {
-        flex: 4,
-        // padding:0,
+        flex: 1,
+        paddingLeft:10,
         // fontSize:14,
         // flex:6,
         // height:px2dp(50),
         // color:'#999',
-        textAlign: 'right',
+        textAlign: 'left',
         alignItems: 'center',
         // backgroundColor:'#fff'
     },
@@ -351,7 +362,6 @@ const styles = StyleSheet.create({
         // borderColor:'#ee735c',
         // borderWidth:1,
         borderRadius: 4,
-        color: '#fff'
     }
 })
 

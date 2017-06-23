@@ -10,6 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import TabNavigator from 'react-native-tab-navigator';
 import px2dp from '../util/px2dp';
+import Avatar from '../util/images'
 
 let {width,height}=Dimensions.get('window');
 
@@ -26,10 +27,10 @@ export default class TabView extends Component{
             hideTabBar:false
         }
         this.tabNames=[
-            ['消费返利','logo-yen','HomePage',<HomePage {...this.props}/>],
+            ['消费返利','nav1_outline','HomePage',<HomePage {...this.props}/>],
             // ['发现','ios-compass-outline','Discover',<Discover {...this.props}/>],
-            ['钱包','md-browsers','Order',<Order {...this.props} />],
-            ['个人中心','ios-contact-outline','My',<My {...this.props} />]
+            ['钱包','nav2_outline','Order',<Order {...this.props} />],
+            ['个人中心','nav3_outline','My',<My {...this.props} />]
         ]
         TabView.hideTabBar=TabView.hideTabBar.bind(this);
         TabView.showTabBar=TabView.showTabBar.bind(this);
@@ -63,8 +64,8 @@ export default class TabView extends Component{
                             title={item[0]}
                             selected={this.state.currentTab===item[2]}
                             selectedTitleStyle={{color:'#3496f0'}}
-                            renderIcon={()=><Icon name={item[1]} size={px2dp(18)} color="#666" />}
-                            renderSelectedIcon={()=><Icon name={item[1].replace(/\-outline$/,'')} size={px2dp(18)} color="#3496f0" />}
+                            renderIcon={()=><Image source={Avatar[item[1]]} style={{width:px2dp(28),height:px2dp(28)}} />}
+                            renderSelectedIcon={()=><Image source={Avatar[item[1].replace(/\_outline$/,'')]} style={{width:px2dp(28),height:px2dp(28)}} />}
                             onPress={()=>this.setState({currentTab:item[2]})}
                         >
                             {item[3]}
@@ -89,7 +90,7 @@ const styles=StyleSheet.create({
         transform:[{translateX:width}]
     },
     tabStyle:{
-        padding:px2dp(4)
+        // padding:px2dp(4)
     }
 
 })

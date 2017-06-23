@@ -89,11 +89,16 @@ export default class Order extends Component {
     }
 
     outputBalance() {
+       
         let { navigator } = this.props;
         if (navigator) {
             navigator.push({
                 name: "outputmoney",
-                component: OutputMoney
+                component: OutputMoney,
+                params: {
+                    is_pay: this.state.ispay,
+                    isrealname: this.state.isrealname
+                }
             })
         }
     }
@@ -307,7 +312,7 @@ export default class Order extends Component {
                     <View style={[styles.numbers, { height: 68 }]}>
                         <TouchableOpacity onPress={this.outputBalance.bind(this)} style={[styles.numItem]}>
                             <View style={[styles.numItem, { flexDirection: 'row' }]}>
-                                <View style={{ marginLeft: 36 }}>
+                                <View >
                                     <Image source={require('../images/m1.png')} resizeMode='contain' style={{ width: 34, height: 34 }} />
                                     {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
                                 </View>
@@ -319,7 +324,7 @@ export default class Order extends Component {
                         <TouchableWithoutFeedback style={[styles.numItem]}>
                             <View style={[styles.numItem, { flexDirection: 'row', borderLeftWidth: 1, borderLeftColor: "#f5f5f5" }]}>
 
-                                <View style={{ marginLeft: 36 }}>
+                                <View >
                                     <Image source={require('../images/m2.png')} resizeMode='contain' style={{ width: 34, height: 34 }} />
                                     {/*<Icon name="ios-list-box-outline" size={px2dp(40)} color="#558dce" />*/}
                                 </View>

@@ -34,7 +34,7 @@ export default class AddBank extends Component {
             banklist: []
         }
     }
-
+    
     componentDidMount() {
         let url = config.baseUrl + config.api.user.showBanklist;
         request.get(url)
@@ -176,7 +176,8 @@ export default class AddBank extends Component {
                         onChangeText={(text) => this.setState({ card_num: text })} />
                 </View>
                 <View style={styles.inputWrapper}>
-                    <Text style={styles.labelinput}>银行</Text>
+                     <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>银行</FormLabel>
+                    {/*<Text style={styles.labelinput}>银行</Text>*/}
                     {
                         isIOS
                             ? <PickerIOS
@@ -283,7 +284,9 @@ const styles = StyleSheet.create({
         height: px2dp(50),
         color: '#999',
         alignItems: 'center',
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        borderBottomColor:'#3a3a3a',
+        borderBottomWidth:1
     },
     subbtn: {
         width: px2dp(284),

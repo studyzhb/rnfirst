@@ -145,7 +145,7 @@ export default class Banklist extends Component {
 
         request.get(loginUrl)
             .then((data) => {
-                console.log(data)
+                
                 if (data.code == 1) {
                     this.setState({
                         banklist: data.data,
@@ -201,7 +201,7 @@ export default class Banklist extends Component {
         let url=config.baseUrl+config.api.user.deleteBank;
         request.post(url,{id:id})
             .then(data=>{
-                console.log(data)
+                
                 if(data.code==1){
                     this._onRefresh();
                 }else{

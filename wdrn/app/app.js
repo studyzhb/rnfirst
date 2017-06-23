@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Navigator, View, StatusBar, Platform, AsyncStorage, BackAndroid } from 'react-native';
+import { Navigator, View, StatusBar, Platform, AsyncStorage, BackAndroid,NativeModules } from 'react-native';
 import Wrapper from './component/Wrapper';
 
 import Storage from './util/storage';
@@ -42,38 +42,70 @@ export default class Navigation extends Component {
 	constructor(props) {
 		super(props)
 		this.onBackAndroid = this.onBackAndroid.bind(this)
+		this.onSysBackAndroid = this.onSysBackAndroid.bind(this)
 	}
 
 
 	componentWillMount() {
 		console.log('componentWillMount')
 		if (Platform.OS === 'android') {
-			BackAndroid.addEventListener('hardwareBackPress', this.onBackAndroid);
+			// NativeModules.Back.show()
+			// 	.then(()=>{
+			// 		console.log('fanhui app')
+			// 		this.onBackAndroid()
+			// 	})
+			// 	.catch(err=>{
+			// 		console.log(err)
+			// 	})
+			BackAndroid.addEventListener('hardwareBackPress', this.onSysBackAndroid);
 		}
 	}
 	componentWillUnmount() {
 		console.log('componentWillUnmount')
 		if (Platform.OS === 'android') {
-			BackAndroid.removeEventListener('hardwareBackPress', this.onBackAndroid);
+			BackAndroid.removeEventListener('hardwareBackPress', this.onSysBackAndroid);
 		}
 	}
 
-	onBackAndroid() {
-		console.log(this)
-		console.log('huitui')
+	onSysBackAndroid(){
 		const nav = this.refs.navigator;
 		const routers = nav.getCurrentRoutes();
+
 		if (routers.length > 1) {
-			const top = routers[routers.length - 1];
-			if (top.ignoreBack || top.component.ignoreBack) {
-				// 路由或组件上决定这个界面忽略back键
-				return true;
-			}
-			const handleBack = top.handleBack || top.component.handleBack;
-			if (handleBack) {
-				// 路由或组件上决定这个界面自行处理back键
-				return handleBack();
-			}
+			// const top = routers[routers.length - 1];
+			// if (top.ignoreBack || top.component.ignoreBack) {
+			// 	// 路由或组件上决定这个界面忽略back键
+			// 	return true;
+			// }
+			// const handleBack = top.handleBack || top.component.handleBack;
+			// if (handleBack) {
+			// 	// 路由或组件上决定这个界面自行处理back键
+			// 	return handleBack();
+			// }
+			// 默认行为： 退出当前界面。
+			nav.pop();
+			return true;
+		}
+		return false;
+
+	}
+
+	onBackAndroid() {
+
+		const nav = this.refs.navigator;
+		const routers = nav.getCurrentRoutes();
+
+		if (routers.length > 1) {
+			// const top = routers[routers.length - 1];
+			// if (top.ignoreBack || top.component.ignoreBack) {
+			// 	// 路由或组件上决定这个界面忽略back键
+			// 	return true;
+			// }
+			// const handleBack = top.handleBack || top.component.handleBack;
+			// if (handleBack) {
+			// 	// 路由或组件上决定这个界面自行处理back键
+			// 	return handleBack();
+			// }
 			// 默认行为： 退出当前界面。
 			nav.pop();
 			return true;

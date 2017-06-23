@@ -53,7 +53,7 @@ export default class Pay extends Component {
     }
 
     openLbs() {
-      
+
         this.setState({ modalVisible: true })
     }
 
@@ -61,52 +61,55 @@ export default class Pay extends Component {
         let createOrderUrl = config.baseUrl + config.api.rebate.createOrder;
         let body = {
             goods_arr: JSON.stringify(this.props.totalArr),
-            is_back: this.props.isback-0-1,
+            is_back: this.props.isback - 0 - 1,
             creditor_id: this.props.queueid
         };
-        console.log(body)
+       
         request.post(createOrderUrl, body)
             .then(data => {
-                console.log(data)
+                
                 if (data.code == 1) {
                     orderData = data.data;
-                    switch(this.state.checked){
+                    switch (this.state.checked) {
                         case FINALNUM.BALANCETYPE:
                             // this._goPay(data.data);
                             this.openLbs();
-                        break;
+                            break;
                         case FINALNUM.ALIPAYTYPE:
-                         alipay({
-                            type: "alipay",
-                            ordernum: data.data.order_sn,
-                            money: this.props.total,
-                            remark: '支付宝支付'
-                        })()
-                        break;
+                            alipay({
+                                type: "alipay",
+                                ordernum: data.data.order_sn,
+                                money: this.props.total,
+                                remark: '支付宝支付'
+                            })()
+                            break;
                     }
-                             
+
                 } else {
                     isIOS
                         ? AlertIOS.alert(data.message)
                         : Alert.alert(data.message)
                 }
-                
+
             })
     }
 
 
     _goPay(data, pass) {
-        
+
         let createOrderUrl = config.baseUrl + config.api.pay.balance;
         let body = {
             order_sn: data.order_sn,
             pay_pwd: pass
         };
-       
+
         request.post(createOrderUrl, body)
             .then(data => {
-               
+
                 if (data.code == 1) {
+                    isIOS
+                        ? AlertIOS.alert(data.message)
+                        : Alert.alert(data.message)
                     //支付成功
                     this.props.navigator.popToTop();
                 } else {
@@ -114,69 +117,70 @@ export default class Pay extends Component {
                         ? AlertIOS.alert(data.message)
                         : Alert.alert(data.message)
                 }
-                
+
             })
     }
 
     closeModal(pass) {
-        
-        
+
+
         this.setState({
             modalVisible: false,
         })
-        if(pass!==undefined){
+        if (pass !== undefined) {
             this._goPay.bind(this, orderData, pass)();
         }
-        
+
     }
 
-    changeCheckedType(type){
+    changeCheckedType(type) {
         this.setState(
             {
-                checked:type
+                checked: type
             }
         )
     }
 
     renderGoodsList() {
         return (
-            <View style={{backgroundColor:'#f3f3f3'}}>
-                <TouchableWithoutFeedback style={{marginBottom:10}} onPress={this.changeCheckedType.bind(this,FINALNUM.BALANCETYPE)}>
+            <View style={{ backgroundColor: '#f3f3f3' }}>
+                <TouchableWithoutFeedback style={{ marginBottom: 10 }} onPress={this.changeCheckedType.bind(this, FINALNUM.BALANCETYPE)}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#fff' }}>
-                        <Text style={{marginLeft:10,marginTop:10}}>余额支付</Text>
+                        <Text style={{ marginLeft: 10, marginTop: 10 }}>余额支付</Text>
                         <CheckBox
                             center
-                            onPress={this.changeCheckedType.bind(this,FINALNUM.BALANCETYPE)}
-                            containerStyle={{backgroundColor: '#fff', borderWidth: 0 }}
+                            onPress={this.changeCheckedType.bind(this, FINALNUM.BALANCETYPE)}
+                            containerStyle={{ backgroundColor: '#fff', borderWidth: 0 }}
                             checkedIcon='dot-circle-o'
                             uncheckedIcon='circle-o'
                             checkedColor='red'
-                            checked={this.state.checked==FINALNUM.BALANCETYPE}
+                            checked={this.state.checked == FINALNUM.BALANCETYPE}
                         />
                     </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback style={{marginBottom:10}} onPress={this.changeCheckedType.bind(this,FINALNUM.ALIPAYTYPE)}>
+                <TouchableWithoutFeedback style={{ marginBottom: 10 }} onPress={this.changeCheckedType.bind(this, FINALNUM.ALIPAYTYPE)}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#fff' }}>
-                        <Text style={{marginLeft:10,marginTop:10}}>支付宝支付</Text>
+                        <Text style={{ marginLeft: 10, marginTop: 10 }}>支付宝支付</Text>
                         <CheckBox
                             center
-                            onPress={this.changeCheckedType.bind(this,FINALNUM.ALIPAYTYPE)}
-                            containerStyle={{backgroundColor: '#fff', borderWidth: 0 }}
+                            onPress={this.changeCheckedType.bind(this, FINALNUM.ALIPAYTYPE)}
+                            containerStyle={{ backgroundColor: '#fff', borderWidth: 0 }}
                             checkedIcon='dot-circle-o'
                             uncheckedIcon='circle-o'
                             checkedColor='red'
-                            checked={this.state.checked==FINALNUM.ALIPAYTYPE}
+                            checked={this.state.checked == FINALNUM.ALIPAYTYPE}
                         />
                     </View>
                 </TouchableWithoutFeedback>
-                <View style={styles.items}>
+                <View style={[{ flexDirection: 'row', height: 40,alignItems:'center',paddingLeft:20 }]}>
+                    <Text>自提点：</Text>
+                    <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>e+便利凤台路店</Text>
+                </View>
+                <View >
                     {/*<Image source={require('../images/goods.png')} style={{width:100,height:100}} />*/}
                     <View style={{ marginLeft: 20, justifyContent: 'space-between' }}>
                         {/*<Text style={{fontSize:14,width:158,lineHeight:20,color:'#666'}}>备注：</Text>*/}
-                        <View style={[{ flexDirection: 'row', marginTop: -10, height: 18 }]}>
-                            <Text>自提点：</Text>
-                            <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>e+便利凤台路店</Text>
-                        </View>
+
                     </View>
                 </View>
             </View>
@@ -184,8 +188,8 @@ export default class Pay extends Component {
     }
 
     leftPress() {
-        let {navigator}=this.props;
-        if(navigator){
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.pop()
         }
     }
@@ -280,6 +284,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#21bb58',
         padding: 10,
         width: 80,
-        height: 45
+        height: 46
     }
 })
