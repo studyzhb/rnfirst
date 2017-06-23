@@ -64,10 +64,10 @@ export default class Pay extends Component {
             is_back: this.props.isback - 0 - 1,
             creditor_id: this.props.queueid
         };
-       
+
         request.post(createOrderUrl, body)
             .then(data => {
-                
+
                 if (data.code == 1) {
                     orderData = data.data;
                     switch (this.state.checked) {
@@ -85,7 +85,26 @@ export default class Pay extends Component {
                             break;
                     }
 
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS
                         ? AlertIOS.alert(data.message)
                         : Alert.alert(data.message)
@@ -112,7 +131,26 @@ export default class Pay extends Component {
                         : Alert.alert(data.message)
                     //支付成功
                     this.props.navigator.popToTop();
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS
                         ? AlertIOS.alert(data.message)
                         : Alert.alert(data.message)
@@ -172,7 +210,7 @@ export default class Pay extends Component {
                         />
                     </View>
                 </TouchableWithoutFeedback>
-                <View style={[{ flexDirection: 'row', height: 40,alignItems:'center',paddingLeft:20 }]}>
+                <View style={[{ flexDirection: 'row', height: 40, alignItems: 'center', paddingLeft: 20 }]}>
                     <Text>自提点：</Text>
                     <Text style={{ color: "#999", fontSize: 12, textAlign: "center", marginLeft: 9, fontWeight: "bold" }}>e+便利凤台路店</Text>
                 </View>

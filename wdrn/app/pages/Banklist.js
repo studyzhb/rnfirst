@@ -151,7 +151,26 @@ export default class Banklist extends Component {
                         banklist: data.data,
                         isRefreshing: false
                     })
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                        let { navigator } = this.props;
+                        
+                        storage.remove({
+                            key: 'loginUser'
+                        });
+                        storage.remove({
+                            key: 'user'
+                        });
+                        storage.remove({
+                            key: 'token'
+                        });
+
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+
+                    }
+                 else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -204,7 +223,26 @@ export default class Banklist extends Component {
                 
                 if(data.code==1){
                     this._onRefresh();
-                }else{
+                }
+                else if (data.code == 2 || data.code == 3) {
+                        let { navigator } = this.props;
+                        
+                        storage.remove({
+                            key: 'loginUser'
+                        });
+                        storage.remove({
+                            key: 'user'
+                        });
+                        storage.remove({
+                            key: 'token'
+                        });
+
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+
+                    }
+                else{
                     isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
                 }
             })

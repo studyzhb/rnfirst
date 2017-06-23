@@ -97,6 +97,24 @@ export default class OrderList extends Component {
                         orderArr: data.data.list
                     });
                 }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
 
             })
     }
@@ -191,7 +209,26 @@ export default class OrderList extends Component {
                                 dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
                             })
                         }
-                    } else {
+                    }
+                    else if (data.code == 2 || data.code == 3) {
+                        let { navigator } = this.props;
+
+                        storage.remove({
+                            key: 'loginUser'
+                        });
+                        storage.remove({
+                            key: 'user'
+                        });
+                        storage.remove({
+                            key: 'token'
+                        });
+
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+
+                    }
+                    else {
                         cachedResults = {
                             nextPage: 1,
                             items: [],
@@ -289,15 +326,15 @@ export default class OrderList extends Component {
         }
         return (
             <TouchableWithoutFeedback key={item.id} >
-                <View style={{borderBottomColor:'#f3f3f3',borderBottomWidth:10 }}>
+                <View style={{ borderBottomColor: '#f3f3f3', borderBottomWidth: 10 }}>
                     <View style={styles.items}>
                         <Image source={{ uri: 'item.img' }} style={{ width: 50, height: 50 }} />
                         <View style={{ marginLeft: 20, justifyContent: 'space-between', flex: 1 }}>
                             <View style={[{ flexDirection: 'row', height: 18, justifyContent: 'space-between' }]}>
-                                <Text style={{ fontSize: 12,  color: '#3a3a3a' }}>订单号：{item.order_sn}</Text>
-                                <Text style={{ fontSize: 12,  marginLeft: 9, textAlign: "center", color: '#3a3a3a' }}>{info}</Text>
+                                <Text style={{ fontSize: 12, color: '#3a3a3a' }}>订单号：{item.order_sn}</Text>
+                                <Text style={{ fontSize: 12, marginLeft: 9, textAlign: "center", color: '#3a3a3a' }}>{info}</Text>
                             </View>
-                            <View style={[{ flexDirection: 'row', height: 26, marginTop:0, justifyContent: 'space-between' }]}>
+                            <View style={[{ flexDirection: 'row', height: 26, marginTop: 0, justifyContent: 'space-between' }]}>
                                 <Text style={{ fontSize: 12, width: 158, color: '#3a3a3a' }}>{item.created_at}</Text>
                                 <View style={[{ flexDirection: 'row', height: 18, alignItems: 'center' }]}>
                                     {/*<Icon name='logo-yen' size={12} />*/}
@@ -307,7 +344,7 @@ export default class OrderList extends Component {
                         </View>
                     </View>
                     {
-                        item.is_split&&item.queque_num-0>0
+                        item.is_split && item.queque_num - 0 > 0
                             ? <View style={[{ flexDirection: 'row', height: 40, justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center', backgroundColor: '#fff' }]}>
                                 <Text style={{ fontSize: 12, color: '#999' }}>该订单拆分队列订单（个）：{item.queque_num}</Text>
                                 <Button
@@ -328,8 +365,8 @@ export default class OrderList extends Component {
     }
 
     leftPress() {
-        let {navigator}=this.props;
-        if(navigator){
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.pop()
         }
     }
@@ -372,7 +409,7 @@ export default class OrderList extends Component {
                         {/*<Icon name='ios-information-circle-outline' size={16} color='#0058be' />
                         <Text style={{ fontSize: 12, color: '#0058be', marginLeft: 6 }}>此处仅展示不可回购订单，查看返利订单消费记录请返回上一页</Text>*/}
                     </View>
-                    <View style={{flex: 1,backgroundColor: '#f00'}}>
+                    <View style={{ flex: 1, backgroundColor: '#f00' }}>
                         <ListView
                             style={{ flex: 1, paddingBottom: 100, backgroundColor: '#f3f3f3' }}
                             dataSource={this.state.dataSource}

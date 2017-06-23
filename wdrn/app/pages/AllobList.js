@@ -110,8 +110,6 @@ export default class AllobList extends Component {
 
         await request.get(getIndexUrl, obj)
             .then((data) => {
-
-                console.log(data)
                 if (data.code == 1 && data.data) {
 
                     let list = data.data.data || [];
@@ -148,17 +146,46 @@ export default class AllobList extends Component {
                                 dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
                             })
                         }
-                    } else {
-
-                        // cachedResults.items = []
-                        // cachedResults.total = data.data.total
-                        // that.setState({
-                        //     isRefreshing: false,
-                        //     dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
-                        // })
                     }
 
-                } else {
+                    else {
+                        cachedResults = {
+                            nextPage: 1,
+                            items: [],
+                            total: 0
+                        }
+
+                        this.setState({
+                            dataSource: that.state.dataSource.cloneWithRows([]),
+                            isRefreshing: false
+                        })
+                        cachedResults.total = data.data.total
+
+                        if (page > 1) {
+                            this._fetchData(1);
+                        }
+                    }
+
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -338,8 +365,8 @@ export default class AllobList extends Component {
         )
     }
     leftPress() {
-        let {navigator}=this.props;
-        if(navigator){
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.pop();
         }
     }

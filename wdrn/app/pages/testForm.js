@@ -61,7 +61,26 @@ export default class testForm extends Component {
 
                 if (data.code == 1) {
                     this.props.enterLogin(data.data);
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -105,30 +124,30 @@ export default class testForm extends Component {
                     <Image source={require('../images/avatar.jpg')} style={{ width: px2dp(80), height: px2dp(80) }} />
                 </View>
                 <View style={styles.inputWrapper}>
-                    <FormLabel containerStyle={{marginTop:-10}} labelStyle={{fontSize:14}}>账号</FormLabel>
+                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>账号</FormLabel>
                     <FormInput
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         placeholder="请输入手机号"
                         //关闭拼写自动修正
                         autoCorrect={false}
-                        containerStyle={{marginLeft:0}}
-                        inputStyle={{width:width-80,paddingLeft:10}}
+                        containerStyle={{ marginLeft: 0 }}
+                        inputStyle={{ width: width - 80, paddingLeft: 10 }}
                         //去除android下的底部边框问题
                         //underlineColorAndroid="transparent"
                         keyboardType='numeric' //弹出软键盘类型
                         onChangeText={(text) => this.setState({ phoneNumber: text })} />
                 </View>
                 <View style={styles.inputWrapper}>
-                    <FormLabel containerStyle={{marginTop:-10}} labelStyle={{fontSize:14}}>密码</FormLabel>
+                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>密码</FormLabel>
                     <FormInput
                         placeholder="请输入密码"
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
                         autoCorrect={false}
-                        containerStyle={{marginLeft:0}}
-                        inputStyle={{width:width-80,paddingLeft:10}}
+                        containerStyle={{ marginLeft: 0 }}
+                        inputStyle={{ width: width - 80, paddingLeft: 10 }}
                         //去除android下的底部边框问题
                         //underlineColorAndroid="transparent"
                         keyboardType='number-pad' //弹出软键盘类型
@@ -170,12 +189,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     inputWrapper: {
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         height: px2dp(50),
         flexDirection: 'row',
         alignItems: 'center',
-        paddingRight:20,
-        overflow:'hidden'
+        paddingRight: 20,
+        overflow: 'hidden'
     },
     labelinput: {
         fontSize: 16,

@@ -205,7 +205,26 @@ export default class ObligationList11 extends Component {
                                 dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
                             })
                         }
-                    } else {
+                    }
+                    else if (data.code == 2 || data.code == 3) {
+                        let { navigator } = this.props;
+
+                        storage.remove({
+                            key: 'loginUser'
+                        });
+                        storage.remove({
+                            key: 'user'
+                        });
+                        storage.remove({
+                            key: 'token'
+                        });
+
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+
+                    }
+                    else {
                         cachedResults = {
                             nextPage: 1,
                             items: [],
@@ -255,7 +274,26 @@ export default class ObligationList11 extends Component {
                     self.setState({
                         isRefreshing: false
                     })
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -273,7 +311,26 @@ export default class ObligationList11 extends Component {
 
                 if (data.code == 1) {
                     this._fetchData(1)
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -481,7 +538,7 @@ export default class ObligationList11 extends Component {
                             <Text style={[styles.normalText, { textAlign: 'center', color: '#ccc' }]}>待返积分</Text>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: width }}>
-                            <Text style={[styles.normalText, { textAlign: 'center' }]}>已返积分：<Text style={{ color: '#333', fontSize: 12 }}>{((this.state.queueInfo.refund-0) + (this.state.queueInfo.refund_pending-0) + this.state.queueInfo.refund_ing-0).toString()}</Text></Text>
+                            <Text style={[styles.normalText, { textAlign: 'center' }]}>已返积分：<Text style={{ color: '#333', fontSize: 12 }}>{((this.state.queueInfo.refund - 0) + (this.state.queueInfo.refund_pending - 0) + this.state.queueInfo.refund_ing - 0).toString()}</Text></Text>
                         </View>
                     </View>
                 </View>
@@ -566,7 +623,7 @@ export default class ObligationList11 extends Component {
 
                     </View>*/}
 
-                    <View style={{ flexDirection: 'row', height: 36, alignItems: 'center', justifyContent: 'space-between',backgroundColor:'#fff',marginTop:10,marginBottom:5 }}>
+                    <View style={{ flexDirection: 'row', height: 36, alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#fff', marginTop: 10, marginBottom: 5 }}>
                         <View style={{ flexDirection: 'row', height: 36, alignItems: 'center' }}>
                             <Image source={require('../images/title_2.png')} resizeMode='contain' style={{ width: 20, height: 20, marginLeft: 10, marginRight: 10 }} />
                             <Text style={{ fontSize: 14, color: '#3a3a3a' }}>返利记录</Text>
@@ -639,7 +696,7 @@ export default class ObligationList11 extends Component {
                 </View>
                 <Button
                     onPress={this.gotoshopping.bind(this)}
-                    containerStyle={{ padding: 10, height: 45,alignItems:'center',justifyContent:'center', overflow: 'hidden', backgroundColor: '#21bb58' }}
+                    containerStyle={{ padding: 10, height: 45, alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#21bb58' }}
                     style={styles.nowbuybtn}>
                     立即参加
                 </Button>

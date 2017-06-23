@@ -32,25 +32,11 @@ request.get = async (url, params) => {
             token: token || ''
         }
     }
+    
     console.log(url)
+ 
     return fetch(url, options)
         .then((response) => response.json())
-        .then(data => {
-            if (data.code == 3) {
-                storage.remove({
-                    key: 'loginUser'
-                });
-                storage.remove({
-                    key: 'user'
-                });
-                storage.remove({
-                    key: 'token'
-                });
-                BackAndroid.exitApp(0);
-                return;
-            }
-            return data
-        })
         .catch(err => {
             console.warn(err)
         })
@@ -96,27 +82,10 @@ request.post = async (url, body, option) => {
         _.assign(options, { body: option.body })
     }
 
-    console.log(options)
-    console.log(url)
+
     return fetch(url, options)
         .then((response) => {
             return response.json()
-        })
-        .then(data => {
-            if (data.code == 3) {
-                storage.remove({
-                    key: 'loginUser'
-                });
-                storage.remove({
-                    key: 'user'
-                });
-                storage.remove({
-                    key: 'token'
-                });
-                BackAndroid.exitApp(0);
-                return;
-            }
-            return data
         })
         .catch(err => {
             console.warn(err)

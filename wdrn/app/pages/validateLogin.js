@@ -56,7 +56,7 @@ export default class LoginIndex extends Component{
         
         request.post(loginUrl,body)
                 .then((data)=>{
-                  
+                    console.log(data)
                     if(data.code==1){
                         this.props.enterLogin(data.data);
                     }else{

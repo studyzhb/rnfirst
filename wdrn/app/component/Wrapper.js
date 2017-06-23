@@ -13,11 +13,15 @@ export default class Wrapper extends Component {
         this.state = {
             isLogin: FinalNum.LOGINDEFAULT
         }
-       
+
     }
 
     componentWillMount() {
-       
+        // storage.save({
+        //     key: 'navigator',
+        //     data: this.props.navigator
+        // })
+
         storage.load({
             key: 'token'
         })
@@ -55,7 +59,42 @@ export default class Wrapper extends Component {
     }
 
     shouldComponentUpdate() {
-        console.log('shouldComponentUpdate')
+
+        if (this.state.isLogin==FinalNum.LOGINFINISHED) {
+            let status=this.state.isLogin;
+            storage.load({
+                key: 'token'
+            })
+                .then(data => {
+                    console.log(data)
+                    if (data) {
+                       return false;
+                    } else {
+                        this.setState(
+                            {
+                                isLogin: FinalNum.LOGINNOFINISHED
+                            }
+                        )
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                    switch (err.name) {
+                        case 'NotFoundError':
+                            // TODO;
+                            this.setState({
+                                isLogin: FinalNum.LOGINNOFINISHED
+                            })
+                            break;
+                        case 'ExpiredError':
+                            // TODO
+                            this.setState({
+                                isLogin: FinalNum.LOGINNOFINISHED
+                            })
+                            break;
+                    }
+                })
+        }
 
         return true;
     }
@@ -71,7 +110,7 @@ export default class Wrapper extends Component {
 
     // componentShould
 
-    
+
 
     _afterLogin(user) {
         console.log(user);

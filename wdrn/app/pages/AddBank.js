@@ -34,7 +34,7 @@ export default class AddBank extends Component {
             banklist: []
         }
     }
-    
+
     componentDidMount() {
         let url = config.baseUrl + config.api.user.showBanklist;
         request.get(url)
@@ -44,7 +44,26 @@ export default class AddBank extends Component {
                     this.setState({
                         banklist: data.data
                     })
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert(data.message);
                 }
             })
@@ -87,7 +106,26 @@ export default class AddBank extends Component {
                     if (navigator) {
                         navigator.pop();
                     }
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -176,14 +214,14 @@ export default class AddBank extends Component {
                         onChangeText={(text) => this.setState({ card_num: text })} />
                 </View>
                 <View style={styles.inputWrapper}>
-                     <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>银行</FormLabel>
+                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>银行</FormLabel>
                     {/*<Text style={styles.labelinput}>银行</Text>*/}
                     {
                         isIOS
                             ? <PickerIOS
                                 selectedValue={this.state.carMake}
-                                onValueChange={(lang) => this.setState({ card_tip: lang  })}>
-                                {this.state.banklist.map((item,key) => (
+                                onValueChange={(lang) => this.setState({ card_tip: lang })}>
+                                {this.state.banklist.map((item, key) => (
                                     <PickerItemIOS
                                         key={key}
                                         value={item.tip}
@@ -285,8 +323,8 @@ const styles = StyleSheet.create({
         color: '#999',
         alignItems: 'center',
         backgroundColor: '#fff',
-        borderBottomColor:'#3a3a3a',
-        borderBottomWidth:1
+        borderBottomColor: '#3a3a3a',
+        borderBottomWidth: 1
     },
     subbtn: {
         width: px2dp(284),

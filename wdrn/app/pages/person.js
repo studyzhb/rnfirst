@@ -75,6 +75,24 @@ export default class Person extends Component {
                         navigator.pop();
                     }
                 }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
             })
     }
 
@@ -162,7 +180,26 @@ export default class Person extends Component {
                                 this.setState({
                                     avatar: data.data.url
                                 })
-                            } else {
+                            }
+                            else if (data.code == 2 || data.code == 3) {
+                                let { navigator } = this.props;
+
+                                storage.remove({
+                                    key: 'loginUser'
+                                });
+                                storage.remove({
+                                    key: 'user'
+                                });
+                                storage.remove({
+                                    key: 'token'
+                                });
+
+                                if (navigator) {
+                                    navigator.popToTop();
+                                }
+
+                            }
+                            else {
                                 isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                             }
                         })
@@ -192,15 +229,15 @@ export default class Person extends Component {
                     leftPress={this.leftPress.bind(this)}
                     rightPress={this.rightPress.bind(this)}
                 />
-                <View style={styles.logo}> 
+                <View style={styles.logo}>
                     <Avatar
                         large
                         rounded
                         onPress={this.imageupload.bind(this)}
-                        
+
                         source={this.state.avatar ? { uri: this.state.avatar } : require('../images/avatar.jpg')}
-                        overlayContainerStyle={{ width: px2dp(124), height: px2dp(124),justifyContent:'center',alignItems:'center',backgroundColor:'#fff'}}
-                        containerStyle={{ width: px2dp(124), height: px2dp(124),justifyContent:'center',alignItems:'center',backgroundColor:'#fff'}}
+                        overlayContainerStyle={{ width: px2dp(124), height: px2dp(124), justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}
+                        containerStyle={{ width: px2dp(124), height: px2dp(124), justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}
                     />
                 </View>
 
@@ -284,7 +321,7 @@ export default class Person extends Component {
                 <View style={{ width: width, flexDirection: 'row', justifyContent: 'center' }}>
                     <Button
                         containerStyle={styles.btn}
-                        style={{color:'#fff'}}
+                        style={{ color: '#fff' }}
                         onPress={this._submit.bind(this)}
                     >
                         点击保存
@@ -333,7 +370,7 @@ const styles = StyleSheet.create({
     },
     inputField: {
         flex: 1,
-        paddingLeft:10,
+        paddingLeft: 10,
         // fontSize:14,
         // flex:6,
         // height:px2dp(50),

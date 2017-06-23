@@ -49,8 +49,9 @@ export default class SafeCenter extends Component {
             key: 'token'
         });
 
-        BackAndroid.exitApp(0);
-
+        if(navigator){
+            navigator.popToTop();
+        }
     }
 
     goPage(key, data = {}) {

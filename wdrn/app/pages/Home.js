@@ -93,6 +93,23 @@ export default class Home extends Component {
                             })
                             return true;
                         }
+                    } else if (data.code == 2 || data.code == 3) {
+                        let { navigator } = this.props;
+                        console.log(navigator)
+                        storage.remove({
+                            key: 'loginUser'
+                        });
+                        storage.remove({
+                            key: 'user'
+                        });
+                        storage.remove({
+                            key: 'token'
+                        });
+
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+
                     }
                 })
                 .catch(err => {
@@ -126,7 +143,7 @@ export default class Home extends Component {
                 if (data.code == 1 && data.data) {
                     self.setState({
                         isAuthor: 2,
-                        isRefreshing:false,
+                        isRefreshing: false,
                         rebateInfo: data.data.rebate || {},
                         dataSource: self.state.dataSource.cloneWithRows(data.data.creditor_list || [])
                     })
@@ -160,7 +177,25 @@ export default class Home extends Component {
                     //     }
                     // }
 
-                } else {
+                }else if (data.code == 2 || data.code == 3) {
+                        let { navigator } = this.props;
+                
+                        storage.remove({
+                            key: 'loginUser'
+                        });
+                        storage.remove({
+                            key: 'user'
+                        });
+                        storage.remove({
+                            key: 'token'
+                        });
+
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+
+                    }
+                 else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -258,7 +293,7 @@ export default class Home extends Component {
         let pages = {
             "oblist": AllObligationList,
             "popularize": Popularize,
-            'share':ShareCode,
+            'share': ShareCode,
             'myExpense': MyExpense,
             'SingleInfo': SingleInfo
         }

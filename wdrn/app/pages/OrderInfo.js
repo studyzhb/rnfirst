@@ -42,12 +42,31 @@ export default class OrderInfo extends Component {
 
         request.get(url, { id: this.props.id })
             .then(data => {
-               
+
                 if (data.code == 1) {
                     this.setState({
                         orderInfo: data.data
                     })
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -161,7 +180,7 @@ export default class OrderInfo extends Component {
                     </View>*/}
                     <View style={[styles.flexRow, styles.sitem]}>
                         <Text style={styles.baseText}>下单时间：</Text>
-                        <Text style={styles.subText}>{new Date(order?order.pay_date * 1000:0).toLocaleString()}</Text>
+                        <Text style={styles.subText}>{new Date(order ? order.pay_date * 1000 : 0).toLocaleString()}</Text>
                     </View>
                     {
                         pick_date - 0 > 0
@@ -200,8 +219,8 @@ export default class OrderInfo extends Component {
     }
 
     leftPress() {
-        let {navigator}=this.props;
-        if(navigator){
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.pop()
         }
     }

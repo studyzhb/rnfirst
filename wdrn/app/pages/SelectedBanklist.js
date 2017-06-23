@@ -41,7 +41,7 @@ export default class SelectedBank extends Component {
             isRefreshing: false,
             isLogin: false,
             banklist: [],
-            isrealname:''
+            isrealname: ''
         }
 
         this.config = [
@@ -100,9 +100,9 @@ export default class SelectedBank extends Component {
                         self.setState({
                             isrealname: user.isrealname
                         })
-                        
+
                     },
-                    updateBank(){
+                    updateBank() {
                         self._onRefresh()
                     }
                 }
@@ -110,8 +110,8 @@ export default class SelectedBank extends Component {
         }
     }
     leftPress() {
-        let {navigator}=this.props;
-        if(navigator){
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.pop();
         }
     }
@@ -140,20 +140,39 @@ export default class SelectedBank extends Component {
     _onRefresh() {
         this.setState({ isRefreshing: true, isrealname: this.props.isrealname, ispay: this.props.ispay });
         let body = {
-            
+
         }
 
         let loginUrl = config.baseUrl + config.api.user.userBanklist;
 
         request.get(loginUrl)
             .then((data) => {
-    
+
                 if (data.code == 1) {
                     this.setState({
                         banklist: data.data,
                         isRefreshing: false
                     })
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -174,37 +193,37 @@ export default class SelectedBank extends Component {
         })
     }
 
-    _clickSelected(item){
-        let {navigator}=this.props;
-        if(navigator){
+    _clickSelected(item) {
+        let { navigator } = this.props;
+        if (navigator) {
             this.props.updateSelectedBank(item)
             navigator.pop();
         }
     }
 
     _renderBanklist() {
-        return this.state.banklist.length>0?this.state.banklist.map((item, key) => {
+        return this.state.banklist.length > 0 ? this.state.banklist.map((item, key) => {
             return (
-                <TouchableOpacity key={key} onPress={this._clickSelected.bind(this,key)}>
-                <View style={{ marginTop: 12, height: 104, width: 360, paddingLeft: 15, paddingRight: 19, borderRadius: 4, paddingTop: 12, backgroundColor: '#c64f55', alignSelf: 'center' }}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Image source={require('../images/index01.png')} style={{ width: 40, height: 40, marginRight: 8 }} />
-                        <View>
-                            <Text style={styles.baseText}>{item.card_tip}</Text>
-                            <Text style={styles.baseText}>储蓄卡</Text>
+                <TouchableOpacity key={key} onPress={this._clickSelected.bind(this, key)}>
+                    <View style={{ marginTop: 12, height: 104, width: 360, paddingLeft: 15, paddingRight: 19, borderRadius: 4, paddingTop: 12, backgroundColor: '#c64f55', alignSelf: 'center' }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Image source={require('../images/index01.png')} style={{ width: 40, height: 40, marginRight: 8 }} />
+                            <View>
+                                <Text style={styles.baseText}>{item.card_tip}</Text>
+                                <Text style={styles.baseText}>储蓄卡</Text>
+                            </View>
                         </View>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                        <Text style={styles.baseText}>
-                            {/**** *** *** 1041*/}
-                            {item.card_num}
-                                </Text>
-                    </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                            <Text style={styles.baseText}>
+                                {/**** *** *** 1041*/}
+                                {item.card_num}
+                            </Text>
+                        </View>
 
-                </View>
+                    </View>
                 </TouchableOpacity>
             )
-        }):null
+        }) : null
     }
 
     render() {

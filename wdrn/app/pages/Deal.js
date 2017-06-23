@@ -42,7 +42,7 @@ let cachedResults = {
     total: 0
 }
 
-let selectedDate=null;
+let selectedDate = null;
 
 let isIOS = Platform.OS === 'ios';
 
@@ -90,10 +90,10 @@ export default class Deal extends Component {
         ]
     }
 
-    static defaultProps ={
-      date: new Date(),
-      timeZoneOffsetInHours: (-1) * (new Date()).getTimezoneOffset() / 60
-  }
+    static defaultProps = {
+        date: new Date(),
+        timeZoneOffsetInHours: (-1) * (new Date()).getTimezoneOffset() / 60
+    }
 
     leftPress() {
         let { navigator } = this.props;
@@ -166,10 +166,10 @@ export default class Deal extends Component {
         let that = this;
         let self = this;
         let obj = {
-            
+
         }
-        if(selectedDate){
-            obj=selectedDate
+        if (selectedDate) {
+            obj = selectedDate
         }
         if (page == 1) {
             obj.page = page;
@@ -241,7 +241,26 @@ export default class Deal extends Component {
                                 dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
                             })
                         }
-                    } else {
+                    }
+                    else if (data.code == 2 || data.code == 3) {
+                        let { navigator } = this.props;
+
+                        storage.remove({
+                            key: 'loginUser'
+                        });
+                        storage.remove({
+                            key: 'user'
+                        });
+                        storage.remove({
+                            key: 'token'
+                        });
+
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+
+                    }
+                    else {
                         cachedResults = {
                             nextPage: 1,
                             items: [],
@@ -338,10 +357,10 @@ export default class Deal extends Component {
                 date: new Date(2017, 4, 25)
             });
             if (action !== DatePickerAndroid.dismissedAction) {
-                
-                selectedDate={ year: year, month: month+1 };
+
+                selectedDate = { year: year, month: month + 1 };
                 // 这里开始可以处理用户选好的年月日三个参数：year, month (0-11), day
-                this._fetchData.bind(this,1, { year: year, month: month })()
+                this._fetchData.bind(this, 1, { year: year, month: month })()
             }
         } catch ({ code, message }) {
             console.warn('Cannot open time picker', message);
@@ -384,26 +403,26 @@ export default class Deal extends Component {
                         rightPress={this.rightPress.bind(this)}
                     />
                     <ListView
-                            style={{ flex: 1, paddingBottom: 100, backgroundColor: '#f3f3f3' }}
-                            dataSource={this.state.dataSource}
-                            renderRow={this._renderRow.bind(this)}
-                            renderFooter={this._renderFooter.bind(this)}
-                            onEndReached={this._fetchMoreData.bind(this)}
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={this.state.isRefreshing}
-                                    onRefresh={this._onRefresh.bind(this)}
-                                    tintColor='#ff6600'
-                                    title='拼命加载中'
-                                />
-                            }
-                            pageSize={2}
-                            onEndReachedThreshold={20}
-                            enableEmptySections={true}
-                            showsVerticalScrollIndicator={false}
-                            automaticallyAdjustContentInsets={false}
-                            removeClippedSubviews={false}
-                        />
+                        style={{ flex: 1, paddingBottom: 100, backgroundColor: '#f3f3f3' }}
+                        dataSource={this.state.dataSource}
+                        renderRow={this._renderRow.bind(this)}
+                        renderFooter={this._renderFooter.bind(this)}
+                        onEndReached={this._fetchMoreData.bind(this)}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.isRefreshing}
+                                onRefresh={this._onRefresh.bind(this)}
+                                tintColor='#ff6600'
+                                title='拼命加载中'
+                            />
+                        }
+                        pageSize={2}
+                        onEndReachedThreshold={20}
+                        enableEmptySections={true}
+                        showsVerticalScrollIndicator={false}
+                        automaticallyAdjustContentInsets={false}
+                        removeClippedSubviews={false}
+                    />
                     {/*<ScrollView
                         style={styles.scrollView}
                         refreshControl={
@@ -429,7 +448,7 @@ export default class Deal extends Component {
                         this.state.showDatePicker
                             ? isIOS
                                 ? <DatePickerIOS
-                                    style={{backgroundColor:'#fff'}}
+                                    style={{ backgroundColor: '#fff' }}
                                     date={this.state.date}
                                     mode="date"
                                     timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}

@@ -39,9 +39,9 @@ let cachedResults = {
     total: 0
 }
 
-let Goods={
-    total:0,
-    totalArr:[]
+let Goods = {
+    total: 0,
+    totalArr: []
 }
 
 export default class GoodsList extends Component {
@@ -53,32 +53,32 @@ export default class GoodsList extends Component {
             rowHasChanged: (r1, r2) => r1 !== r2
         })
 
-        this.state={
-            total:0,
+        this.state = {
+            total: 0,
             isRefreshing: false,
             isLoadingTail: false,
             dataSource: ds.cloneWithRows([]),
-            selected:[],
-            totalArr:[],
-            isSelected:1
+            selected: [],
+            totalArr: [],
+            isSelected: 1
         }
     }
 
     confirmPay() {
-        let self=this;
-       if(this.state.total<=0){
-        isIOS
-        ?AlertIOS.alert('请先选中商品')
-        :Alert.alert('请先选中商品')
-        return;
-       }
-        let info = this.state.total<this.props.money?'您的订单不足'+this.props.money+'元，将无法生成队列订单，您可以继续购物凑够金额。':'您的购物金额为：'+this.state.total+' ,将拆分为'+Math.floor(this.state.total/this.props.money)+'单进入返利。';
+        let self = this;
+        if (this.state.total <= 0) {
+            isIOS
+                ? AlertIOS.alert('请先选中商品')
+                : Alert.alert('请先选中商品')
+            return;
+        }
+        let info = this.state.total < this.props.money ? '您的订单不足' + this.props.money + '元，将无法生成队列订单，您可以继续购物凑够金额。' : '您的购物金额为：' + this.state.total + ' ,将拆分为' + Math.floor(this.state.total / this.props.money) + '单进入返利。';
         isIOS
             ? AlertIOS.alert(
                 '提示',
                 info,
                 [
-                    this.state.total<this.props.money?{ text: '去凑单', onPress: () => console.log('Ask me later pressed') }:null,
+                    this.state.total < this.props.money ? { text: '去凑单', onPress: () => console.log('Ask me later pressed') } : null,
                     { text: '去支付', onPress: this.gotoPay.bind(this), style: 'cancel' }
                 ],
                 { cancelable: false }
@@ -87,7 +87,7 @@ export default class GoodsList extends Component {
                 '提示',
                 info,
                 [
-                    this.state.total<this.props.money?{ text: '去凑单', onPress: () => console.log('Ask me later pressed') }:null,
+                    this.state.total < this.props.money ? { text: '去凑单', onPress: () => console.log('Ask me later pressed') } : null,
                     { text: '去支付', onPress: this.gotoPay.bind(this), style: 'cancel' }
                 ],
                 { cancelable: false }
@@ -95,59 +95,59 @@ export default class GoodsList extends Component {
     }
 
     gotoPay() {
-        let totalArr=Goods.totalArr.map((item,i)=>{
-            return {id:item.id,num:1}
+        let totalArr = Goods.totalArr.map((item, i) => {
+            return { id: item.id, num: 1 }
         })
-   
+
         this.props.navigator.push({
             name: 'pay',
             component: Pay,
-            params:{
-                total:this.state.total,
-                totalArr:totalArr,
-                queueid:this.props.obid,
-                isback:this.state.isSelected
+            params: {
+                total: this.state.total,
+                totalArr: totalArr,
+                queueid: this.props.obid,
+                isback: this.state.isSelected
             }
         })
     }
 
     //计算价格
-    _reduceItem(row){
-        if(!row.selected){
-            row.selected=false;
+    _reduceItem(row) {
+        if (!row.selected) {
+            row.selected = false;
         }
-        let {selected,total}=this.state;
+        let { selected, total } = this.state;
 
-        row.selected=!row.selected;
+        row.selected = !row.selected;
 
-        for(let i=0;i<selected.length;i++){
-            if(selected[i].id==row.id){
-                selected[i].selected=row.selected;
+        for (let i = 0; i < selected.length; i++) {
+            if (selected[i].id == row.id) {
+                selected[i].selected = row.selected;
             }
         }
 
-        total=0;
-        Goods.totalArr=[];
-        for(let i=0;i<selected.length;i++){
-            if(selected[i].selected){
+        total = 0;
+        Goods.totalArr = [];
+        for (let i = 0; i < selected.length; i++) {
+            if (selected[i].selected) {
                 Goods.totalArr.push(selected[i]);
-                total+=selected[i].price-0;
+                total += selected[i].price - 0;
             }
         }
 
 
 
-        this.setState({selected,total});
-        
+        this.setState({ selected, total });
+
     }
 
-      componentWillMount() {
+    componentWillMount() {
         this._getIndexInfo();
     }
 
-    _fetchData(page,obj) {
+    _fetchData(page, obj) {
         let that = this;
-        let self=this;
+        let self = this;
         if (page !== 0) {
             this.setState({
                 isLoadingTail: true
@@ -162,17 +162,17 @@ export default class GoodsList extends Component {
 
         let getIndexUrl = config.baseUrl + config.api.rebate.getGoodsList;
 
-        let newObj={
-            page:page,
-            isback:obj?obj.isback:1
+        let newObj = {
+            page: page,
+            isback: obj ? obj.isback : 1
         }
 
-        request.get(getIndexUrl,newObj)
+        request.get(getIndexUrl, newObj)
             .then((data) => {
-             
+
 
                 if (data.code == 1 && data.data) {
-                    data=data.data;
+                    data = data.data;
                     if (data.data.length > 0) {
 
                         let items = cachedResults.items.slice()
@@ -186,7 +186,7 @@ export default class GoodsList extends Component {
                         }
 
                         this.setState({
-                            selected:items
+                            selected: items
                         })
                         cachedResults.items = items
                         cachedResults.total = data.total
@@ -205,7 +205,26 @@ export default class GoodsList extends Component {
                         }
                     }
 
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -271,15 +290,15 @@ export default class GoodsList extends Component {
         let self = this;
 
         self._fetchData(1);
-       
+
 
     }
 
 
 
     leftPress() {
-        let {navigator}=this.props;
-        if(navigator){
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.pop()
         }
     }
@@ -289,7 +308,7 @@ export default class GoodsList extends Component {
 
     _renderRow(row) {
         return (
-            <TouchableOpacity onPress={this._reduceItem.bind(this,row)}>
+            <TouchableOpacity onPress={this._reduceItem.bind(this, row)}>
                 <View style={styles.items}>
                     <Image source={require('../images/goods.png')} style={{ width: 100, height: 100 }} />
                     <View style={{ marginLeft: 20, justifyContent: 'space-between' }}>
@@ -301,8 +320,8 @@ export default class GoodsList extends Component {
                     </View>
                     {
                         row.selected
-                        ?<Image source={require('../images/slected.png')} style={{ position: 'absolute', right: 0 }} />
-                        :null
+                            ? <Image source={require('../images/slected.png')} style={{ position: 'absolute', right: 0 }} />
+                            : null
                     }
                 </View>
             </TouchableOpacity>
@@ -310,11 +329,11 @@ export default class GoodsList extends Component {
         )
     }
 
-    tabType(obj){
+    tabType(obj) {
         this.setState({
-            isSelected:obj.isback,
+            isSelected: obj.isback,
             dataSource: this.state.dataSource.cloneWithRows([]),
-            total:0
+            total: 0
         })
 
         cachedResults = {
@@ -322,7 +341,7 @@ export default class GoodsList extends Component {
             items: [],
             total: 0
         }
-        this._fetchData(1,obj);
+        this._fetchData(1, obj);
     }
 
     render() {
@@ -338,15 +357,15 @@ export default class GoodsList extends Component {
                     />
                     <View style={styles.tabTitle}>
                         <Button
-                            onPress={this.tabType.bind(this,{isback:1})}
-                            containerStyle={[styles.backBuyWrapper, this.state.isSelected==1?styles.backActive:null]}
+                            onPress={this.tabType.bind(this, { isback: 1 })}
+                            containerStyle={[styles.backBuyWrapper, this.state.isSelected == 1 ? styles.backActive : null]}
                             style={styles.backBuy}
                         >
                             可回购
                         </Button>
                         <Button
-                            onPress={this.tabType.bind(this,{isback:2})}
-                            containerStyle={[styles.backBuyWrapper, this.state.isSelected==2?styles.backActive:null]}
+                            onPress={this.tabType.bind(this, { isback: 2 })}
+                            containerStyle={[styles.backBuyWrapper, this.state.isSelected == 2 ? styles.backActive : null]}
                             style={styles.backBuy}
                         >
                             不可回购

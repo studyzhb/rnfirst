@@ -1,24 +1,24 @@
 'use strict';
 import React, { Component } from 'react';
 import {
-    Text,
-    View,
-    Image,
-    StyleSheet,
-    ScrollView,
-    Dimensions,
-    AsyncStorage,
-    Platform,
-    AlertIOS,
-    Alert,
-    TextInput,
-    TouchableOpacity,
-    TouchableHighlight,
-    TouchableNativeFeedback,
-    TouchableWithoutFeedback,
-    RefreshControl,
-    Modal,
-    NativeModules
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  AsyncStorage,
+  Platform,
+  AlertIOS,
+  Alert,
+  TextInput,
+  TouchableOpacity,
+  TouchableHighlight,
+  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
+  RefreshControl,
+  Modal,
+  NativeModules
 } from 'react-native';
 
 
@@ -32,7 +32,7 @@ import Progress from 'react-native-progress';
 
 let ImagePicker = NativeModules.ImagePickerManager
 
-const ISIOS=Platform.OS==='ios';
+const ISIOS = Platform.OS === 'ios';
 
 let { width, height } = Dimensions.get('window');
 
@@ -44,8 +44,8 @@ let photoOptions = {
   quality: 0.75,
   allowsEditing: true,
   noData: false,
-  storageOptions: { 
-    skipBackup: true, 
+  storageOptions: {
+    skipBackup: true,
     path: 'images'
   }
 }
@@ -69,17 +69,17 @@ function avatar(id, type) {
 }
 
 
-export default class Account extends Component{
+export default class Account extends Component {
 
-  constructor(props){
-      super(props);
+  constructor(props) {
+    super(props);
 
-      this.state={
-        user: this.props.user||{},
-        avatarProgress: 0,
-        avatarUploading: false,
-        modalVisible: false
-      }
+    this.state = {
+      user: this.props.user || {},
+      avatarProgress: 0,
+      avatarUploading: false,
+      modalVisible: false
+    }
   }
 
   _edit() {
@@ -95,27 +95,46 @@ export default class Account extends Component{
   }
 
   componentDidMount() {
-    
+
     // storage.load('loginUser')
-    let url=config.baseUrl+config.api.user.userinfo;
+    let url = config.baseUrl + config.api.user.userinfo;
     request.get(url)
-        .then(data=>{
-         
-            if(data.code==1){
-                storage.save({
-                    key:'user',
-                    data:data.data
-                })
-                this.setState({
-                    user:data.data
-                })
-            }else{
-                ISIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
-            }
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+      .then(data => {
+
+        if (data.code == 1) {
+          storage.save({
+            key: 'user',
+            data: data.data
+          })
+          this.setState({
+            user: data.data
+          })
+        }
+        else if (data.code == 2 || data.code == 3) {
+          let { navigator } = this.props;
+
+          storage.remove({
+            key: 'loginUser'
+          });
+          storage.remove({
+            key: 'user'
+          });
+          storage.remove({
+            key: 'token'
+          });
+
+          if (navigator) {
+            navigator.popToTop();
+          }
+
+        }
+        else {
+          ISIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   _getQiniuToken() {
@@ -127,9 +146,9 @@ export default class Account extends Component{
       type: 'avatar',
       cloud: 'qiniu'
     })
-    .catch((err) => {
-      console.log(err)
-    })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   _pickPhoto() {
@@ -237,7 +256,7 @@ export default class Account extends Component{
         if (response.public_id) {
           user.avatar = response.public_id
         }
-        
+
         if (response.key) {
           user.avatar = response.key
         }
@@ -285,7 +304,7 @@ export default class Account extends Component{
 
             that.setState({
               user: user
-            }, function() {
+            }, function () {
               that._closeModal()
               AsyncStorage.setItem('user', JSON.stringify(user))
             })
@@ -324,40 +343,40 @@ export default class Account extends Component{
 
         {
           user.avatar
-          ? <TouchableOpacity onPress={this._pickPhoto.bind(this)} style={styles.avatarContainer}>
-            <Image source={{uri: avatar(user.avatar, 'image')}} style={styles.avatarContainer}>
+            ? <TouchableOpacity onPress={this._pickPhoto.bind(this)} style={styles.avatarContainer}>
+              <Image source={{ uri: avatar(user.avatar, 'image') }} style={styles.avatarContainer}>
+                <View style={styles.avatarBox}>
+                  {
+                    this.state.avatarUploading
+                      ? <Progress.Circle
+                        showsText={true}
+                        size={75}
+                        color={'#ee735c'}
+                        progress={this.state.avatarProgress} />
+                      : <Image
+                        source={{ uri: avatar(user.avatar, 'image') }}
+                        style={styles.avatar} />
+                  }
+                </View>
+                <Text style={styles.avatarTip}>戳这里换头像</Text>
+              </Image>
+            </TouchableOpacity>
+            : <TouchableOpacity onPress={this._pickPhoto.bind(this)} style={styles.avatarContainer}>
+              <Text style={styles.avatarTip}>添加狗狗头像</Text>
               <View style={styles.avatarBox}>
                 {
                   this.state.avatarUploading
-                  ? <Progress.Circle
-                    showsText={true}
-                    size={75}
-                    color={'#ee735c'}
-                    progress={this.state.avatarProgress} />
-                  : <Image
-                    source={{uri: avatar(user.avatar, 'image')}}
-                    style={styles.avatar} />
+                    ? <Progress.Circle
+                      showsText={true}
+                      size={75}
+                      color={'#ee735c'}
+                      progress={this.state.avatarProgress} />
+                    : <Icon
+                      name='ios-cloud-upload-outline'
+                      style={styles.plusIcon} />
                 }
               </View>
-              <Text style={styles.avatarTip}>戳这里换头像</Text>
-            </Image>
-          </TouchableOpacity>
-          : <TouchableOpacity onPress={this._pickPhoto.bind(this)} style={styles.avatarContainer}>
-            <Text style={styles.avatarTip}>添加狗狗头像</Text>
-            <View style={styles.avatarBox}>
-              {
-                this.state.avatarUploading
-                ? <Progress.Circle
-                    showsText={true}
-                    size={75}
-                    color={'#ee735c'}
-                    progress={this.state.avatarProgress} />
-                : <Icon          
-                    name='ios-cloud-upload-outline'
-                    style={styles.plusIcon} />
-              }
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
         }
 
         <Modal
@@ -368,7 +387,7 @@ export default class Account extends Component{
               name='ios-close-outline'
               onPress={this._closeModal}
               style={styles.closeIcon} />
-            
+
             <View style={styles.fieldItem}>
               <Text style={styles.label}>昵称</Text>
               <TextInput
@@ -450,7 +469,7 @@ export default class Account extends Component{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'#f3f3f3'
+    backgroundColor: '#f3f3f3'
   },
 
   toolbar: {

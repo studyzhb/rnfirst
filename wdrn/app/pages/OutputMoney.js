@@ -91,7 +91,26 @@ export default class OutputMoney extends Component {
                         : Alert.alert(data.message)
                     //支付成功
                     this.props.navigator.popToTop();
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS
                         ? AlertIOS.alert(data.message)
                         : Alert.alert(data.message)
@@ -138,7 +157,26 @@ export default class OutputMoney extends Component {
                             })
                         }
 
-                    } else {
+                    }
+                    else if (data.code == 2 || data.code == 3) {
+                        let { navigator } = this.props;
+
+                        storage.remove({
+                            key: 'loginUser'
+                        });
+                        storage.remove({
+                            key: 'user'
+                        });
+                        storage.remove({
+                            key: 'token'
+                        });
+
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+
+                    }
+                    else {
                         isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                     }
                 })
@@ -158,7 +196,7 @@ export default class OutputMoney extends Component {
                 name: "selectedBanklist",
                 component: SelectedBank,
                 params: {
-                    isrealname:this.props.isrealname,
+                    isrealname: this.props.isrealname,
                     updateSelectedBank: (key) => {
                         self.setState({
                             selectedPosition: key
@@ -191,7 +229,26 @@ export default class OutputMoney extends Component {
                 if (data.code == 1) {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                     self._showVerifyCode()
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })

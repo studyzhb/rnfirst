@@ -80,7 +80,26 @@ export default class ChangeLogin extends Component{
                  
                     if(data.code==1){
                         this.props.navigator.pop();
-                    }else{
+                    }
+                    else if (data.code == 2 || data.code == 3) {
+                        let { navigator } = this.props;
+                        
+                        storage.remove({
+                            key: 'loginUser'
+                        });
+                        storage.remove({
+                            key: 'user'
+                        });
+                        storage.remove({
+                            key: 'token'
+                        });
+
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+
+                    }
+                    else{
                         isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
                     }
                 })
@@ -138,7 +157,26 @@ export default class ChangeLogin extends Component{
                     if(data.code==1){
                         isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
                         self._showVerifyCode()
-                    }else{
+                    }
+                    else if (data.code == 2 || data.code == 3) {
+                        let { navigator } = this.props;
+                        
+                        storage.remove({
+                            key: 'loginUser'
+                        });
+                        storage.remove({
+                            key: 'user'
+                        });
+                        storage.remove({
+                            key: 'token'
+                        });
+
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+
+                    }
+                    else{
                         isIOS?AlertIOS.alert(data.message):Alert.alert(data.message);
                     }
                 })

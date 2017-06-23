@@ -75,7 +75,7 @@ export default class MyExpenseList extends Component {
     }
 
     _fetchMoreData() {
-       
+
         if (!this._hasMore() || this.state.isLoadingTail) {
 
             this.setState({
@@ -99,7 +99,7 @@ export default class MyExpenseList extends Component {
         let getAuthorUrl = config.baseUrl + config.api.rebate.lookupHis;
         let body = {};
 
-        if(page==1){
+        if (page == 1) {
             cachedResults = {
                 nextPage: 1,
                 items: [],
@@ -109,13 +109,13 @@ export default class MyExpenseList extends Component {
             this.setState({
                 isRefreshing: true
             })
-        }else if (page !== 0) {
+        } else if (page !== 0) {
             this.setState({
                 isLoadingTail: true
             })
             body.page = page;
         }
-         else {
+        else {
             body.page = 1;
             cachedResults = {
                 nextPage: 1,
@@ -128,11 +128,11 @@ export default class MyExpenseList extends Component {
         }
 
 
-       
+
 
         await request.get(getAuthorUrl, body)
             .then(data => {
-              
+
                 let self = this;
                 if (data.code == 1 && data.data) {
                     if (data.data.data.length > 0) {
@@ -146,8 +146,8 @@ export default class MyExpenseList extends Component {
                         }
                         cachedResults.items = items;
                         cachedResults.total = data.data.total;
-                       
-                        if(page==1){
+
+                        if (page == 1) {
                             self.setState({
                                 isRefreshing: false,
                                 dataSource: self.state.dataSource.cloneWithRows(cachedResults.items)
@@ -166,7 +166,26 @@ export default class MyExpenseList extends Component {
                         }
                     }
                     return data.data.data;
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     return [];
                 }
             })
@@ -201,7 +220,7 @@ export default class MyExpenseList extends Component {
     }
 
     _renderRow(row) {
-     
+
         return (
             <View style={styles.items}>
                 <View style={[styles.flexRow, { marginBottom: 10 }]}>

@@ -36,7 +36,7 @@ export default class RealName extends Component {
     }
     _submit() {
         let self = this;
-       
+
         let phoneNumber = this.state.phoneNumber;
         let name = this.state.name;
 
@@ -59,7 +59,7 @@ export default class RealName extends Component {
 
         request.post(loginUrl, body)
             .then((data) => {
-             
+
                 if (data.code == 1) {
                     if (this.props.getUser) {
                         this.props.getUser({ isrealname: staticNum.ISREALNAME })
@@ -67,7 +67,26 @@ export default class RealName extends Component {
                     if (navigator) {
                         navigator.pop();
                     }
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -92,7 +111,7 @@ export default class RealName extends Component {
     }
 
     render() {
-        
+
         return (
             <View style={styles.container} >
                 <NavBar
