@@ -121,7 +121,7 @@ export default class testForm extends Component {
                     rightPress={this.rightPress.bind(this)}
                 />
                 <View style={styles.logo}>
-                    <Image source={require('../images/avatar.jpg')} style={{ width: px2dp(80), height: px2dp(80) }} />
+                    <Image source={require('../images/logo.png')} style={{ width: px2dp(80), height: px2dp(80) }} />
                 </View>
                 <View style={styles.inputWrapper}>
                     <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>账号</FormLabel>

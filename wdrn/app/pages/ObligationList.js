@@ -59,11 +59,13 @@ export default class ObligationList11 extends Component {
     }
 
     componentDidMount() {
+        console.log('did mount')
         setTimeout(() => {
             this._fetchData(1);
-        }, 1000);
+        }, 100);
     }
     shouldComponentUpdate() {
+        console.log('ob should update')
         // this._fetchData()
         return true;
     }
@@ -161,6 +163,7 @@ export default class ObligationList11 extends Component {
         }
         let getQueueUrl = config.baseUrl + config.api.rebate.getQueueInfoByQueueId;
 
+        
 
         await request.get(getQueueUrl, obj)
             .then(data => {
@@ -206,44 +209,46 @@ export default class ObligationList11 extends Component {
                             })
                         }
                     }
-                    else if (data.code == 2 || data.code == 3) {
-                        let { navigator } = this.props;
 
-                        storage.remove({
-                            key: 'loginUser'
-                        });
-                        storage.remove({
-                            key: 'user'
-                        });
-                        storage.remove({
-                            key: 'token'
-                        });
-
-                        if (navigator) {
-                            navigator.popToTop();
-                        }
-
-                    }
                     else {
-                        cachedResults = {
-                            nextPage: 1,
-                            items: [],
-                            total: 0
-                        }
 
                         this.setState({
                             update: true,
-                            queueInfo: data.data,
                             isRefreshing: false
                         })
-                        cachedResults.total = data.data.total
+                        // cachedResults.total = data.data.total
 
-                        if (page > 1) {
-                            this._fetchData(1);
-                        }
+                        // if (page > 1) {
+                        //     this._fetchData(1);
+                        // }
 
                     }
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
+                    that.setState({
+                        isRefreshing: false,
+                        isLoadingTail:false,
+                        queueInfo: data.data,
+                        dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
+                    })
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -269,7 +274,7 @@ export default class ObligationList11 extends Component {
         request.post(getQueueUrl, { id: id })
             .then(data => {
 
-                if (data.code == 1 && data.data) {
+                if (data.code == 1) {
                     this._fetchData(1)
                     self.setState({
                         isRefreshing: false
@@ -381,21 +386,24 @@ export default class ObligationList11 extends Component {
     }
 
     _hasMore() {
+        console.log(cachedResults.items.length)
+        console.log(cachedResults.total)
         return cachedResults.items.length !== cachedResults.total;
     }
 
     _fetchMoreData() {
+        
         if (!this._hasMore() || this.state.isLoadingTail) {
 
-            this.setState({
-                isLoadingTail: false
-            })
+            // this.setState({
+            //     isLoadingTail: false
+            // })
 
             return
         }
 
         let page = cachedResults.nextPage
-
+        console.log(page)
         this._fetchData(page)
     }
 
@@ -426,15 +434,15 @@ export default class ObligationList11 extends Component {
         //`isback` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可以回购 1 是 2 否',
 
         let pickupinfo = '提货';
-        if (item.queque_status == '0') {
+        if (item.queque_status == 0) {
             item.queueStatusText = '队列中';
-        } else if (item.queque_status == '1') {
-            item.queueStatusText = '可提现';
-        } else if (item.queque_status == '2') {
-            item.queueStatusText = '提现中';
-        } else if (item.queque_status == '3') {
-            item.queueStatusText = '已提现';
-        } else if (item.queque_status == '4') {
+        } else if (item.queque_status == 1) {
+            item.queueStatusText = '可兑换';
+        } else if (item.queque_status == 2) {
+            item.queueStatusText = '兑换中';
+        } else if (item.queque_status == 3) {
+            item.queueStatusText = '已兑换';
+        } else if (item.queque_status == 4) {
             item.queueStatusText = '被踢出';
         }
 
@@ -482,7 +490,7 @@ export default class ObligationList11 extends Component {
                                     {pickupinfo}
                                 </Button>
                                 {
-                                    item.queque_status == 2
+                                    item.queque_status == 1
                                         ? <Button onPress={this.goConverce.bind(this, item.id)} style={[styles.convercebtn]} containerStyle={[styles.convercebtnWrapper, { marginLeft: 15 }]}>
                                             兑换
                                         </Button>
