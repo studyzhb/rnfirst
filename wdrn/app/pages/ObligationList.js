@@ -59,13 +59,13 @@ export default class ObligationList11 extends Component {
     }
 
     componentDidMount() {
-        console.log('did mount')
+        
         setTimeout(() => {
             this._fetchData(1);
         }, 100);
     }
     shouldComponentUpdate() {
-        console.log('ob should update')
+        
         // this._fetchData()
         return true;
     }

@@ -24,6 +24,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import config from '../util/config';
 import request from '../util/request';
 
+import Author from './authorize';
 
 let { width, height } = Dimensions.get('window');
 
@@ -73,6 +74,17 @@ export default class SingleInfo extends Component {
                 console.warn(err)
             })
     }
+
+    gotoAuthor() {
+        let { navigator } = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'author',
+                component: Author
+            })
+        }
+    }
+
     leftPress() {
         let { navigator } = this.props;
         if (navigator) {
@@ -129,6 +141,16 @@ export default class SingleInfo extends Component {
                     }
 
                 </View>
+                {
+                    !this.state.currentInfo
+                        ? <Button
+                            onPress={this.gotoAuthor.bind(this)}
+                            containerStyle={{ padding: 10, height: 45, overflow: 'hidden', backgroundColor: '#21bb58' }}
+                            style={styles.nowbuybtn}>
+                            添加新的债权
+                        </Button>
+                        : null
+                }
 
             </View>
         )
@@ -148,5 +170,8 @@ const styles = StyleSheet.create({
     baseText: {
         color: '#999',
         fontSize: 12
+    },
+    nowbuybtn: {
+        fontSize: 14, color: '#fff'
     }
 })

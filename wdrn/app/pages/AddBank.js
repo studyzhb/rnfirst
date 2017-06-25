@@ -23,6 +23,8 @@ import NavBar from '../component/NavBar';
 
 import { FormLabel, FormInput } from 'react-native-elements';
 
+let PickerItemIOS = PickerIOS.Item;
+
 const isIOS = Platform.OS === 'ios';
 let { width, height } = Dimensions.get('window');
 export default class AddBank extends Component {
@@ -30,7 +32,7 @@ export default class AddBank extends Component {
         super(props);
         this.state = {
             card_num: '',
-            card_tip: '',
+            card_tip: 'ceshi',
             banklist: []
         }
     }
@@ -39,7 +41,7 @@ export default class AddBank extends Component {
         let url = config.baseUrl + config.api.user.showBanklist;
         request.get(url)
             .then(data => {
-
+                console.log(data)
                 if (data.code == 1) {
                     this.setState({
                         banklist: data.data
@@ -203,7 +205,7 @@ export default class AddBank extends Component {
                     <FormInput
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
-                        placeholder="请输入手机号"
+                        placeholder="请输入银行卡号"
                         //关闭拼写自动修正
                         autoCorrect={false}
                         containerStyle={{ marginLeft: 0 }}
@@ -219,26 +221,53 @@ export default class AddBank extends Component {
                     {
                         isIOS
                             ? <PickerIOS
-                                selectedValue={this.state.carMake}
+                                style={styles.iospicker}
+                                itemStyle={{fontSize: 25, color: 'red', textAlign: 'center', fontWeight: 'bold'}}
+                                selectedValue={this.state.card_tip}
                                 onValueChange={(lang) => this.setState({ card_tip: lang })}>
-                                {this.state.banklist.map((item, key) => (
-                                    <PickerItemIOS
-                                        key={key}
-                                        value={item.tip}
-                                        label={item.tip}
-                                    />
-                                ))}
+                                <PickerItemIOS 
+                                    value={'ceshi'}
+                                    label={'ceshi'}
+                                />
+                                <PickerItemIOS 
+                                    value={'ceshi1'}
+                                    label={'ceshi1'}
+                                />
+                                <PickerItemIOS 
+                                    value={'ceshi2'}
+                                    label={'ceshi2'}
+                                />
+                                {
+                                  /*  this.state.banklist.length > 0
+                                        ? this.state.banklist.map((item, key) => {
+                                            return (
+                                                <PickerIOS.Item
+                                                    key={key}
+                                                    value={item.tip}
+                                                    label={item.tip}
+                                                />
+                                            )
+                                        })
+                                        :<PickerIOS.Item
+                                                    key={1}
+                                                    value={'ceshi'}
+                                                    label={'ceshi'}
+                                                />
+                                    */
+                                }
                             </PickerIOS>
                             : <Picker
                                 style={styles.inputField}
                                 selectedValue={this.state.card_tip}
                                 onValueChange={(lang) => this.setState({ card_tip: lang })}>
                                 {
-                                    this.state.banklist.map((item, key) => {
-                                        return (
-                                            <Picker.Item label={item.tip} value={item.tip} key={key} />
-                                        )
-                                    })
+                                    this.state.banklist.length > 0
+                                        ? this.state.banklist.map((item, key) => {
+                                            return (
+                                                <Picker.Item label={item.tip} value={item.tip} key={key} />
+                                            )
+                                        })
+                                        : null
                                 }
                             </Picker>
                     }
@@ -321,6 +350,17 @@ const styles = StyleSheet.create({
         flex: 6,
         height: px2dp(50),
         color: '#999',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderBottomColor: '#3a3a3a',
+        borderBottomWidth: 1
+    },
+    iospicker: {
+     
+        paddingRight: 10,
+        // fontSize: 14,
+        width:100,
+        height: px2dp(50),
         alignItems: 'center',
         backgroundColor: '#fff',
         borderBottomColor: '#3a3a3a',

@@ -110,8 +110,9 @@ export default class AllobList extends Component {
 
         await request.get(getIndexUrl, obj)
             .then((data) => {
+                console.log(data)
                 if (data.code == 1 && data.data) {
-
+                    
                     let list = data.data.data || [];
 
                     if (list.length > 0) {
@@ -211,9 +212,9 @@ export default class AllobList extends Component {
     _fetchMoreData() {
         if (!this._hasMore() || this.state.isLoadingTail) {
 
-            this.setState({
-                isLoadingTail: false
-            })
+            // this.setState({
+            //     isLoadingTail: false
+            // })
 
             return
         }
@@ -289,8 +290,8 @@ export default class AllobList extends Component {
 
                         <View style={styles.flexRow}>
                             <Text style={styles.baseText}>消费笔数：</Text>
-                            <Text style={{ color: '#333', fontSize: 14 }}>100笔</Text>
-                            <Text style={styles.baseText}>（共20人）</Text>
+                            <Text style={{ color: '#333', fontSize: 14 }}>{item.queque_count}笔</Text>
+                            {/*<Text style={styles.baseText}>（共20人）</Text>*/}
                         </View>
                         <View style={styles.flexRow}>
                             <Text style={styles.baseText}>债权金额：</Text>
@@ -303,7 +304,6 @@ export default class AllobList extends Component {
                                     ? <Text style={[styles.baseText, { marginTop: 7 }]}>结清时间：{item.updated_at}</Text>
                                     : null
                             }
-
                         </View>
 
                         {/*<View style={{ position: 'absolute', right: 15, top: 76 }}>
@@ -404,12 +404,12 @@ export default class AllobList extends Component {
                         removeClippedSubviews={false}
                     />
                 </View>
-                <Button
+                {/*<Button
                     onPress={this.gotoAuthor.bind(this)}
                     containerStyle={{ padding: 10, height: 45, overflow: 'hidden', backgroundColor: '#21bb58' }}
                     style={styles.nowbuybtn}>
                     添加新的债权
-                </Button>
+                </Button>*/}
             </View>
         )
     }
