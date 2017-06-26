@@ -14,7 +14,8 @@ import {
     TouchableHighlight,
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
-    RefreshControl
+    RefreshControl,
+    ActivityIndicator
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -48,8 +49,20 @@ export default class Pay extends Component {
         ]
         this.state = {
             checked: FINALNUM.BALANCETYPE,
-            modalVisible: false
+            modalVisible: false,
+            ispaypwd:null
         }
+    }
+
+    componentDidMount(){
+        storage.load({
+            key:'loginUser'
+        })
+        .then(data=>{
+            this.setState({
+                ispaypwd:data.is_pay_pwd
+            })
+        })
     }
 
     openLbs() {
@@ -73,7 +86,12 @@ export default class Pay extends Component {
                     switch (this.state.checked) {
                         case FINALNUM.BALANCETYPE:
                             // this._goPay(data.data);
-                            this.openLbs();
+                            if(this.state.ispaypwd){
+                                this.openLbs.bind(this)();
+                            }else if(this.state.ispaypwd!==null&&!this.state.ispaypwd){
+                                this._goPay.bind(this,orderData,'');
+                            }
+                            
                             break;
                         case FINALNUM.ALIPAYTYPE:
                             alipay({
@@ -124,7 +142,6 @@ export default class Pay extends Component {
 
         request.post(createOrderUrl, body)
             .then(data => {
-
                 if (data.code == 1) {
                     isIOS
                         ? AlertIOS.alert(data.message)
@@ -233,6 +250,13 @@ export default class Pay extends Component {
     }
 
     render() {
+        if(this.state.ispaypwd===null){
+            return (
+                <View style={styles.container}>
+                    <ActivityIndicator></ActivityIndicator>
+                </View>
+            )
+        }
         return (
             <View style={styles.container}>
                 <View style={styles.container}>

@@ -20,7 +20,7 @@ import {
 } from 'react-native';
 
 import * as Progress from 'react-native-progress';
-
+import PercentageCircle from 'react-native-percentage-circle';
 import NavBar from '../component/NavBar';
 import px2dp from '../util/px2dp';
 
@@ -32,6 +32,7 @@ import Popularize from './Popularize';
 import MyExpense from './myExpenseList';
 import ShareCode from './sharecode';
 import Notice from './notice';
+import Circle from './pickertest'
 
 import request from '../util/request';
 import config from '../util/config';
@@ -116,8 +117,6 @@ export default class Home extends Component {
                     console.warn(err);
                 })
         }
-
-
         return true;
     }
 
@@ -139,7 +138,7 @@ export default class Home extends Component {
 
         request.get(getIndexUrl)
             .then((data) => {
-                
+                console.log(data)
                 if (data.code == 1 && data.data) {
                     self.setState({
                         isAuthor: 2,
@@ -177,25 +176,25 @@ export default class Home extends Component {
                     //     }
                     // }
 
-                }else if (data.code == 2 || data.code == 3) {
-                        let { navigator } = this.props;
-                
-                        storage.remove({
-                            key: 'loginUser'
-                        });
-                        storage.remove({
-                            key: 'user'
-                        });
-                        storage.remove({
-                            key: 'token'
-                        });
+                } else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
 
-                        if (navigator) {
-                            navigator.popToTop();
-                        }
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
 
+                    if (navigator) {
+                        navigator.popToTop();
                     }
-                 else {
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -285,7 +284,14 @@ export default class Home extends Component {
 
     }
     rightPress() {
-
+        console.log('ceshi')
+        let { navigator } = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'test',
+                component: Circle
+            })
+        }
     }
 
     goPage(key, data = {}) {
@@ -329,21 +335,47 @@ export default class Home extends Component {
             <View>
                 <View style={styles.baseInfo}>
 
-                    <View style={styles.leftShow}>
+                    {/*<View style={styles.leftShow}>
                         <Text style={{ fontSize: 10, color: '#999' }}>我的债权金</Text>
                         <Text >{this.state.rebateInfo ? this.state.rebateInfo.money.toString() : ''}</Text>
-                    </View>
-                    <Progress.Circle size={90} color={'#ee735c'} progress={this.state.rebateInfo ? 1 - this.state.rebateInfo.per / 100 : 0} showsText={true} />
+                    </View>*/}
+                    {/*<Progress.Circle size={100} color={'#ee735c'} progress={this.state.rebateInfo ? 1 - this.state.rebateInfo.per / 100 : 0} showsText={false} children={
+                        (
+                            <View>
+                                <View style={{ alignItems: 'center' }}>
+                                    <Text>{this.state.rebateInfo ? this.state.rebateInfo.repayment_money.toString() : ''}</Text>
+                                    <Text style={{ flex: 1, fontSize: 13 }}>已还债权（元）</Text>
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 23, color: '#34495e' }}>全部债权{this.state.rebateInfo ? this.state.rebateInfo.money.toString() : ''}</Text>
+                                </View>
+                            </View>
+                        )
+
+                    }>
+
+                    </Progress.Circle>*/}
+                    <PercentageCircle radius={60} percent={this.state.rebateInfo ? 100 - this.state.rebateInfo.per : 0} color={"#21BB58"} bgcolor={'#f0f0f0'}>
+                        <View style={{justifyContent:'center',flex:2,alignItems:'center',marginTop:30}}>
+                            <Text style={{fontSize:20,color:'#21BB58'}}>{this.state.rebateInfo ? this.state.rebateInfo.repayment_money.toString() : ''}</Text>
+                            <Text style={{fontSize:8,color:'#999'}}>已返</Text>
+                        </View>
+                        <View style={{flex:1,alignItems:'center'}}>
+                            <Text style={{fontSize:8,color:'#999'}}>全部{this.state.rebateInfo ? this.state.rebateInfo.money.toString() : ''}</Text>
+                        </View>
+                    </PercentageCircle>
+                    {/*<View style={{position:'absolute',left:0,top:0,width:width,height:px2dp(114)}}>
+                        <Progress.Bar height={114} width={width} color={'rgba(33,187,88,0.5)'} borderRadius={0} borderWidth={0} progress={this.state.rebateInfo ? 1 - this.state.rebateInfo.per / 100 : 0} showsText={true} />
+                    </View>*/}
                     {/*<TouchableOpacity>
                             <View style={styles.residueNum}>
                                 <Text onStartShouldSetResponder={() => false} style={{ textAlign: 'center' }}>剩余</Text>
                                 <TouchableOpacity>
                                     <Text onStartShouldSetResponder={() => false} style={{ textAlign: 'center' }}>{this.state.rebateInfo ? this.state.rebateInfo.per : ''}%</Text>
                                 </TouchableOpacity>
-
                             </View>
                         </TouchableOpacity>*/}
-                    <View style={styles.rightShow}>
+                    {/*<View style={styles.rightShow}>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={{ fontSize: 10, color: '#999' }}>已用债权：</Text>
                             <Text style={{ fontSize: 10, color: '#999' }}>{this.state.rebateInfo ? this.state.rebateInfo.repayment_money.toString() : ''}</Text>
@@ -352,7 +384,7 @@ export default class Home extends Component {
                             <Text style={{ fontSize: 10, color: '#999' }}>待用债权：</Text>
                             <Text style={{ fontSize: 10, color: '#999' }}>{this.state.rebateInfo ? this.state.rebateInfo.stay_money.toString() : ''}</Text>
                         </View>
-                    </View>
+                    </View>*/}
                 </View>
                 {/*return*/}
 
@@ -447,11 +479,10 @@ const styles = StyleSheet.create({
     },
     baseInfo: {
         // paddingTop:px2dp(28),
-        height: px2dp(114),
+        height: px2dp(160),
         paddingHorizontal: 20,
         backgroundColor: '#fff',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center'
     },
     leftShow: {
@@ -470,7 +501,7 @@ const styles = StyleSheet.create({
     },
     tabWrapper: {
         marginTop: px2dp(12),
-        height: px2dp(119),
+        height: px2dp(90),
         width: width,
         backgroundColor: '#fff',
         flexDirection: 'row',

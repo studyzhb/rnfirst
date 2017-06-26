@@ -31,7 +31,7 @@ let { width, height } = Dimensions.get('window');
 
 
 
-export default class ShareCode extends Component {
+export default class TTT extends Component {
     constructor(props) {
         super(props);
         this.state = {

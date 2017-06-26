@@ -1,9 +1,9 @@
 'use strict';
 
 import React, { Component } from 'react'
-import { View, Platform, BackAndroid } from 'react-native'
+import { View, Platform, BackAndroid ,ActivityIndicator} from 'react-native'
 import TabView from './TabView'
-import Login from '../pages/testForm';
+import Login from '../pages/validateLogin';
 
 import FinalNum from '../util/FinalNum'
 
@@ -141,7 +141,7 @@ export default class Wrapper extends Component {
         } else if (this.state.isLogin == FinalNum.LOGINDEFAULT) {
             return (
                 <View style={{ flex: 1, backgroundColor: '#fff' }}>
-
+                     <ActivityIndicator color="#aa00aa" />
                 </View>
             )
         }

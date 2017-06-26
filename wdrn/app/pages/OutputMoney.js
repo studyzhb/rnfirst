@@ -44,7 +44,8 @@ export default class OutputMoney extends Component {
             banklist: [],
             selectedPosition: 0,
             modalVisible: false,
-            showPage: false
+            showPage: false,
+            ispaypwd: null
         }
         this.interval = null;
     }
@@ -75,6 +76,7 @@ export default class OutputMoney extends Component {
     }
 
     _goPay(pass) {
+        
         let createOrderUrl = config.baseUrl + config.api.user.useroutput;
         let body = {
             money: this.state.money,
@@ -120,8 +122,11 @@ export default class OutputMoney extends Component {
     }
 
     _submit() {
-        this.openLbs.bind(this)();
-
+        if (this.state.ispaypwd) {
+            this.openLbs.bind(this)();
+        } else if (this.state.ispaypwd !== null && !this.state.ispaypwd) {
+            this._goPay.bind(this,'')();
+        }
     }
 
     _showVerifyCode() {
@@ -138,12 +143,21 @@ export default class OutputMoney extends Component {
 
 
     componentDidMount() {
+
+        storage.load({
+            key: 'loginUser'
+        })
+            .then(data => {
+                this.setState({
+                    ispaypwd: data.is_pay_pwd
+                })
+            })
+
         setTimeout(() => {
             let loginUrl = config.baseUrl + config.api.user.userBanklist;
 
             request.get(loginUrl)
                 .then((data) => {
-                    console.log(data)
                     if (data.code == 1) {
                         if (data.data.length > 0) {
                             this.setState({
@@ -156,7 +170,6 @@ export default class OutputMoney extends Component {
                                 showPage: true
                             })
                         }
-
                     }
                     else if (data.code == 2 || data.code == 3) {
                         let { navigator } = this.props;
@@ -330,7 +343,7 @@ export default class OutputMoney extends Component {
                                 style={[styles.btn, this.state.clicked ? { backgroundColor: '#2ac945', } : null]}
                                 onPress={this._submit.bind(this)}
                             >
-                                下一步
+                                提现
                             </Button>
                         </View>
 

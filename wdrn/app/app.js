@@ -49,14 +49,16 @@ export default class Navigation extends Component {
 	componentWillMount() {
 		console.log('componentWillMount')
 		if (Platform.OS === 'android') {
-			NativeModules.Back.show()
-				.then(()=>{
-					console.log('fanhui app')
-					this.onBackAndroid()
-				})
-				.catch(err=>{
-					console.log(err)
-				})
+			// NativeModules.Back.show(()=>{
+			// 	this.onBackAndroid()
+			// })
+				// .then(()=>{
+				// 	console.log('fanhui app')
+				// 	this.onBackAndroid()
+				// })
+				// .catch(err=>{
+				// 	console.log(err)
+				// })
 			BackAndroid.addEventListener('hardwareBackPress', this.onSysBackAndroid);
 		}
 	}
@@ -83,7 +85,7 @@ export default class Navigation extends Component {
 			// 	return handleBack();
 			// }
 			// 默认行为： 退出当前界面。
-			// nav.pop();
+			nav.pop();
 			return true;
 		}
 		return false;

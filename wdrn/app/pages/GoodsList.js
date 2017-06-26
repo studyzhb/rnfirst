@@ -11,6 +11,7 @@ import {
     ListView,
     AlertIOS,
     Alert,
+    PixelRatio,
     TouchableOpacity,
     TouchableHighlight,
     TouchableNativeFeedback,
@@ -310,7 +311,7 @@ export default class GoodsList extends Component {
         return (
             <TouchableOpacity onPress={this._reduceItem.bind(this, row)}>
                 <View style={styles.items}>
-                    <Image source={require('../images/goods.png')} style={{ width: 100, height: 100 }} />
+                    <Image source={require('../images/goods.png')} style={{ width: px2dp(100), height:px2dp(100) }} />
                     <View style={{ marginLeft: 20, justifyContent: 'space-between' }}>
                         <Text style={{ fontSize: 14, width: 158, lineHeight: 20, color: '#666' }}>{row.goodsname}</Text>
                         <View style={[{ flexDirection: 'row', marginTop: -10, height: 18 }]}>
@@ -320,7 +321,7 @@ export default class GoodsList extends Component {
                     </View>
                     {
                         row.selected
-                            ? <Image source={require('../images/slected.png')} style={{ position: 'absolute', right: 0 }} />
+                            ? <Image source={require('../images/slected.png')} style={{ position: 'absolute', right: 0,width: px2dp(47),height:px2dp(33)}} />
                             : null
                     }
                 </View>

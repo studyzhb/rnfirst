@@ -62,7 +62,7 @@ export default class ObligationList11 extends Component {
         
         setTimeout(() => {
             this._fetchData(1);
-        }, 100);
+        }, 500);
     }
     shouldComponentUpdate() {
         
@@ -386,8 +386,7 @@ export default class ObligationList11 extends Component {
     }
 
     _hasMore() {
-        console.log(cachedResults.items.length)
-        console.log(cachedResults.total)
+
         return cachedResults.items.length !== cachedResults.total;
     }
 
@@ -403,7 +402,7 @@ export default class ObligationList11 extends Component {
         }
 
         let page = cachedResults.nextPage
-        console.log(page)
+
         this._fetchData(page)
     }
 

@@ -100,7 +100,7 @@ export default class LoginIndex extends Component{
                     rightPress={this.rightPress.bind(this)}
                 />
                 <View style={styles.logo}>
-                    <Image source={require('../images/avatar.jpg')} style={{width:px2dp(80),height:px2dp(80)}} />
+                    <Image source={require('../images/logo.png')} style={{width:px2dp(80),height:px2dp(80)}} />
                 </View>
                 <View style={styles.inputWrapper}>
                     <Text style={styles.labelinput}>账号</Text>

@@ -222,7 +222,7 @@ export default class Person extends Component {
         return (
             <View style={styles.container} >
                 <NavBar
-                    title=''
+                    title='用户资料'
                     style={{ 'backgroundColor': '#fff' }}
                     titleStyle={{ 'color': '#666' }}
                     leftIcon='ios-close-outline'
@@ -247,7 +247,7 @@ export default class Person extends Component {
                 <View style={styles.inputWrapper}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Icon name='ios-contact-outline' size={18} />
-                        <Text style={styles.labelinput}>昵称</Text>
+                        <Text style={styles.labelinput}>昵称：</Text>
                     </View>
                     <TextInput
                         style={styles.inputField}
@@ -298,7 +298,7 @@ export default class Person extends Component {
                 <View style={styles.inputWrapper}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Icon name='ios-contact-outline' size={18} />
-                        <Text style={styles.labelinput}>年龄</Text>
+                        <Text style={styles.labelinput}>年龄：</Text>
                     </View>
                     <TextInput
                         style={styles.inputField}

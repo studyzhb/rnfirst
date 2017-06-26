@@ -92,7 +92,10 @@ export default class Authorize extends Component{
     }
 
     leftPress(){
-        
+        let {navigator}=this.props;
+        if(navigator){
+            navigator.pop();
+        }
     }
     rightPress(){
         
@@ -110,6 +113,7 @@ export default class Authorize extends Component{
                     title='认证'
                     style={{'backgroundColor':'#fff'}}
                     titleStyle={{'color':'#666'}}
+                    leftIcon='ios-arrow-back-outline'
                     leftPress={this.leftPress.bind(this)}
                     rightPress={this.rightPress.bind(this)}
                 />

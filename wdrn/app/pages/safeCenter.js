@@ -37,7 +37,7 @@ export default class SafeCenter extends Component {
         ]
     }
     _submit() {
-        let {navigator} = this.props;   
+        let { navigator } = this.props;
 
         storage.remove({
             key: 'loginUser'
@@ -49,7 +49,7 @@ export default class SafeCenter extends Component {
             key: 'token'
         });
 
-        if(navigator){
+        if (navigator) {
             navigator.popToTop();
         }
     }
@@ -72,8 +72,8 @@ export default class SafeCenter extends Component {
     }
 
     leftPress() {
-        let {navigator}=this.props;
-        if(navigator){
+        let { navigator } = this.props;
+        if (navigator) {
             navigator.pop();
         }
     }
@@ -99,6 +99,8 @@ export default class SafeCenter extends Component {
             <View style={styles.container} >
                 <NavBar
                     title='安全中心'
+                    leftIcon='ios-close-outline'
+                    leftPress={this.leftPress.bind(this)}
                     style={{ 'backgroundColor': '#fff' }}
                     titleStyle={{ 'color': '#666' }}
                 />

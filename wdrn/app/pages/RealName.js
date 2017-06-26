@@ -59,7 +59,6 @@ export default class RealName extends Component {
 
         request.post(loginUrl, body)
             .then((data) => {
-
                 if (data.code == 1) {
                     if (this.props.getUser) {
                         this.props.getUser({ isrealname: staticNum.ISREALNAME })
@@ -123,7 +122,7 @@ export default class RealName extends Component {
                     rightPress={this.rightPress.bind(this)}
                 />
                 <View style={styles.inputWrapper}>
-                    <FormLabel>身份证号</FormLabel>
+                    <FormLabel containerStyle={{height:px2dp(40),justifyContent:'center'}} labelStyle={{marginLeft:0,fontSize:14,color:'#353535',marginTop:0,fontWeight:'normal'}}>身份证号</FormLabel>
                     {/*<Text style={styles.labelinput}>身份证号</Text>*/}
                     <TextInput
                         style={styles.inputField}
@@ -144,7 +143,7 @@ export default class RealName extends Component {
 
                 </View>
                 <View style={styles.inputWrapper}>
-                    <FormLabel>真实姓名</FormLabel>
+                    <FormLabel containerStyle={{height:px2dp(40),justifyContent:'center'}} labelStyle={{marginLeft:0,fontSize:14,color:'#353535',marginTop:0,fontWeight:'normal'}}>真实姓名</FormLabel>
                     {/*<Text style={styles.labelinput}>真实姓名</Text>*/}
                     <TextInput
                         style={styles.inputField}
@@ -200,7 +199,6 @@ const styles = StyleSheet.create({
     },
     labelinput: {
         fontSize: 16,
-
         height: px2dp(20),
         marginBottom: 7,
         color: '#3a3a3a',
