@@ -16,6 +16,7 @@ import {
     TouchableHighlight,
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
+    ActivityIndicator,
     RefreshControl
 } from 'react-native';
 
@@ -51,7 +52,10 @@ export default class GoodsList extends Component {
         super(props);
 
         let ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2
+            rowHasChanged: (r1, r2) => {
+                console.log(r1, r2)
+                return r1 !== r2
+            }
         })
 
         this.state = {
@@ -79,7 +83,7 @@ export default class GoodsList extends Component {
                 '提示',
                 info,
                 [
-                    this.state.total < this.props.money ? { text: '去凑单', onPress: () => console.log('Ask me later pressed') } : null,
+                    this.state.total < this.props.money ? { text: '去凑单', onPress: () => console.log('Ask me later pressed') } : { text: '取消', onPress: () => console.log('Ask me later pressed') },
                     { text: '去支付', onPress: this.gotoPay.bind(this), style: 'cancel' }
                 ],
                 { cancelable: false }
@@ -88,7 +92,7 @@ export default class GoodsList extends Component {
                 '提示',
                 info,
                 [
-                    this.state.total < this.props.money ? { text: '去凑单', onPress: () => console.log('Ask me later pressed') } : null,
+                    this.state.total < this.props.money ? { text: '去凑单', onPress: () => console.log('Ask me later pressed') } : { text: '取消', onPress: () => console.log('Ask me later pressed') },
                     { text: '去支付', onPress: this.gotoPay.bind(this), style: 'cancel' }
                 ],
                 { cancelable: false }
@@ -114,67 +118,89 @@ export default class GoodsList extends Component {
 
     //计算价格
     _reduceItem(row) {
-        if (!row.selected) {
+        console.log(row)
+        if (row.selected === undefined) {
             row.selected = false;
         }
         let { selected, total } = this.state;
 
         row.selected = !row.selected;
 
-        for (let i = 0; i < selected.length; i++) {
-            if (selected[i].id == row.id) {
-                selected[i].selected = row.selected;
+        let arrData=JSON.parse(JSON.stringify(selected));
+        //
+        for (let i = 0; i < arrData.length; i++) {
+            if (arrData[i].id == row.id) {
+                arrData[i].selected = row.selected;
             }
         }
 
         total = 0;
         Goods.totalArr = [];
-        for (let i = 0; i < selected.length; i++) {
-            if (selected[i].selected) {
-                Goods.totalArr.push(selected[i]);
-                total += selected[i].price - 0;
+        for (let i = 0; i < arrData.length; i++) {
+            if (arrData[i].selected) {
+                Goods.totalArr.push(arrData[i]);
+                total += arrData[i].price - 0;
             }
         }
 
+        //dataSource: this.state.dataSource.cloneWithRows(selected)
+        console.log(row.selected)
 
-
-        this.setState({ selected, total });
-
+        this.setState({ selected:arrData, total ,dataSource: this.state.dataSource.cloneWithRows(arrData)});
+        // console.log(this.state.selected)
     }
 
     componentWillMount() {
         this._getIndexInfo();
     }
 
-    _fetchData(page, obj) {
+    _fetchData(page, isobj) {
         let that = this;
         let self = this;
-        if (page !== 0) {
+        let obj = {
+            isback: isobj ? isobj.isback : this.state.isSelected
+        }
+
+        if (page == 1) {
+            obj.page = page;
+            cachedResults = {
+                nextPage: 1,
+                items: [],
+                total: 0
+            }
+            this.setState({
+                isRefreshing: true,
+                total: 0
+            })
+        }
+        else if (page !== 0) {
+            obj.page = page;
             this.setState({
                 isLoadingTail: true
             })
         }
         else {
+            obj.page = 1;
+            cachedResults = {
+                nextPage: 1,
+                items: [],
+                total: 0
+            }
             this.setState({
-                isRefreshing: true
+                isRefreshing: true,
+                total: 0
             })
         }
 
 
         let getIndexUrl = config.baseUrl + config.api.rebate.getGoodsList;
 
-        let newObj = {
-            page: page,
-            isback: obj ? obj.isback : 1
-        }
-
-        request.get(getIndexUrl, newObj)
+        request.get(getIndexUrl, obj)
             .then((data) => {
-
 
                 if (data.code == 1 && data.data) {
                     data = data.data;
-                    if (data.data.length > 0) {
+                    if (data.data && data.data.length > 0) {
 
                         let items = cachedResults.items.slice()
 
@@ -192,16 +218,38 @@ export default class GoodsList extends Component {
                         cachedResults.items = items
                         cachedResults.total = data.total
 
-                        if (page !== 0) {
+                        if (page == 1) {
+                            self.setState({
+                                isRefreshing: false,
+                                dataSource: self.state.dataSource.cloneWithRows(this.state.selected)
+                            })
+                        }
+                        else if (page !== 0) {
                             that.setState({
                                 isLoadingTail: false,
-                                dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
+                                dataSource: that.state.dataSource.cloneWithRows(this.state.selected)
                             })
                         }
                         else {
                             that.setState({
                                 isRefreshing: false,
-                                dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
+                                dataSource: that.state.dataSource.cloneWithRows(this.state.selected)
+                            })
+                        }
+                    } else {
+                        if (page == 1) {
+                            this.setState({
+                                isRefreshing: false
+                            })
+                        }
+                        else if (page !== 0) {
+                            this.setState({
+                                isLoadingTail: false
+                            })
+                        }
+                        else {
+                            this.setState({
+                                isRefreshing: false
                             })
                         }
                     }
@@ -226,6 +274,12 @@ export default class GoodsList extends Component {
 
                 }
                 else {
+                    
+                    this.setState({
+                        isRefreshing: false,
+                        isLoadingTail: false,
+                        dataSource: this.state.dataSource.cloneWithRows([])
+                    })
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -249,11 +303,12 @@ export default class GoodsList extends Component {
     }
 
     _fetchMoreData() {
+        console.log('jiazai')
         if (!this._hasMore() || this.state.isLoadingTail) {
 
-            this.setState({
-                isLoadingTail: false
-            })
+            // this.setState({
+            //     isLoadingTail: false
+            // })
 
             return
         }
@@ -264,7 +319,7 @@ export default class GoodsList extends Component {
     }
 
     _onRefresh() {
-        if (!this._hasMore() || this.state.isRefreshing) {
+        if (this.state.isRefreshing) {
             return
         }
 
@@ -284,7 +339,7 @@ export default class GoodsList extends Component {
             return <View style={styles.loadingMore} />
         }
 
-        return <ActivityIndicatorIOS style={styles.loadingMore} />
+        return <ActivityIndicator style={styles.loadingMore} />
     }
 
     async _getIndexInfo() {
@@ -308,10 +363,11 @@ export default class GoodsList extends Component {
     }
 
     _renderRow(row) {
+        console.log(row)
         return (
             <TouchableOpacity onPress={this._reduceItem.bind(this, row)}>
                 <View style={styles.items}>
-                    <Image source={require('../images/goods.png')} style={{ width: px2dp(100), height:px2dp(100) }} />
+                    <Image source={{ uri: row.goods_pic }} style={{ width: px2dp(100), height: px2dp(100) }} />
                     <View style={{ marginLeft: 20, justifyContent: 'space-between' }}>
                         <Text style={{ fontSize: 14, width: 158, lineHeight: 20, color: '#666' }}>{row.goodsname}</Text>
                         <View style={[{ flexDirection: 'row', marginTop: -10, height: 18 }]}>
@@ -321,7 +377,7 @@ export default class GoodsList extends Component {
                     </View>
                     {
                         row.selected
-                            ? <Image source={require('../images/slected.png')} style={{ position: 'absolute', right: 0,width: px2dp(47),height:px2dp(33)}} />
+                            ? <Image source={require('../images/slected.png')} style={{ position: 'absolute', right: 0, width: px2dp(47), height: px2dp(33) }} />
                             : null
                     }
                 </View>
@@ -333,15 +389,10 @@ export default class GoodsList extends Component {
     tabType(obj) {
         this.setState({
             isSelected: obj.isback,
-            dataSource: this.state.dataSource.cloneWithRows([]),
-            total: 0
+            total: 0,
+            dataSource: this.state.dataSource.cloneWithRows([])
         })
 
-        cachedResults = {
-            nextPage: 1,
-            items: [],
-            total: 0
-        }
         this._fetchData(1, obj);
     }
 
@@ -376,6 +427,8 @@ export default class GoodsList extends Component {
                         style={{ paddingBottom: 100 }}
                         dataSource={this.state.dataSource}
                         renderRow={this._renderRow.bind(this)}
+                        renderFooter={this._renderFooter.bind(this)}
+                        onEndReached={this._fetchMoreData.bind(this)}
                         refreshControl={
                             <RefreshControl
                                 refreshing={this.state.isRefreshing}
@@ -463,5 +516,13 @@ const styles = StyleSheet.create({
         padding: 10,
         width: 80,
         height: 46
+    },
+    loadingMore: {
+        marginVertical: 20
+    },
+
+    loadingText: {
+        color: '#777',
+        textAlign: 'center'
     }
 })

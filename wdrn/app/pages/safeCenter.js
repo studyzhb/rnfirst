@@ -31,9 +31,10 @@ export default class SafeCenter extends Component {
             phoneNumber: '',
             password: ''
         }
+        //icon: "ios-pin", icon: "ios-bulb-outline",
         this.config = [
-            { icon: "ios-pin", name: "修改登录密码", onPress: this.goPage.bind(this, "changeLogin") },
-            { icon: "ios-bulb-outline", name: "修改支付密码", color: "#fc7b53", onPress: this.goPage.bind(this, "changePay") },
+            {  name: "修改登录密码", onPress: this.goPage.bind(this, "changeLogin") },
+            {  name: "修改支付密码", color: "#fc7b53", onPress: this.goPage.bind(this, "changePay") },
         ]
     }
     _submit() {
@@ -110,9 +111,10 @@ export default class SafeCenter extends Component {
                         this._renderListItem()
                     }
                 </View>
-                <View style={{ width: width, flexDirection: 'row', justifyContent: 'center' }}>
+                <View style={{ width: width, flexDirection: 'row', justifyContent: 'center',marginTop:20 }}>
                     <Button
-                        style={styles.btn}
+                        containerStyle={styles.btn}
+                        style={styles.btnstyle}
                         onPress={this._submit.bind(this)}
                     >
                         注销登录
@@ -190,7 +192,11 @@ const styles = StyleSheet.create({
         // borderColor:'#ee735c',
         // borderWidth:1,
         borderRadius: 4,
-        color: '#fff'
+        
+    },
+    btnstyle:{
+        color: '#fff',
+        fontWeight:'normal'
     }
 })
 

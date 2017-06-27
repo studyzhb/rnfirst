@@ -268,7 +268,7 @@ export default class Person extends Component {
 
                 </View>
                 <View style={styles.inputWrapper}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center'}}>
                         <Icon name='ios-female-outline' size={18} />
                         <Text style={styles.labelinput}>性别</Text>
                     </View>
@@ -277,7 +277,7 @@ export default class Person extends Component {
                         center
                         title='男'
                         onPress={() => { this.setState({ checked: 1, sex: '1' }) }}
-                        containerStyle={{ backgroundColor: '#fff', borderWidth: 0 }}
+                        containerStyle={{ backgroundColor: '#fff', borderWidth: 0,marginTop:-5 }}
                         checkedIcon='dot-circle-o'
                         uncheckedIcon='circle-o'
                         checkedColor='red'
@@ -287,7 +287,7 @@ export default class Person extends Component {
                         center
                         title='女'
                         onPress={() => { this.setState({ checked: 2, sex: '2' }) }}
-                        containerStyle={{ backgroundColor: '#fff', borderWidth: 0 }}
+                        containerStyle={{ backgroundColor: '#fff', borderWidth: 0 ,marginTop:-5 }}
                         checkedIcon='dot-circle-o'
                         uncheckedIcon='circle-o'
                         checkedColor='red'
@@ -377,6 +377,8 @@ const styles = StyleSheet.create({
         // color:'#999',
         textAlign: 'left',
         alignItems: 'center',
+        marginTop:-5 ,
+        fontWeight:'normal'
         // backgroundColor:'#fff'
     },
     subbtn: {

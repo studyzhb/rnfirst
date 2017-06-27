@@ -70,6 +70,10 @@ export default class PayPass extends Component {
             return isIOS ? AlertIOS.alert('密码不能为空！') : Alert.alert('密码不能为空！');
         }
 
+        if (password.length<6) {
+            return isIOS ? AlertIOS.alert('密码长度最少6位') : Alert.alert('密码长度最少6位');
+        }
+
         let body = {
             tel: phoneNumber,
             code: verifyCode,
@@ -402,7 +406,14 @@ const styles = StyleSheet.create({
     },
     countBtn: {
         width: 110,
-        height: 30,
+        ...Platform.select({
+            android: {
+                height: 46,
+            },
+            ios: {
+                height: 36,
+            },
+        }),
         padding: 10,
         justifyContent: 'center',
         // marginLeft: 8,

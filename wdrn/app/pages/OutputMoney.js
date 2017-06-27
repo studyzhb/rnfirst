@@ -292,7 +292,7 @@ export default class OutputMoney extends Component {
                                 onPress={this.changeBankSelected.bind(this)}
                                 title={this.state.banklist.length > 0 ? this.state.banklist[this.state.selectedPosition].card_tip : '点我添加银行卡'}
                                 subtitle={this.state.banklist.length > 0 ? this.state.banklist[this.state.selectedPosition].card_num : '点我添加银行卡'}
-                                avatar={this.state.banklist.length > 0 ? { uri: this.state.banklist[this.state.selectedPosition].card.logo } : require('../images/jh.png')}
+                                avatar={this.state.banklist.length > 0 ? { uri: this.state.banklist[this.state.selectedPosition].card.logo } : require('../images/defaultbank.png')}
                             />
                             {/*<View style={{ flex: 1, position: 'absolute', left: 0, top: 0, width: width }}>
                                 <Picker

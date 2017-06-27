@@ -255,13 +255,13 @@ export default class RecordList extends Component {
     _renderRow(item) {
         let info = '';
         if (item.status == 0) {
-            info = '未付款';
+            info = '';
         } else if (item.status == 1) {
-            info = '付款中';
+            info = '申请中';
         } else if (item.status == 2) {
-            info = '交易完成';
+            info = '已完成';
         } else if (item.status == 3) {
-            info = '付款失败';
+            info = '已拒绝';
         }
         return (
             <View style={{ paddingLeft: 20, paddingVertical: 12, paddingRight: 20, backgroundColor: '#fff', marginTop: 12 }}>

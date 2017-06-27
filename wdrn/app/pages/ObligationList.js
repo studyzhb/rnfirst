@@ -243,14 +243,13 @@ export default class ObligationList11 extends Component {
                     if (navigator) {
                         navigator.popToTop();
                     }
-
                 }
                 else {
                     that.setState({
                         isRefreshing: false,
                         isLoadingTail:false,
                         queueInfo: data.data,
-                        dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
+                        dataSource: that.state.dataSource.cloneWithRows([])
                     })
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
@@ -548,7 +547,7 @@ export default class ObligationList11 extends Component {
                             <Text style={[styles.normalText, { textAlign: 'center', color: '#ccc' }]}>待返积分</Text>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: width }}>
-                            <Text style={[styles.normalText, { textAlign: 'center' }]}>已返积分：<Text style={{ color: '#333', fontSize: 12 }}>{this.state.queueInfo.refund?((this.state.queueInfo.refund - 0) + (this.state.queueInfo.refund_pending - 0) + this.state.queueInfo.refund_ing - 0).toString():'0'}</Text></Text>
+                            <Text style={[styles.normalText, { textAlign: 'center' }]}>已返积分：<Text style={{ color: '#333', fontSize: 12 }}>{this.state.queueInfo.refund?((this.state.queueInfo.refund - 0) + (this.state.queueInfo.refund_pending - 0) + (this.state.queueInfo.refund_ing - 0)).toString():'0'}</Text></Text>
                         </View>
                     </View>
                 </View>
@@ -768,8 +767,9 @@ const styles = StyleSheet.create({
         color: '#3a3a3a'
     },
     convercebtn: {
-        fontSize: 14,
+        fontSize: 12,
         color: '#fff',
+        fontWeight:'normal'
     },
     convercebtnWrapper: {
         width: px2dp(56),
@@ -778,6 +778,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#21bb58",
         overflow: 'hidden',
         borderRadius: 20,
+        alignItems:'center'
         // marginTop:-16
         // marginBottom:16
     },

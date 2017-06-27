@@ -42,9 +42,9 @@ export default class My extends Component {
         }
 
         this.config = [
-            { icon: "ios-pin", name: "安全中心", onPress: this.goPage.bind(this, "safeCenter") },
+            { img: require('../images/safe.png'), name: "安全中心", onPress: this.goPage.bind(this, "safeCenter") },
             { icon: "ios-bulb-outline", name: "意见反馈", color: "#fc7b53" },
-            { icon: "ios-information-circle-outline", name: "关于我们", subName: "分润奖励金", color: "#fc7b53" },
+            { icon: "ios-information-circle-outline",iconSize:18, name: "关于我们", subName: "分润奖励金", color: "#fc7b53" },
             // {icon:"md-flower", name:"服务中心"},
         ]
     }

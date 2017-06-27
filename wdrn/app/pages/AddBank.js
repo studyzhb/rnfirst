@@ -37,7 +37,8 @@ export default class AddBank extends Component {
         this.state = {
             card_num: '',
             card_tip: 'ceshi',
-            banklist: []
+            banklist: [],
+            user:null
         }
     }
 
@@ -73,6 +74,42 @@ export default class AddBank extends Component {
 
     componentDidMount() {
         let url = config.baseUrl + config.api.user.showBanklist;
+        let userurl = config.baseUrl + config.api.user.userStatus;
+
+        request.get(userurl)
+            .then(data => {
+                console.log(data)
+                if (data.code == 1) {
+                    this.setState({
+                        user: data.data
+                    })
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
+                    isIOS ? AlertIOS.alert(data.message) : Alert(data.message);
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
         request.get(url)
             .then(data => {
                 console.log(data)
@@ -235,22 +272,37 @@ export default class AddBank extends Component {
 
                 </View>*/}
                 <View style={styles.inputWrapper}>
-                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>卡号</FormLabel>
+                    <FormLabel containerStyle={{ marginTop: -10, width: 100 }} labelStyle={{ fontSize: 14, color: '#3a3a3a', fontWeight: 'normal' }}>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</FormLabel>
+                    <View style={styles.textContainerStyle}>
+                        <Text style={styles.textstyle}>{this.state.user?this.state.user.real_name:null}</Text>
+                    </View>
+
+                </View>
+                <View style={styles.inputWrapper}>
+                    <FormLabel containerStyle={{ marginTop: -10, width: 100 }} labelStyle={{ fontSize: 14, color: '#3a3a3a', fontWeight: 'normal' }}>身份证号</FormLabel>
+                    <View style={styles.textContainerStyle}>
+                        <Text style={styles.textstyle}>{this.state.user?this.state.user.id_card:null}</Text>
+                    </View>
+                </View>
+                <View style={styles.inputWrapper}>
+                    <FormLabel containerStyle={{ marginTop: -10, width: 100 }} labelStyle={{ fontSize: 14, color: '#3a3a3a', fontWeight: 'normal' }}>银行卡号</FormLabel>
                     <FormInput
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         placeholder="请输入银行卡号"
                         //关闭拼写自动修正
                         autoCorrect={false}
-                        containerStyle={{ marginLeft: 0 }}
-                        inputStyle={{ width: width - 80, paddingLeft: 10 }}
+                        inputStyle={{ width: width - 100, paddingLeft: 10 }}
                         //去除android下的底部边框问题
-                        //underlineColorAndroid="transparent"
+                        underlineColorAndroid="transparent"
+                        containerStyle={{ marginLeft: 0, borderBottomColor: '#eaeaea', borderBottomWidth: px2dp(1), width: width - 100 }}
                         keyboardType='numeric' //弹出软键盘类型
                         onChangeText={(text) => this.setState({ card_num: text })} />
                 </View>
                 <View style={styles.inputWrapper}>
-                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>银行</FormLabel>
+
+                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14, color: '#3a3a3a', fontWeight: 'normal' }}>开户银行</FormLabel>
+
                     {/*<Text style={styles.labelinput}>银行</Text>*/}
                     {
                         isIOS
@@ -369,7 +421,8 @@ const styles = StyleSheet.create({
         // fontSize: 14,
         flex: 6,
         height: px2dp(50),
-        color: '#999',
+        color: '#767676',
+        marginLeft:8,
         alignItems: 'center',
         backgroundColor: '#fff',
         borderBottomColor: '#3a3a3a',
@@ -407,6 +460,33 @@ const styles = StyleSheet.create({
         // borderWidth:1,
         borderRadius: 4,
         color: '#fff'
+    },
+    textContainerStyle: {
+        marginLeft: 0,
+        marginRight: 15,
+        width: width - 80,
+        justifyContent:'center',
+        borderBottomColor: '#eaeaea',
+        borderBottomWidth: 1,
+        ...Platform.select({
+            ios: {
+                marginLeft: 20,
+                marginRight: 20,
+            },
+        })
+    },
+    textstyle: {
+        paddingLeft:10,
+        ...Platform.select({
+            android: {
+                height: 46,
+                lineHeight:30
+            },
+            ios: {
+                height: 36,
+                lineHeight:30
+            },
+        }),
     }
 })
 

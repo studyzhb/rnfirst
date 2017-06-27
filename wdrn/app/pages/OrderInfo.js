@@ -26,6 +26,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import config from '../util/config'
 import request from '../util/request'
 
+
+import dateFormat from 'dateformat'
+
 let { width, height } = Dimensions.get('window');
 let isIOS = Platform.OS === 'ios';
 export default class OrderInfo extends Component {
@@ -122,7 +125,6 @@ export default class OrderInfo extends Component {
             case 4:
                 backstatus = '违规踢出'
                 break;
-
         }
 
         return (

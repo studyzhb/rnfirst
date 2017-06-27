@@ -268,11 +268,11 @@ export default class AllobList extends Component {
         if (item.status == 0) {
             info = '未使用';
         } else if (item.status == 1) {
-            info = '申请中';
+            info = '审核中';
         } else if (item.status == 2) {
-            info = '队列中';
+            info = '进行中';
         } else if (item.status == 3) {
-            info = '返利完成';
+            info = '已完结';
         } else if (item.status == 4) {
             info = "申请拒绝"
         }

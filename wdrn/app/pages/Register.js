@@ -74,11 +74,17 @@ export default class Register extends Component {
             return isIOS ? AlertIOS.alert('密码不能为空！') : Alert.alert('密码不能为空！');
         }
 
+        if (password.length<6) {
+            return isIOS ? AlertIOS.alert('密码长度最少6位') : Alert.alert('密码长度最少6位');
+        }
+
         let body = {
             tel: phoneNumber,
             code: verifyCode,
             password: password
         }
+
+        let {navigator}=this.props;
 
         let verifyURL = config.baseUrl + config.api.user.register;
 
@@ -87,7 +93,9 @@ export default class Register extends Component {
 
                 if (data.code == 1) {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
-                    self.props.afterLogin(data.data)
+                    if(navigator){
+                        navigator.pop();
+                    }
                 }
                 else if (data.code == 2 || data.code == 3) {
                     let { navigator } = this.props;
@@ -113,7 +121,7 @@ export default class Register extends Component {
             })
             .catch((err) => {
                 console.log(err)
-                isIOS ? AlertIOS.alert('请检查网络是否良好') : Alert.alert('请检查网络是否良好');
+                // isIOS ? AlertIOS.alert('请检查网络是否良好') : Alert.alert('请检查网络是否良好');
             })
     }
 
@@ -197,7 +205,7 @@ export default class Register extends Component {
             })
             .catch((err) => {
                 console.log(err)
-                isIOS ? AlertIOS.alert('获取验证码失败，请检查网络是否良好!') : Alert.alert('获取验证码失败，请检查网络是否良好!');
+                // isIOS ? AlertIOS.alert('获取验证码失败，请检查网络是否良好!') : Alert.alert('获取验证码失败，请检查网络是否良好!');
             })
     }
 
@@ -424,7 +432,14 @@ const styles = StyleSheet.create({
     },
     countBtn: {
         width: 110,
-        height: 30,
+        ...Platform.select({
+            android: {
+                height: 46,
+            },
+            ios: {
+                height: 36,
+            },
+        }),
         padding: 10,
         justifyContent: 'center',
         // marginLeft: 8,

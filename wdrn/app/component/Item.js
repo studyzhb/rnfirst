@@ -60,14 +60,15 @@ export default class Item extends Component {
     onPress: PropTypes.func
   }
   _render(){
-    let {icon, iconSize, name, subName, color, first, avatar,image, disable, font} = this.props
+    let {icon, iconSize, name, subName, color, first, avatar,image,img, disable, font} = this.props
     font = font||"Ionicons"
     const Icon = Font[font]
     return (
       <View style={styles.listItem}>
         {icon?(<Icon name={icon} size={px2dp(iconSize||20)} style={{width: 22, marginRight:5, textAlign:"center"}} color={color || "#4da6f0"} />):null}
         {image?(<Image source={image} style={{width: 36, height: 36, resizeMode: "cover", overflow:"hidden", borderRadius: 18}}/>):null}
-        <View style={[styles.listInfo, {borderTopWidth: !first?1:0}]}>
+        {img?(<Image source={img} style={{width: 12, height: 14.5,marginRight:10,marginLeft:5,  resizeMode: "cover", overflow:"hidden"}}/>):null}
+        <View style={[styles.listInfo, {borderBottomWidth: !first?1:1}]}>
           <View style={{flex: 1}}><Text>{name}</Text></View>
           <View style={styles.listInfoRight}>
             {subName?(<Text style={{color: "#aaa", fontSize:12}}>{subName}</Text>):null}
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderTopColor: "#f5f5f5"
+    borderBottomColor: "#f5f5f5"
   },
   listInfoRight: {
     flexDirection: "row",
