@@ -52,7 +52,7 @@ export default class OrderList extends Component {
 
         this.state = {
             orderArr: [],
-            tabStatus: FINALNUM.ORDERLISTNOFINISHED,
+            tabStatus: FINALNUM.ORDERLISTFINISHED,
             isRefreshing: false,
             isLoadingTail: false,
             dataSource: ds.cloneWithRows([])
@@ -129,13 +129,13 @@ export default class OrderList extends Component {
         })
     }
 
-    async _fetchData(page, to) {
+    async _fetchData(page) {
 
         let that = this;
         let self = this;
         let obj = {
             creditor_id: this.props.obid,
-            status: to ? to.status : this.state.tabStatus
+            status: this.state.tabStatus
         }
         if (page == 1) {
             obj.page = page;
@@ -210,43 +210,39 @@ export default class OrderList extends Component {
                             })
                         }
                     }
-                    else if (data.code == 2 || data.code == 3) {
-                        let { navigator } = this.props;
 
-                        storage.remove({
-                            key: 'loginUser'
-                        });
-                        storage.remove({
-                            key: 'user'
-                        });
-                        storage.remove({
-                            key: 'token'
-                        });
-
-                        if (navigator) {
-                            navigator.popToTop();
-                        }
-
-                    }
                     else {
-                        cachedResults = {
-                            nextPage: 1,
-                            items: [],
-                            total: 0
-                        }
 
                         this.setState({
-                            dataSource: that.state.dataSource.cloneWithRows([]),
                             isRefreshing: false
                         })
-                        cachedResults.total = data.data.total
+                        // cachedResults.total = data.data.total
 
-                        if (page > 1) {
-                            this._fetchData(1);
-                        }
+                        // if (page > 1) {
+                        //     this._fetchData(1);
+                        // }
                     }
 
-                } else {
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
                 }
             })
@@ -272,9 +268,9 @@ export default class OrderList extends Component {
     _fetchMoreData() {
         if (!this._hasMore() || this.state.isLoadingTail) {
 
-            this.setState({
-                isLoadingTail: false
-            })
+            // this.setState({
+            //     isLoadingTail: false
+            // })
 
             return
         }
@@ -286,7 +282,7 @@ export default class OrderList extends Component {
 
     _onRefresh() {
 
-        if (!this._hasMore() || this.state.isRefreshing) {
+        if (this.state.isRefreshing) {
             return
         }
         this._fetchData(0)
@@ -383,7 +379,7 @@ export default class OrderList extends Component {
                         titleStyle={{ color: '#666', fontSize: 18 }}
                         style={{ backgroundColor: '#fff', borderBottomColor: "#eaeaea" }}
                     />
-                    <View style={styles.tabTitle}>
+                    {/*<View style={styles.tabTitle}>
                         <Button
                             onPress={this.changeTabStatus.bind(this, FINALNUM.ORDERLISTNOFINISHED)}
                             containerStyle={[styles.backBuyWrapper, this.state.tabStatus == FINALNUM.ORDERLISTNOFINISHED ? styles.backActive : null]}
@@ -391,12 +387,12 @@ export default class OrderList extends Component {
                         >
                             未付款
                         </Button>
-                        {/*<Button
+                        <Button
                             containerStyle={[styles.backBuyWrapper]}
                             style={styles.backBuy}
                         >
                             已处理
-                        </Button>*/}
+                        </Button>
                         <Button
                             onPress={this.changeTabStatus.bind(this, FINALNUM.ORDERLISTFINISHED)}
                             containerStyle={[styles.backBuyWrapper, this.state.tabStatus == FINALNUM.ORDERLISTFINISHED ? styles.backActive : null]}
@@ -404,7 +400,7 @@ export default class OrderList extends Component {
                         >
                             已完成
                         </Button>
-                    </View>
+                    </View>*/}
                     <View style={{ height: 30, flexDirection: 'row', alignItems: 'center', paddingLeft: 12 }}>
                         {/*<Icon name='ios-information-circle-outline' size={16} color='#0058be' />
                         <Text style={{ fontSize: 12, color: '#0058be', marginLeft: 6 }}>此处仅展示不可回购订单，查看返利订单消费记录请返回上一页</Text>*/}

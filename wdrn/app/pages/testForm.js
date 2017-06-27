@@ -24,9 +24,13 @@ import Register from './Register';
 import ForgetPass from './ForgetPass';
 import ChangeLogin from './changeLogin';
 
+import AutoHideKeyBoard from '../component/AutoHideKeyBoard'
+
+
 const isIOS = Platform.OS === 'ios';
 let { width, height } = Dimensions.get('window');
 
+@AutoHideKeyBoard
 export default class testForm extends Component {
     constructor(props) {
         super(props);
@@ -48,7 +52,7 @@ export default class testForm extends Component {
         if (!/^1[34578]\d{9}$/.test(phoneNumber)) {
             return isIOS ? AlertIOS.alert('手机号码有误，请重填!') : Alert.alert('手机号码有误，请重填');
         }
-        
+
         if (!pass) {
             return isIOS ? AlertIOS.alert('密码不能为空！') : Alert.alert('密码不能为空！');
         }

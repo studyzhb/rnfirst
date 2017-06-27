@@ -22,9 +22,12 @@ import NavBar from '../component/NavBar';
 import { FormLabel, FormInput } from 'react-native-elements'
 
 import staticNum from '../util/FinalNum'
-
+import AutoHideKeyBoard from '../component/AutoHideKeyBoard'
 const isIOS = Platform.OS === 'ios';
 let { width, height } = Dimensions.get('window');
+
+
+@AutoHideKeyBoard
 export default class RealName extends Component {
     constructor(props) {
         super(props);
@@ -133,7 +136,7 @@ export default class RealName extends Component {
                         autoCorrect={false}
                         //去除android下的底部边框问题
                         underlineColorAndroid="transparent"
-                        keyboardType='number-pad' //弹出软键盘类型
+                        keyboardType='default' //弹出软键盘类型
                         onChangeText={(text) => {
                             this.setState({
                                 phoneNumber: text
@@ -154,7 +157,7 @@ export default class RealName extends Component {
                         autoCorrect={false}
                         //去除android下的底部边框问题
                         underlineColorAndroid="transparent"
-                        keyboardType='number-pad' //弹出软键盘类型
+                        keyboardType='email-address' //弹出软键盘类型
                         onChangeText={(text) => {
                             this.setState({
                                 name: text

@@ -20,13 +20,17 @@ import request from '../util/request';
 import config from '../util/config';
 import px2dp from '../util/px2dp';
 import NavBar from '../component/NavBar';
-
+import PickerI from 'react-native-picker';
 import { FormLabel, FormInput } from 'react-native-elements';
+
+import AutoHideKeyBoard from '../component/AutoHideKeyBoard'
 
 let PickerItemIOS = PickerIOS.Item;
 
 const isIOS = Platform.OS === 'ios';
 let { width, height } = Dimensions.get('window');
+
+@AutoHideKeyBoard
 export default class AddBank extends Component {
     constructor(props) {
         super(props);
@@ -35,6 +39,36 @@ export default class AddBank extends Component {
             card_tip: 'ceshi',
             banklist: []
         }
+    }
+
+    _createAreaData() {
+        let data = [];
+        let len = this.state.banklist.length;
+        for (let i = 0; i < len; i++) {
+            data.push(this.state.banklist[i].tip)
+        }
+        return data;
+    }
+
+    _showAreaPicker() {
+        Picker.init({
+            pickerData: this._createAreaData(),
+            selectedValue: this.state.card_tip,
+            onPickerConfirm: pickedValue => {
+                this.setState({
+                    card_tip: pickedValue
+                })
+                console.log('area', pickedValue);
+            },
+            onPickerCancel: pickedValue => {
+                console.log('area', pickedValue);
+            },
+            onPickerSelect: pickedValue => {
+                //Picker.select(['山东', '青岛', '黄岛区'])
+                console.log('area', pickedValue);
+            }
+        });
+        Picker.show();
     }
 
     componentDidMount() {
@@ -220,7 +254,26 @@ export default class AddBank extends Component {
                     {/*<Text style={styles.labelinput}>银行</Text>*/}
                     {
                         isIOS
-                            ? <PickerIOS
+                            ? <TouchableOpacity style={styles.inputField} onPress={this._showAreaPicker.bind(this)}>
+                                <Text>{this.state.card_tip}</Text>
+                            </TouchableOpacity>
+                            : <Picker
+                                style={styles.inputField}
+                                selectedValue={this.state.card_tip}
+                                onValueChange={(lang) => this.setState({ card_tip: lang })}>
+                                {
+                                    this.state.banklist.length > 0
+                                        ? this.state.banklist.map((item, key) => {
+                                            return (
+                                                <Picker.Item label={item.tip} value={item.tip} key={key} />
+                                            )
+                                        })
+                                        : null
+                                }
+                            </Picker>
+                    }
+
+                    {/*<PickerIOS
                                 style={styles.iospicker}
                                 itemStyle={{fontSize: 25, color: 'red', textAlign: 'center', fontWeight: 'bold'}}
                                 selectedValue={this.state.card_tip}
@@ -237,40 +290,7 @@ export default class AddBank extends Component {
                                     value={'ceshi2'}
                                     label={'ceshi2'}
                                 />
-                                {
-                                  /*  this.state.banklist.length > 0
-                                        ? this.state.banklist.map((item, key) => {
-                                            return (
-                                                <PickerIOS.Item
-                                                    key={key}
-                                                    value={item.tip}
-                                                    label={item.tip}
-                                                />
-                                            )
-                                        })
-                                        :<PickerIOS.Item
-                                                    key={1}
-                                                    value={'ceshi'}
-                                                    label={'ceshi'}
-                                                />
-                                    */
-                                }
-                            </PickerIOS>
-                            : <Picker
-                                style={styles.inputField}
-                                selectedValue={this.state.card_tip}
-                                onValueChange={(lang) => this.setState({ card_tip: lang })}>
-                                {
-                                    this.state.banklist.length > 0
-                                        ? this.state.banklist.map((item, key) => {
-                                            return (
-                                                <Picker.Item label={item.tip} value={item.tip} key={key} />
-                                            )
-                                        })
-                                        : null
-                                }
-                            </Picker>
-                    }
+                            </PickerIOS>*/}
 
                     {/*<TextInput 
                         style={styles.inputField}
@@ -356,10 +376,10 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     iospicker: {
-     
+
         paddingRight: 10,
         // fontSize: 14,
-        width:100,
+        width: 100,
         height: px2dp(50),
         alignItems: 'center',
         backgroundColor: '#fff',

@@ -26,6 +26,10 @@ let { width, height } = Dimensions.get('window');
 let count = {
     num: 60
 }
+
+import AutoHideKeyBoard from '../component/AutoHideKeyBoard'
+
+@AutoHideKeyBoard
 export default class PayPass extends Component {
     constructor(props) {
         super(props);

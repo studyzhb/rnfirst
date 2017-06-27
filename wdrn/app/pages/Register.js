@@ -20,7 +20,7 @@ import NavBar from '../component/NavBar';
 import { FormInput } from 'react-native-elements';
 
 import CountDownText from '../util/CountDownText';
-
+import AutoHideKeyBoard from '../component/AutoHideKeyBoard'
 const isIOS = Platform.OS === 'ios';
 let { width, height } = Dimensions.get('window');
 // console.log(CountDownText)
@@ -30,6 +30,8 @@ let count = {
     num: 60
 }
 
+
+@AutoHideKeyBoard
 export default class Register extends Component {
     constructor(props) {
         super(props);

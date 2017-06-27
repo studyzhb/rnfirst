@@ -62,7 +62,7 @@ export default class RecordList extends Component {
     }
 
     changeTabStatus(value) {
-        console.log('status' + value)
+        
         let cachedResults = {
             nextPage: 1,
             items: [],
@@ -70,7 +70,8 @@ export default class RecordList extends Component {
         }
         this.setState({
             tabStatus: value,
-            isRefreshing: true
+            isRefreshing: true,
+            dataSource: this.state.dataSource.cloneWithRows(cachedResults.items)
         })
 
         this._fetchData(0, { status: value });
@@ -80,27 +81,44 @@ export default class RecordList extends Component {
 
         let that = this;
         let self = this;
-        if (page !== 0) {
+        let obj = {
+            id: this.props.obid,
+            type: to ? to.status : this.state.tabStatus
+        }
+
+        if (page == 1) {
+            obj.page = page;
+            cachedResults = {
+                nextPage: 1,
+                items: [],
+                total: 0
+            }
+            this.setState({
+                isRefreshing: true
+            })
+        }
+        else if (page !== 0) {
+            obj.page = page;
             this.setState({
                 isLoadingTail: true
             })
         }
         else {
+            obj.page = 1;
+            cachedResults = {
+                nextPage: 1,
+                items: [],
+                total: 0
+            }
             this.setState({
                 isRefreshing: true
             })
         }
 
         let getIndexUrl = config.baseUrl + config.api.rebate.getBackOrConverce;
-        let obj = {
-            page: page,
-            id: this.props.obid,
-            type: to ? to.status : this.state.tabStatus
-        }
-
+        
         request.get(getIndexUrl, obj)
             .then((data) => {
-               console.log(data)
 
                 if (data.code == 1 && data.data) {
 
@@ -121,7 +139,13 @@ export default class RecordList extends Component {
                         cachedResults.items = items
                         cachedResults.total = data.data.total
 
-                        if (page !== 0) {
+                        if (page == 1) {
+                            self.setState({
+                                isRefreshing: false,
+                                dataSource: self.state.dataSource.cloneWithRows(cachedResults.items)
+                            })
+                        }
+                        else if (page !== 0) {
                             that.setState({
                                 isLoadingTail: false,
                                 dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
@@ -135,11 +159,9 @@ export default class RecordList extends Component {
                         }
                     } else {
 
-                        cachedResults.items = []
-                        cachedResults.total = data.data.total
                         that.setState({
                             isRefreshing: false,
-                            dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
+                            isLoadingTail: false
                         })
                     }
 
@@ -188,9 +210,9 @@ export default class RecordList extends Component {
     _fetchMoreData() {
         if (!this._hasMore() || this.state.isLoadingTail) {
 
-            this.setState({
-                isLoadingTail: false
-            })
+            // this.setState({
+            //     isLoadingTail: false
+            // })
 
             return
         }
@@ -203,7 +225,7 @@ export default class RecordList extends Component {
 
     _onRefresh() {
         
-        if (!this._hasMore() || this.state.isRefreshing) {
+        if (this.state.isRefreshing) {
             return
         }
         this._fetchData(0)
