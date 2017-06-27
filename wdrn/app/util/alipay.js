@@ -16,6 +16,7 @@ export default function alipay(opt) {
     /*调用支付接口*/
     request.post(uri,body)
         .then((response) => {
+          console.log(response);
         if (response.status === 200) {
           return response.json()
         } else {

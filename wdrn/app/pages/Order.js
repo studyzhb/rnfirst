@@ -194,7 +194,49 @@ export default class Order extends Component {
     }
 
     shouldComponentUpdate() {
+        let getIndexUrl = config.baseUrl + config.api.user.showBalance;
+        request.get(getIndexUrl)
+            .then((data) => {
 
+                if (data.code == 1) {
+                    if(this.state.isrealname===data.data.is_real_name||this.state.is_pay===data.data.is_pay){
+                        return false;
+                    }
+                    this.setState({
+                        userData: data.data.user_data,
+                        ispay: data.data.is_pay,
+                        isrealname: data.data.is_real_name
+                    })
+
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    let { navigator } = this.props;
+
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
+                    isIOS
+                        ? AlertIOS.alert(data.message)
+                        : Alert.alert(data.message)
+                }
+            })
+            .catch(err => {
+                console.log(err);
+
+            })
         return true;
     }
     componentWillUpdate() {
@@ -211,7 +253,7 @@ export default class Order extends Component {
         let getIndexUrl = config.baseUrl + config.api.user.showBalance;
         request.get(getIndexUrl)
             .then((data) => {
-
+                console.log(data);
                 if (data.code == 1) {
                     this.setState({
                         userData: data.data.user_data,
@@ -336,7 +378,7 @@ export default class Order extends Component {
                                         </View>
                                     </TouchableWithoutFeedback>
                                 </View>
-                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding: 10, marginTop: 10, backgroundColor: 'rgba(0,0,0,0)' }}>
+                                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding: 10, marginTop: 20, backgroundColor: 'rgba(0,0,0,0)' }}>
                                     <TouchableOpacity style={{ paddingVertical: 0, backgroundColor: 'rgba(0,0,0,0)' }} onPress={this.alltoBalance.bind(this, 1)}>
                                         <Text style={{ color: "#fff", fontSize: px2dp(12) }}>我的债权金（元）：{this.state.userData ? this.state.userData.creditor : 0}</Text>
                                     </TouchableOpacity>

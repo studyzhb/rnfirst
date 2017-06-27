@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import { View, Platform, BackAndroid ,ActivityIndicator} from 'react-native'
 import TabView from './TabView'
-import Login from '../pages/validateLogin';
+import Login from '../pages/testForm';
 
 import FinalNum from '../util/FinalNum'
 
@@ -114,6 +114,7 @@ export default class Wrapper extends Component {
 
     _afterLogin(user) {
         console.log(user);
+        console.log('debgyu')
         storage.save({
             key: 'loginUser',
             data: user

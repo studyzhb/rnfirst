@@ -51,7 +51,7 @@ export default class Banklist extends Component {
 
 
     confirmPay(txt) {
-
+        alert(this.state.isrealname)
         if (this.state.isrealname) {
             this.goPage.bind(this, 'addBank')();
         } else {

@@ -45,6 +45,10 @@ export default class testForm extends Component {
             return isIOS ? AlertIOS.alert('手机号不能为空！') : Alert.alert('手机号不能为空！');
         }
 
+        if (!/^1[34578]\d{9}$/.test(phoneNumber)) {
+            return isIOS ? AlertIOS.alert('手机号码有误，请重填!') : Alert.alert('手机号码有误，请重填');
+        }
+        
         if (!pass) {
             return isIOS ? AlertIOS.alert('密码不能为空！') : Alert.alert('密码不能为空！');
         }
@@ -124,38 +128,40 @@ export default class testForm extends Component {
                     <Image source={require('../images/logo.png')} style={{ width: px2dp(80), height: px2dp(80) }} />
                 </View>
                 <View style={styles.inputWrapper}>
-                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>账号</FormLabel>
+                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14,color:'#3a3a3a',fontWeight:'normal' }}>账号</FormLabel>
                     <FormInput
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         placeholder="请输入手机号"
                         //关闭拼写自动修正
                         autoCorrect={false}
-                        containerStyle={{ marginLeft: 0 }}
+                        containerStyle={{marginLeft:0,borderBottomColor: '#eaeaea',borderBottomWidth: px2dp(1)}}
                         inputStyle={{ width: width - 80, paddingLeft: 10 }}
                         //去除android下的底部边框问题
-                        //underlineColorAndroid="transparent"
+                        underlineColorAndroid="transparent"
                         keyboardType='numeric' //弹出软键盘类型
+                        
                         onChangeText={(text) => this.setState({ phoneNumber: text })} />
                 </View>
                 <View style={styles.inputWrapper}>
-                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14 }}>密码</FormLabel>
+                    <FormLabel containerStyle={{ marginTop: -10 }} labelStyle={{ fontSize: 14,color:'#3a3a3a',fontWeight:'normal' }}>密码</FormLabel>
                     <FormInput
                         placeholder="请输入密码"
                         //是否自动将特定字符切换为大写
                         autoCapitalize={'none'}
                         //关闭拼写自动修正
                         autoCorrect={false}
-                        containerStyle={{ marginLeft: 0 }}
                         inputStyle={{ width: width - 80, paddingLeft: 10 }}
                         //去除android下的底部边框问题
-                        //underlineColorAndroid="transparent"
+                        underlineColorAndroid="transparent"
                         keyboardType='number-pad' //弹出软键盘类型
+                        containerStyle={{marginLeft:0,borderBottomColor: '#eaeaea',borderBottomWidth: px2dp(1)}}
                         onChangeText={(text) => this.setState({ password: text })} />
                 </View>
                 <View style={{ width: width, flexDirection: 'row', justifyContent: 'center' }}>
                     <Button
-                        style={styles.btn}
+                        containerStyle={styles.btn}
+                        style={styles.btnstyle}
                         onPress={this._submit.bind(this)}
                     >
                         登录
@@ -236,7 +242,9 @@ const styles = StyleSheet.create({
         // borderColor:'#ee735c',
         // borderWidth:1,
         borderRadius: 4,
-        color: '#fff'
+    },
+    btnstyle:{
+        color:'#fff'
     }
 })
 

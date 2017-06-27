@@ -64,6 +64,10 @@ export default class Register extends Component {
             return isIOS ? AlertIOS.alert('手机号或验证码不能为空！') : Alert.alert('手机号或验证码不能为空！');
         }
 
+        if (!/^1[34578]\d{9}$/.test(phoneNumber)) {
+            return isIOS ? AlertIOS.alert('手机号码有误，请重填!') : Alert.alert('手机号码有误，请重填');
+        }
+
         if (!password) {
             return isIOS ? AlertIOS.alert('密码不能为空！') : Alert.alert('密码不能为空！');
         }
@@ -107,7 +111,7 @@ export default class Register extends Component {
             })
             .catch((err) => {
                 console.log(err)
-                isIOS ? AlertIOS.alert('获取验证码失败，请检查网络是否良好') : Alert.alert('获取验证码失败，请检查网络是否良好');
+                isIOS ? AlertIOS.alert('请检查网络是否良好') : Alert.alert('请检查网络是否良好');
             })
     }
 
@@ -124,9 +128,12 @@ export default class Register extends Component {
             })
             if (count.num <= 0) {
                 clearInterval(self.interval)
+                count.num=60;
                 self.setState({
-                    codeSent: false
+                    codeSent: false,
+                    count:60
                 })
+               
             }
         }, 1000);
     }
@@ -145,6 +152,10 @@ export default class Register extends Component {
 
         if (!phoneNumber) {
             return isIOS ? AlertIOS.alert('手机号不能为空!') : Alert.alert('手机号不能为空');
+        }
+
+        if (!/^1[34578]\d{9}$/.test(phoneNumber)) {
+            return isIOS ? AlertIOS.alert('手机号码有误，请重填!') : Alert.alert('手机号码有误，请重填');
         }
 
         let body = {
@@ -177,7 +188,6 @@ export default class Register extends Component {
                     if (navigator) {
                         navigator.popToTop();
                     }
-
                 }
                 else {
                     isIOS ? AlertIOS.alert(data.message) : Alert.alert(data.message);
@@ -223,7 +233,10 @@ export default class Register extends Component {
                         //关闭拼写自动修正
                         autoCorrect={false}
                         //去除android下的底部边框问题
-                        //underlineColorAndroid="transparent"
+                        underlineColorAndroid="transparent"
+                        containerStyle={{
+                                    borderBottomColor: '#eaeaea',
+                                    borderBottomWidth: px2dp(1)}}
                         keyboardType='numeric' //弹出软键盘类型
                         placeholder="请输入手机号"
                         onChangeText={(text) => {
@@ -253,8 +266,11 @@ export default class Register extends Component {
                         //关闭拼写自动修正
                         autoCorrect={false}
                         //去除android下的底部边框问题
-                        //underlineColorAndroid="transparent"
+                        underlineColorAndroid="transparent"
                         keyboardType='number-pad' //弹出软键盘类型
+                        containerStyle={{
+                                    borderBottomColor: '#eaeaea',
+                                    borderBottomWidth: px2dp(1)}}
                         placeholder="请输入收到的验证码"
                         onChangeText={(text) => {
                             this.setState({
@@ -308,7 +324,10 @@ export default class Register extends Component {
                         //关闭拼写自动修正
                         autoCorrect={false}
                         //去除android下的底部边框问题
-                        //underlineColorAndroid="transparent"
+                        underlineColorAndroid="transparent"
+                        containerStyle={{
+                                    borderBottomColor: '#eaeaea',
+                                    borderBottomWidth: px2dp(1)}}
                         keyboardType='number-pad' //弹出软键盘类型
                         placeholder="请设置密码"
                         onChangeText={(text) => {
@@ -320,7 +339,8 @@ export default class Register extends Component {
                 </View>
                 <View style={{ width: width, flexDirection: 'row', justifyContent: 'center' }}>
                     <Button
-                        style={styles.btn}
+                        style={styles.btnstyle}
+                        containerStyle={styles.btn}
                         onPress={this._submit.bind(this)}
                     >
                         确认
@@ -395,6 +415,9 @@ const styles = StyleSheet.create({
         // borderColor:'#ee735c',
         // borderWidth:1,
         borderRadius: 4,
+        
+    },
+    btnstyle:{
         color: '#fff'
     },
     countBtn: {

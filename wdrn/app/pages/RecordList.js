@@ -95,12 +95,12 @@ export default class RecordList extends Component {
         let obj = {
             page: page,
             id: this.props.obid,
-            type: to ? to.status : 1
+            type: to ? to.status : this.state.tabStatus
         }
 
         request.get(getIndexUrl, obj)
             .then((data) => {
-               
+               console.log(data)
 
                 if (data.code == 1 && data.data) {
 

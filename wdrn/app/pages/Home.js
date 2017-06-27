@@ -138,7 +138,7 @@ export default class Home extends Component {
 
         request.get(getIndexUrl)
             .then((data) => {
-                console.log(data)
+               
                 if (data.code == 1 && data.data) {
                     self.setState({
                         isAuthor: 2,
@@ -178,7 +178,7 @@ export default class Home extends Component {
 
                 } else if (data.code == 2 || data.code == 3) {
                     let { navigator } = this.props;
-
+                    
                     storage.remove({
                         key: 'loginUser'
                     });
@@ -260,7 +260,7 @@ export default class Home extends Component {
         let user = await storage.load({
             key: 'loginUser'
         })
-
+        console.log(user);
         //'0未申请1第一次申请中2申请过'
         if (user.creditor_status == 0) {
             user.status = 0
@@ -284,7 +284,7 @@ export default class Home extends Component {
 
     }
     rightPress() {
-        console.log('ceshi')
+        
         let { navigator } = this.props;
         if (navigator) {
             navigator.push({
@@ -510,6 +510,6 @@ const styles = StyleSheet.create({
     },
     itemcon: {
         flex: 1,
-        width: px2dp(70),
+        width: px2dp(70)
     }
 })

@@ -66,7 +66,6 @@ export default class Pay extends Component {
     }
 
     openLbs() {
-
         this.setState({ modalVisible: true })
     }
 
@@ -80,16 +79,17 @@ export default class Pay extends Component {
 
         request.post(createOrderUrl, body)
             .then(data => {
-
+                console.log(data);
                 if (data.code == 1) {
                     orderData = data.data;
                     switch (this.state.checked) {
                         case FINALNUM.BALANCETYPE:
                             // this._goPay(data.data);
+                            console.log(this.state.ispaypwd)
                             if(this.state.ispaypwd){
                                 this.openLbs.bind(this)();
                             }else if(this.state.ispaypwd!==null&&!this.state.ispaypwd){
-                                this._goPay.bind(this,orderData,'');
+                                this._goPay.bind(this,orderData,'')();
                             }
                             
                             break;

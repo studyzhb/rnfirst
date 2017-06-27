@@ -118,7 +118,7 @@ export default class ObligationList11 extends Component {
     }
 
     _onRefresh() {
-        if (!this._hasMore() || this.state.isRefreshing) {
+        if (this.state.isRefreshing) {
             return
         }
         this._fetchData(0);
@@ -167,9 +167,9 @@ export default class ObligationList11 extends Component {
 
         await request.get(getQueueUrl, obj)
             .then(data => {
-
+                
                 if (data.code == 1 && data.data) {
-
+                    
                     let list = data.data.list_queque.queque || [];
 
                     if (list.length > 0) {
@@ -202,6 +202,8 @@ export default class ObligationList11 extends Component {
                             })
                         }
                         else {
+                            
+
                             that.setState({
                                 isRefreshing: false,
                                 queueInfo: data.data,
@@ -214,6 +216,7 @@ export default class ObligationList11 extends Component {
 
                         this.setState({
                             update: true,
+                            queueInfo: data.data,
                             isRefreshing: false
                         })
                         // cachedResults.total = data.data.total
@@ -541,11 +544,11 @@ export default class ObligationList11 extends Component {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: px2dp(110), backgroundColor: '#fff', borderBottomColor: '#eaeaea', borderBottomWidth: 1 }}>
                     <View style={{ flexDirection: 'column', height: px2dp(110), justifyContent: 'center', marginLeft: px2dp(18) }}>
                         <View style={{ marginBottom: px2dp(10), alignItems: 'center', width: width }}>
-                            <Text style={{ color: '#21bb58', fontSize: 36, marginTop: 0, textAlign: 'center' }}>{this.state.queueInfo.refund_no.toString()}</Text>
+                            <Text style={{ color: '#21bb58', fontSize: 36, marginTop: 0, textAlign: 'center' }}>{this.state.queueInfo.refund_no?this.state.queueInfo.refund_no.toString():'0'}</Text>
                             <Text style={[styles.normalText, { textAlign: 'center', color: '#ccc' }]}>待返积分</Text>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: width }}>
-                            <Text style={[styles.normalText, { textAlign: 'center' }]}>已返积分：<Text style={{ color: '#333', fontSize: 12 }}>{((this.state.queueInfo.refund - 0) + (this.state.queueInfo.refund_pending - 0) + this.state.queueInfo.refund_ing - 0).toString()}</Text></Text>
+                            <Text style={[styles.normalText, { textAlign: 'center' }]}>已返积分：<Text style={{ color: '#333', fontSize: 12 }}>{this.state.queueInfo.refund?((this.state.queueInfo.refund - 0) + (this.state.queueInfo.refund_pending - 0) + this.state.queueInfo.refund_ing - 0).toString():'0'}</Text></Text>
                         </View>
                     </View>
                 </View>
@@ -659,7 +662,7 @@ export default class ObligationList11 extends Component {
     }
 
     render() {
-
+        console.log(this.state.queueInfo);
         if (!this.state.update) {
             return (
                 <View style={{ backgroundColor: '#fff', justifyContent: 'center', flex: 1 }}>

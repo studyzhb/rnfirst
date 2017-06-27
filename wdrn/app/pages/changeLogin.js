@@ -63,6 +63,10 @@ export default class ChangeLogin extends Component{
             return isIOS?AlertIOS.alert('手机号或验证码不能为空！'):Alert.alert('手机号或验证码不能为空！');
         }
 
+        if (!/^1[34578]\d{9}$/.test(phoneNumber)) {
+            return isIOS ? AlertIOS.alert('手机号码有误，请重填!') : Alert.alert('手机号码有误，请重填');
+        }
+
         if(!password){
             return isIOS?AlertIOS.alert('密码不能为空！'):Alert.alert('密码不能为空！');
         }
@@ -121,10 +125,13 @@ export default class ChangeLogin extends Component{
                 count:count.num
             })
             if(count.num<=0){
-                self.setState({
-                    codeSent:false
-                })
                 clearInterval(self.interval)
+                count.num=60;
+                self.setState({
+                    codeSent:false,
+                    count:60
+                })
+                
             }
         },1000);
     }
@@ -142,6 +149,10 @@ export default class ChangeLogin extends Component{
 
         if(!phoneNumber){
             return isIOS?AlertIOS.alert('手机号不能为空!'):Alert.alert('手机号不能为空');
+        }
+
+        if (!/^1[34578]\d{9}$/.test(phoneNumber)) {
+            return isIOS ? AlertIOS.alert('手机号码有误，请重填!') : Alert.alert('手机号码有误，请重填');
         }
 
         let body={
@@ -209,8 +220,11 @@ export default class ChangeLogin extends Component{
                         //关闭拼写自动修正
                         autoCorrect={false}
                         //去除android下的底部边框问题
-                        //underlineColorAndroid="transparent"
+                        underlineColorAndroid="transparent"
                         keyboardType='numeric' //弹出软键盘类型
+                        containerStyle={{
+                                    borderBottomColor: '#eaeaea',
+                                    borderBottomWidth: px2dp(1),}}
                         onChangeText={(text) => {
                             this.setState({
                                 phoneNumber: text
@@ -228,8 +242,11 @@ export default class ChangeLogin extends Component{
                         //关闭拼写自动修正
                         autoCorrect={false}
                         //去除android下的底部边框问题
-                        //underlineColorAndroid="transparent"
+                        underlineColorAndroid="transparent"
                         keyboardType='numeric' //弹出软键盘类型
+                        containerStyle={{
+                                    borderBottomColor: '#eaeaea',
+                                    borderBottomWidth: px2dp(1),}}
                         onChangeText={(text) => {
                             this.setState({
                                 verifyCode: text
@@ -272,9 +289,12 @@ export default class ChangeLogin extends Component{
                         //关闭拼写自动修正
                         autoCorrect={false}
                         //去除android下的底部边框问题
-                        //underlineColorAndroid="transparent"
+                        underlineColorAndroid="transparent"
                         keyboardType='number-pad' //弹出软键盘类型
                         placeholder="请设置密码"
+                        containerStyle={{
+                                    borderBottomColor: '#eaeaea',
+                                    borderBottomWidth: px2dp(1)}}
                         onChangeText={(text) => {
                             this.setState({
                                 password: text
@@ -286,7 +306,8 @@ export default class ChangeLogin extends Component{
                 <View style={{width:width,height:px2dp(40),flexDirection:'row',justifyContent:'center',marginTop:10}}>
                     <Button
                         
-                        style={styles.btn}
+                        containerStyle={styles.btn}
+                        style={styles.btnstyle}
                         onPress={this._submit.bind(this)}
                     >
                         确认
@@ -359,7 +380,7 @@ const styles=StyleSheet.create({
         // borderColor:'#ee735c',
         // borderWidth:1,
         borderRadius:4,
-        color:'#fff'
+        
     },
     selecedBtn:{
         width:px2dp(284),

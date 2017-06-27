@@ -43,6 +43,10 @@ export default class LoginIndex extends Component{
             return isIOS?AlertIOS.alert('手机号不能为空！'):Alert.alert('手机号不能为空！');
         }
 
+        if (!/^1[34578]\d{9}$/.test(phoneNumber)) {
+            return isIOS ? AlertIOS.alert('手机号码有误，请重填!') : Alert.alert('手机号码有误，请重填');
+        }
+
         if(!pass){
             return isIOS?AlertIOS.alert('密码不能为空！'):Alert.alert('密码不能为空！');
         }
@@ -56,7 +60,7 @@ export default class LoginIndex extends Component{
         
         request.post(loginUrl,body)
                 .then((data)=>{
-                    console.log(data)
+                    
                     if(data.code==1){
                         this.props.enterLogin(data.data);
                     }else{
@@ -145,7 +149,8 @@ export default class LoginIndex extends Component{
                 </View>
                 <View style={{width:width,flexDirection:'row',justifyContent:'center'}}>
                     <Button
-                        style={styles.btn}
+                        containerStyle={styles.btn}
+                        style={styles.btnstyle}
                         onPress={this._submit.bind(this)}
                     >
                         登录
@@ -228,6 +233,9 @@ const styles=StyleSheet.create({
         // borderColor:'#ee735c',
         // borderWidth:1,
         borderRadius:4,
+        color:'#fff'
+    },
+    btnstyle:{
         color:'#fff'
     }
 })
