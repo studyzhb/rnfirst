@@ -82,9 +82,12 @@ request.post = async (url, body, option) => {
         _.assign(options, { body: option.body })
     }
 
+    console.log(options)
+    console.log(url)
 
     return fetch(url, options)
         .then((response) => {
+            console.log(response)
             return response.json()
         })
         .catch(err => {

@@ -59,8 +59,52 @@ export default class MyExpenseList extends Component {
 
     _onRefresh() {
         let self = this;
+        let userurl = config.baseUrl + config.api.user.userStatus;
+        let { navigator,enterAuthor } = this.props;
+        console.log(navigator)
+        request.get(userurl)
+            .then(data => {
+                console.log(data)
+                if (data.code == 1) {
+                    let user=data.data;
+                    if(user.creditor_status==1){
+                        this._getCurrentInfo(1);
+                    }else if(user.creditor_status==2){
+                        if(navigator){
+                            navigator.popToTop();
+                        }
+                        if(enterAuthor){
+                            enterAuthor();
+                        }
+                    }
+                    console.log(user);
+                }
+                else if (data.code == 2 || data.code == 3) {
+                    
 
-        this._getCurrentInfo(1);
+                    storage.remove({
+                        key: 'loginUser'
+                    });
+                    storage.remove({
+                        key: 'user'
+                    });
+                    storage.remove({
+                        key: 'token'
+                    });
+
+                    if (navigator) {
+                        navigator.popToTop();
+                    }
+
+                }
+                else {
+                    isIOS ? AlertIOS.alert(data.message) : Alert(data.message);
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        
         // .then(data => {
         //     console.log(data);
         //     if (!!data) {

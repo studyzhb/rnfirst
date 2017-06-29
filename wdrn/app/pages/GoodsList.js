@@ -118,7 +118,7 @@ export default class GoodsList extends Component {
 
     //计算价格
     _reduceItem(row) {
-        console.log(row)
+       
         if (row.selected === undefined) {
             row.selected = false;
         }
@@ -144,8 +144,8 @@ export default class GoodsList extends Component {
         }
 
         //dataSource: this.state.dataSource.cloneWithRows(selected)
-        console.log(row.selected)
-
+        
+        cachedResults.items=arrData;
         this.setState({ selected:arrData, total ,dataSource: this.state.dataSource.cloneWithRows(arrData)});
         // console.log(this.state.selected)
     }
@@ -303,7 +303,7 @@ export default class GoodsList extends Component {
     }
 
     _fetchMoreData() {
-        console.log('jiazai')
+       
         if (!this._hasMore() || this.state.isLoadingTail) {
 
             // this.setState({
@@ -363,7 +363,7 @@ export default class GoodsList extends Component {
     }
 
     _renderRow(row) {
-        console.log(row)
+        
         return (
             <TouchableOpacity onPress={this._reduceItem.bind(this, row)}>
                 <View style={styles.items}>

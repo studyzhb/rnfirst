@@ -4,78 +4,58 @@
  * @detetime 2016-11-08
  **/
 
-import Alipay from 'react-native-yunpeng-alipay'
+import { pay } from 'react-native-alipay'
 import config from './config'
 import request from './request'
-
+import {Alert} from 'react-native';
 export default function alipay(opt) {
   console.log(opt)
   return (dispatch) => {
-    const uri =config.baseUrl + config.api.pay.alipay;  /*支付接口*/
-    let body=opt;
+    const uri = config.baseUrl + config.api.pay.alipay;  /*支付接口*/
+    let body = opt.data;
     /*调用支付接口*/
-    request.post(uri,body)
-        .then((response) => {
-          console.log(response);
-        if (response.status === 200) {
-          return response.json()
+    request.post(uri, body)
+      // .then((response) => {
+      //   console.log(response);
+      //   if (response.code == 1) {
+      //     return 
+      //   } else {
+      //     return { code: response.code }
+      //   }
+      // })
+
+      // fetch(uri, {method: 'POST', headers: headers, body: JSON.stringify(opt.body)})
+      //   .then((response) => {
+      //     if (response.status === 200) {
+      //       return response.json()
+      //     } else {
+      //       return {code: response.status}
+      //     }
+      //   })
+      .then((res) => {
+        console.log(res);
+        Alert.alert(res.code+'');
+        if (res.code == 1) {
+          /*打开支付宝进行支付*/
+          console.log(res.data.sign)
+          Alert.alert(res.data.sign+'111');
+          pay(res.data.sign, true).then((data) => {
+            console.log(data);
+            if (data.resultStatus === '9000') {
+              Alert.alert('提示', '支付成功');
+            } else if (data.resultStatus === '8000') {
+              Alert.alert('提示', '支付结果确认中,请稍后查看您的账户确认支付结果');
+            } else if (data.resultStatus !== '6001') {
+              // 如果用户不是主动取消
+              Alert.alert('提示', '支付失败');
+            }
+          }, (err) => {
+            opt.fail && opt.fail('支付失败，请重新支付')
+          }
+          )
         } else {
-          return {code: response.status}
+          opt.error && opt.error('支付参数错误')
         }
       })
-
-    // fetch(uri, {method: 'POST', headers: headers, body: JSON.stringify(opt.body)})
-    //   .then((response) => {
-    //     if (response.status === 200) {
-    //       return response.json()
-    //     } else {
-    //       return {code: response.status}
-    //     }
-    //   })
-      .then((data) => {
-          console.log(data);
-        if (String(data.code) == '0') {
-          /*打开支付宝进行支付*/
-          Alipay.pay(data.result).then((data) => {
-              console.log(data);
-            if (data.length && data[0].resultStatus) {
-              /*处理支付结果*/
-            //   switch (data[0].resultStatus) {
-            //      case "9000":
-            //        opt.success && opt.success(data)
-            //        break;
-            //      case "8000":
-            //        opt.fail && opt.fail('支付结果未知,请查询订单状态')
-            //        break;
-            //      case "4000":
-            //        opt.fail && opt.fail('订单支付失败')
-            //        break;
-            //      case "5000":
-            //        opt.fail && opt.fail('重复请求')
-            //        break;
-            //      case "6001":
-            //        opt.fail && opt.fail('用户中途取消')
-            //        break;
-            //      case "6002":
-            //        opt.fail && opt.fail('网络连接出错')
-            //        break;
-            //      case "6004":
-            //        opt.fail && opt.fail('支付结果未知,请查询订单状态')
-            //        break;
-            //      default:
-            //        opt.fail && opt.fail('其他失败原因')
-            //        break;
-            //    }
-             } else {
-               opt.fail && opt.fail('其他失败原因')
-             }
-           }, (err) => {
-             opt.fail && opt.fail('支付失败，请重新支付')
-           }
-         )
-       } else {
-         opt.error && opt.error('支付参数错误')
-       }
-    })
   }
 }

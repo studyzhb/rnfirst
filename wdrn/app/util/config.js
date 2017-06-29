@@ -74,7 +74,7 @@ export default {
         },
         pay:{
             balance:'/defray/balance',
-            alipay:"/pay/getsign"
+            alipay:"/pay/aliapp"
         }
     }
 

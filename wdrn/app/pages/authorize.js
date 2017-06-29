@@ -36,7 +36,7 @@ export default class Authorize extends Component{
         let tel=this.state.tel;
         let name=this.state.name;
         let coding=this.state.coding;
-
+        let { navigator } = this.props;
         if(!tel){
             return isIOS?AlertIOS.alert('手机号不能为空！'):Alert.alert('手机号不能为空！');
         }
@@ -60,11 +60,16 @@ export default class Authorize extends Component{
         request.post(loginUrl,body)
                 .then((data)=>{
                     if(data.code==1){
-                        this.props.navigator.pop();
-                        this.props.enterOblist();
+                        if (navigator) {
+                            navigator.popToTop();
+                        }
+                        // this.props.navigator.pop();
+                        if(this.props.enterOblist){
+                            this.props.enterOblist();
+                        }
                     }
                     else if (data.code == 2 || data.code == 3) {
-                        let { navigator } = this.props;
+                        
                         
                         storage.remove({
                             key: 'loginUser'

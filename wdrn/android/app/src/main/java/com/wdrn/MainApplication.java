@@ -3,11 +3,10 @@ package com.wdrn;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.reactnative.alipay.AlipayPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.yunpeng.alipay.AlipayPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.yunpeng.alipay.AlipayPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -29,7 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-              new AlipayPackage(),
+            new AlipayPackage(),
             new ImagePickerPackage(),
             new VectorIconsPackage(),
             new OnBackPackage()

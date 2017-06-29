@@ -50,19 +50,19 @@ export default class Pay extends Component {
         this.state = {
             checked: FINALNUM.BALANCETYPE,
             modalVisible: false,
-            ispaypwd:null
+            ispaypwd: null
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         storage.load({
-            key:'loginUser'
+            key: 'loginUser'
         })
-        .then(data=>{
-            this.setState({
-                ispaypwd:data.is_pay_pwd
+            .then(data => {
+                this.setState({
+                    ispaypwd: data.is_pay_pwd
+                })
             })
-        })
     }
 
     openLbs() {
@@ -86,19 +86,25 @@ export default class Pay extends Component {
                         case FINALNUM.BALANCETYPE:
                             // this._goPay(data.data);
                             console.log(this.state.ispaypwd)
-                            if(this.state.ispaypwd){
+                            if (this.state.ispaypwd) {
                                 this.openLbs.bind(this)();
-                            }else if(this.state.ispaypwd!==null&&!this.state.ispaypwd){
-                                this._goPay.bind(this,orderData,'')();
+                            } else if (this.state.ispaypwd !== null && !this.state.ispaypwd) {
+                                this._goPay.bind(this, orderData, '')();
                             }
-                            
                             break;
                         case FINALNUM.ALIPAYTYPE:
                             alipay({
-                                type: "alipay",
-                                ordernum: data.data.order_sn,
-                                money: this.props.total,
-                                remark: '支付宝支付'
+                                data: {
+                                    order_sn: data.data.order_sn,
+                                    money: this.props.total,
+                                    remark: '支付宝支付'
+                                },
+                                success:(res)=>{
+                                    alert(res)
+                                },
+                                fail:(res)=>{
+                                    alert(res)
+                                }
                             })()
                             break;
                     }
@@ -250,7 +256,7 @@ export default class Pay extends Component {
     }
 
     render() {
-        if(this.state.ispaypwd===null){
+        if (this.state.ispaypwd === null) {
             return (
                 <View style={styles.container}>
                     <ActivityIndicator></ActivityIndicator>

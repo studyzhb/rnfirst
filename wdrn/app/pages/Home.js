@@ -316,6 +316,11 @@ export default class Home extends Component {
             isAuthor: 1
         });
     }
+    _enterChangeAuthor(){
+        this.setState({
+            isAuthor: 2
+        });
+    }
 
     _enterObligationGoods(id) {
 
@@ -424,7 +429,7 @@ export default class Home extends Component {
         }
 
         if (this.state.isAuthor === 1) {
-            return <MyExpense />;
+            return <MyExpense navigator={this.props.navigator} enterAuthor={this._enterChangeAuthor.bind(this)}/>;
         } else if (this.state.isAuthor === 2) {
             return (
                 <View style={styles.container}>
