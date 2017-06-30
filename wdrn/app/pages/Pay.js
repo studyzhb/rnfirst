@@ -23,6 +23,7 @@ import Item from '../component/Item';
 import NavBar from '../component/NavBar';
 import px2dp from '../util/px2dp';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Modal from '../component/react-native-simple-modal';
 import { CheckBox } from 'react-native-elements';
 import config from '../util/config'
 import request from '../util/request'
@@ -32,6 +33,7 @@ import LbsModal from '../component/LbsModal'
 import alipay from '../util/alipay'
 
 import FINALNUM from '../util/FinalNum'
+
 
 let { width, height } = Dimensions.get('window');
 let isIOS = Platform.OS === 'ios';
@@ -50,7 +52,8 @@ export default class Pay extends Component {
         this.state = {
             checked: FINALNUM.BALANCETYPE,
             modalVisible: false,
-            ispaypwd: null
+            ispaypwd: null,
+            openModalStatus: false
         }
     }
 
@@ -70,6 +73,9 @@ export default class Pay extends Component {
     }
 
     createOrder() {
+        this.setState({
+            openModalStatus: true
+        })
         let createOrderUrl = config.baseUrl + config.api.rebate.createOrder;
         let body = {
             goods_arr: JSON.stringify(this.props.totalArr),
@@ -99,11 +105,22 @@ export default class Pay extends Component {
                                     money: this.props.total,
                                     remark: '支付宝支付'
                                 },
-                                success:(res)=>{
-                                    alert(res)
+                                success: (res) => {
+                                    this.setState({
+                                        openModalStatus: false
+                                    })
+                                    isIOS
+                                        ? AlertIOS.alert(res)
+                                        : Alert.alert(res)
                                 },
-                                fail:(res)=>{
-                                    alert(res)
+                                fail: (res) => {
+                                    this.setState({
+                                        openModalStatus: false
+                                    })
+                                    isIOS
+                                        ? AlertIOS.alert(res)
+                                        : Alert.alert(res)
+
                                 }
                             })()
                             break;
@@ -148,6 +165,9 @@ export default class Pay extends Component {
 
         request.post(createOrderUrl, body)
             .then(data => {
+                this.setState({
+                    openModalStatus: false
+                })
                 if (data.code == 1) {
                     isIOS
                         ? AlertIOS.alert(data.message)
@@ -187,6 +207,7 @@ export default class Pay extends Component {
 
         this.setState({
             modalVisible: false,
+            openModalStatus: false
         })
         if (pass !== undefined) {
             this._goPay.bind(this, orderData, pass)();
@@ -265,6 +286,7 @@ export default class Pay extends Component {
         }
         return (
             <View style={styles.container}>
+                
                 <View style={styles.container}>
                     <NavBar
                         leftIcon='ios-arrow-back-outline'
@@ -277,11 +299,38 @@ export default class Pay extends Component {
                         this.renderGoodsList()
                     }
                 </View>
+                
                 <LbsModal
                     total={this.props.total}
                     modalVisible={this.state.modalVisible}
                     closeModal={this.closeModal.bind(this)}
                 />
+                <Modal
+                    open={this.state.openModalStatus}
+                    offset={0}
+                    overlayBackground={'rgba(0, 0, 0, 0.75)'}
+                    animationDuration={200}
+                    animationTension={40}
+                    modalDidOpen={() => undefined}
+                    modalDidClose={() => undefined}
+                    closeOnTouchOutside={false}
+                    containerStyle={{
+                        justifyContent: 'center',
+                        height:height,
+                        position:'absolute',
+                        left:0,
+                        top:0,
+                        zIndex:10
+                    }}
+                    modalStyle={{
+                        borderRadius: 2,
+                        margin: 20,
+                        padding: 10,
+                        backgroundColor: '#F5F5F5'
+                    }}
+                    disableOnBackPress={true}>
+                    <ActivityIndicator></ActivityIndicator>
+                </Modal>
                 <View style={styles.footerCon}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={{ fontSize: 14, color: '#626262' }}>总计：</Text>
